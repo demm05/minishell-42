@@ -7,7 +7,7 @@ BIN					=	minishell
 #VPATH				=	$(SDIR):$(SDIR)/parser:$(SDIR)/exec
 
 CC					=	gcc
-CFLAGS				=	-Wall -Wextra -I$(HDIR)
+CFLAGS				=	-Wall -Wextra -fsanitize=address -I$(HDIR)
 MAKE_LIB			=	@make --no-print-directory -C
 
 LIBFT_DIR			=	$(LDIR)/libft
@@ -25,7 +25,7 @@ $(ODIR)/%.o: $(SDIR)/%.c | $(DIRS)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(BIN): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@ -lreadline
 
 $(DIRS):
 	@mkdir -p $@
@@ -37,7 +37,7 @@ clean:
 	$(MAKE_LIB) $(LIBFT_DIR) clean
 	@rm -rf $(ODIR)
 
-fclean: clean lib_fclean
+fclean: clean 
 	@rm -rf $(BIN)
 	$(MAKE_LIB) $(LIBFT_DIR) fclean
 
