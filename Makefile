@@ -2,13 +2,15 @@ HDIR				=	inc
 SDIR				=	src
 ODIR				=	obj
 LDIR				=	libft
-BIN					=	minishell
+TDIR				=	tests
+NAME				=	minishell
 
 #VPATH				=	$(SDIR):$(SDIR)/parser:$(SDIR)/exec
 
-CC					=	gcc
-CFLAGS				=	-Wall -Wextra -fsanitize=address -I$(HDIR)
+CC					?=	gcc
+CFLAGS				?=	-Wall -Wextra -fsanitize=address -I$(HDIR)
 MAKE_LIB			=	@make --no-print-directory -C
+DIRS				=	$(sort $(dir $(OBJS)))
 
 LIBFT_DIR			=	$(LDIR)/libft
 LIBFT_FILE			=	libft.a
@@ -16,31 +18,57 @@ LIBFT				=	$(LIBFT_DIR)/$(LIBFT_FILE)
 CFLAGS				+=	-I$(LIBFT_DIR)/include
 
 SRCS				:=	$(shell find $(SDIR) -name "*.c")
-OBJS				:=	$(patsubst $(SDIR)/%.c, $(ODIR)/%.o, $(SRCS))
-DIRS				=	$(sort $(dir $(OBJS)))
+OBJS				:=	$(patsubst $(SDIR)/%.c,$(ODIR)/%.o, $(SRCS))
 
-all: $(LIBFT) $(BIN)
+TEST_OBJS			:=	$(filter-out $(ODIR)/main.o, $(OBJS))
+TEST_SRCS			:=	$(wildcard $(TDIR)/*.c)
+TEST_BINS			:=	$(patsubst $(TDIR)/%.c,$(TDIR)/bin/%, $(TEST_SRCS))
 
-$(ODIR)/%.o: $(SDIR)/%.c | $(DIRS)
-	$(CC) $(CFLAGS) -c -o $@ $<
+all: $(LIBFT) $(NAME)
+	$(ECHO) "Build complete"
 
-$(BIN): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $^ -o $@ -lreadline
+$(OBJS): $(ODIR)/%.o: $(SDIR)/%.c | $(DIRS)
+	$(Q)$(CC) $(CFLAGS) -c -o $@ $<
 
-$(DIRS):
-	@mkdir -p $@
+$(NAME): $(OBJS) $(LIBFT)
+	$(Q)$(CC) $(CFLAGS) $^ -o $@ -lreadline
+
+$(TDIR)/bin/%: $(TDIR)/%.c $(TEST_OBJS)
+	$(Q)$(CC) $(CFLAGS) $^ -o $@ -lcriterion
+	$(Q)chmod +x $@
+
+$(DIRS) $(TDIR)/bin:
+	$(Q)mkdir -p $@
 
 $(LIBFT):
-	$(MAKE_LIB) $(LIBFT_DIR)
-	
-clean:
-	$(MAKE_LIB) $(LIBFT_DIR) clean
-	@rm -rf $(ODIR)
+	$(Q)$(MAKE_LIB) $(LIBFT_DIR)
 
-fclean: clean 
-	@rm -rf $(BIN)
-	$(MAKE_LIB) $(LIBFT_DIR) fclean
+test: $(LIBFT) $(TDIR)/bin $(TEST_BINS)
+	@for test in $(TEST_BINS) ; do \
+		./$$test || exit 1 ; \
+	done
+
+clean:
+	$(Q)rm -rf $(ODIR)
+	$(Q)rm -rf $(TDIR)/bin
+	$(Q)$(MAKE_LIB) $(LIBFT_DIR) clean
+	$(ECHO) "Clean is done!"
+
+fclean: clean
+	$(Q)rm -rf $(NAME)
+	$(Q)$(MAKE_LIB) $(LIBFT_DIR) fclean
 
 re: fclean all
 
-.PHONY: all lib_fclean lib_clean clean fclean
+.PHONY: all clean fclean re test
+
+ifeq ($(V),2)
+    Q =
+    ECHO = @echo
+else ifeq ($(V),1)
+    Q = @
+    ECHO = @echo
+else
+    Q = @
+    ECHO = @:
+endif
