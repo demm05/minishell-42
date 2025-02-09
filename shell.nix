@@ -4,6 +4,7 @@
 pkgs.mkShell {
   packages = with pkgs; [
     readline
+    criterion
     cmake
     gcc
     bear
