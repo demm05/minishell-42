@@ -25,7 +25,6 @@ TEST_SRCS			:=	$(wildcard $(TDIR)/*.c)
 TEST_BINS			:=	$(patsubst $(TDIR)/%.c,$(TDIR)/bin/%, $(TEST_SRCS))
 
 all: $(LIBFT) $(NAME)
-	$(ECHO) "Build complete"
 
 $(OBJS): $(ODIR)/%.o: $(SDIR)/%.c | $(DIRS)
 	$(Q)$(CC) $(CFLAGS) -c -o $@ $<
@@ -34,7 +33,7 @@ $(NAME): $(OBJS) $(LIBFT)
 	$(Q)$(CC) $(CFLAGS) $^ -o $@ -lreadline
 
 $(TDIR)/bin/%: $(TDIR)/%.c $(TEST_OBJS)
-	$(Q)$(CC) $(CFLAGS) $^ -o $@ -lcriterion
+	$(Q)$(CC) $(CFLAGS) $^ $(LIBFT) -o $@ -lcriterion
 	$(Q)chmod +x $@
 
 $(DIRS) $(TDIR)/bin:
@@ -43,7 +42,7 @@ $(DIRS) $(TDIR)/bin:
 $(LIBFT):
 	$(Q)$(MAKE_LIB) $(LIBFT_DIR)
 
-test: $(LIBFT) $(TDIR)/bin $(TEST_BINS)
+t test: $(LIBFT) $(TDIR)/bin $(TEST_BINS)
 	@for test in $(TEST_BINS) ; do \
 		./$$test || exit 1 ; \
 	done
@@ -58,9 +57,14 @@ fclean: clean
 	$(Q)rm -rf $(NAME)
 	$(Q)$(MAKE_LIB) $(LIBFT_DIR) fclean
 
+n norm:
+	@-norminette $(SDIR)
+	@echo
+	@-norminette $(HDIR)
+
 re: fclean all
 
-.PHONY: all clean fclean re test
+.PHONY: all clean fclean re test n norm 
 
 ifeq ($(V),2)
     Q =
