@@ -9,6 +9,7 @@ pkgs.mkShell {
     gcc
     bear
     gdb
+    norminette
   ];
   shellHook = ''zsh'';
 }
