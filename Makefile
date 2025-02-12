@@ -8,7 +8,7 @@ NAME				=	minishell
 #VPATH				=	$(SDIR):$(SDIR)/parser:$(SDIR)/exec
 
 CC					?=	gcc
-CFLAGS				?=	-Wall -Wextra -fsanitize=address -I$(HDIR)
+CFLAGS				?=	-g -Wall -Wextra -fsanitize=address -I$(HDIR)
 MAKE_LIB			=	@make --no-print-directory -C
 DIRS				=	$(sort $(dir $(OBJS)))
 
