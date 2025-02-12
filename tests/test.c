@@ -7,12 +7,24 @@ Test(new_token, creating_new_token)
 	t_token	*tok;
 
 	tok = new_token(PIPE, NULL, 1);
-	cr_expect_null(tok->literal);
+	cr_expect_null(tok, "Expected NULL when passed NULL as lexer");
+	l = new_lexer("echo");
+	tok = new_token(ECHO, l, 4);
+	cr_expect(strncmp(tok->literal, "echo", 4) == 0);
 	free(tok);
-	tok = new_token(PIPE, "HELLO", 1);
-	cr_expect(strcmp(tok->literal, "HELLO") == 0);
-	free(tok->literal);
+	free(l);
+}
+
+Test(new_token, test_next_post)
+{
+	t_token	*tok;
+
+	l = new_lexer("echotest");
+	tok = new_token(ECHO, l, 4);
+	cr_expect(strncmp(tok->literal, "echo", 4) == 0);
+	cr_expect(l->ch == 't', "expected t got %c", l->ch);
 	free(tok);
+	free(l);
 }
 
 Test(new_lexer, initalize)
@@ -20,7 +32,7 @@ Test(new_lexer, initalize)
 	l = new_lexer("cd /bin/ls | echo \"Hello world\"");
 	cr_expect_not_null(l, "Lexer should be initialized");
 	cr_expect(l->read_postion == 1);
-	cr_expect(l->pos == 0);
+	cr_expect(l->position == 0);
 	cr_expect(l->size == 31);
 	cr_expect(l->ch == 'c');
 	free(l);
@@ -31,67 +43,12 @@ Test(new_lexer, initalize)
 	free(l);
 }
 
-Test(get_next_token, single_literal)
+Test(eat_whitespaces, first)
 {
-	t_token	tests[] = {
-		{LBRACE, "{"},
-		{RBRACE, "}"},
-		{LPAREN, "("},
-		{RPAREN, ")"},
-		{SQUOTE, "'"},
-		{DQUOTE, "\""},
-		{PIPE, "|"},
-		{LT, "<"},
-		{GT, ">"},
-		{DLT, "<<"},
-		{DGT, ">>"},
-		{EOL, NULL} 
-	};
-	int	n = sizeof(tests) / sizeof(tests[0]) - 1;
-	t_token	*t;
-	int	i = -1;
+	l = new_lexer("       \t\t \rD");
+	cr_assert_not_null(l, "Failed on initializing new lexer");
+	eat_whitespaces(l);
+	cr_expect(l->ch == 'D', "Failed basic test");
+	free(l);
 
-
-	while (++i < n)
-	{
-		l = new_lexer(tests[i].literal);
-		t = get_next_token(l);
-		cr_expect(tests[i].type == t->type, "test: %d\tI shoul've get type %s(%d) but got %d", i, tests[i].literal, tests[i].type, t->type);
-		free(t);
-		free(l);
-	}
-}
-
-Test(get_next_token, single_literal_whitespaces)
-{
-	t_token	tests[] = {
-		{LBRACE, "  \t {    \t"},
-		{RBRACE, "  \r \r } \t"},
-		{LPAREN, "\t (\t       "},
-		{RPAREN, "\r ) \r\r   "},
-		{SQUOTE, "'   \t\t\t"},
-		{DQUOTE, "\t\t\t     \" "},
-		{PIPE, "\t\t  |  "},
-		{LT, "  \t <  "},
-		{GT, "   >   \t"},
-		{DLT, "     << \t   "},
-		{DGT, "    >>   "},
-		{EOL, NULL} 
-	};
-	int	n = sizeof(tests) / sizeof(tests[0]) - 1;
-	t_token	*t;
-	int	i = -1;
-
-
-	while (++i < n)
-	{
-		l = new_lexer(tests[i].literal);
-		t = get_next_token(l);
-		cr_expect(tests[i].type == t->type, "test: %d\tI shoul've get type %d but got %d", i, tests[i].type, t->type);
-		free(t);
-		t = get_next_token(l);
-		cr_expect(EOL == t->type, "test: %d\tI shoul've get EOL", i);
-		free(t);
-		free(l);
-	}
 }

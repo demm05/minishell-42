@@ -6,6 +6,7 @@ int	main(int argc, char **argv)
 	t_lexer	*l;
 	t_token	*t;
 	char	*line;
+	int		i;
 
 	while (1)
 	{
@@ -14,9 +15,13 @@ int	main(int argc, char **argv)
 		while (1)
 		{
 			t = get_next_token(l);
-			printf("Type: %d Literal: %s\n", t->type, t->literal);
 			if (t->type == EOL)
 				break ;
+			printf("Type: %d Literal: ", t->type);
+			i = 0;
+			while (i < t->size)
+				printf("%c", t->literal[i++]);
+			printf("\n");
 			free(t);
 		}
 		free(line);
