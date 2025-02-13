@@ -9,7 +9,7 @@ Test(lex_env_var, extra_1)
 	l = new_lexer("$0$111$?");
 	cr_assert_not_null(l);
 	t = lex_env_var(l);
-	cr_expect(t->type == ILLEGAL, "Expected %d got %d %s", ILLEGAL, t->type, t->literal);
+	cr_expect(t->type == DSIGN, "Expected %d got %d %s", ILLEGAL, t->type, t->literal);
 	free(t);
 	t = lex_env_var(l);
 	cr_expect(t->type == DSIGN, "Expected %d got %d %s", DSIGN, t->type, t->literal);
@@ -35,6 +35,7 @@ Test(lex_env_var, valid_whitespaces)
 		tok = lex_env_var(l);
 		cr_assert_not_null(tok, "Failed on initializing env token, current lexer input: %s", l->input + l->position);
 		cr_expect(strncmp(vars[i] + 1, tok->literal, strlen(vars[i]) - 1) == 0, "Expecetd %s got size:%d and s:%s", vars[i]+1, tok->size, tok->literal);
+		cr_expect(tok->type == DSIGN, "%d: Expected typed: %d insteadt got %d", i, DSIGN, tok->type);
 		free(tok);
 		free(vars[i]);
 		i++;
