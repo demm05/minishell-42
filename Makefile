@@ -47,13 +47,13 @@ t test: $(LIBFT) $(TDIR)/bin $(TEST_BINS)
 		./$$test || exit 1 ; \
 	done
 
-clean:
+c clean:
 	$(Q)rm -rf $(ODIR)
 	$(Q)rm -rf $(TDIR)/bin
 	$(Q)$(MAKE_LIB) $(LIBFT_DIR) clean
 	$(ECHO) "Clean is done!"
 
-fclean: clean
+f fclean: clean
 	$(Q)rm -rf $(NAME)
 	$(Q)$(MAKE_LIB) $(LIBFT_DIR) fclean
 
@@ -63,6 +63,9 @@ n norm:
 	@-norminette $(HDIR)
 
 re: fclean all
+
+r run: $(NAME)
+	$(Q)./$(NAME)
 
 .PHONY: all clean fclean re test n norm 
 
