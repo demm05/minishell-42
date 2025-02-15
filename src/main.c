@@ -14,22 +14,19 @@ int	main(int argc, char **argv)
 		if (!line)
 			break ;
 		l = new_lexer(line);
-		while (1 && !exit_s)
+		generate_tokens(l);
+		t = l->tokens;
+		while (t)
 		{
-			t = get_next_token(l);
-			if (t->type == EOL)
-				break ;
-			if (t->type == EXIT)
-				exit_s = 1;
 			printf("Type: %d Literal: ", t->type);
 			i = 0;
 			while (i < t->size)
 				printf("%c", t->literal[i++]);
 			printf("\n");
-			free(t);
+			t = t->next;
 		}
 		free(line);
-		free(l);
+		free_lexer(l);
 	}
 	return (0);
 }

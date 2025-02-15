@@ -37,13 +37,16 @@ typedef struct s_keyword
 
 typedef struct s_token
 {
-	t_token_type	type;
+	struct s_token	*next;
+	struct s_token	*prev;
 	const char		*literal;
+	t_token_type	type;
 	int				size;
 }	t_token;
 
 typedef struct s_lexer {
 	const char	*input;
+	t_token		*tokens;
 	int			position;  // current position in input (points to current char)
 	int			read_postion; // current reading position in input (after current char)
 	int			size;
@@ -51,11 +54,13 @@ typedef struct s_lexer {
 }	t_lexer;
 
 t_lexer	*new_lexer(const char *str);
-t_token	*new_token(t_token_type t, t_lexer *l, int size);
-t_token *get_next_token(t_lexer *l);
+void	generate_tokens(t_lexer	*l);
+int		lex_env_var(t_lexer *l);
+int		lex_keyword(t_lexer *l);
+int		append_token(t_lexer *l, t_token_type type, int size);
+void	free_lexer(t_lexer *l);
 
-t_token *lex_env_var(t_lexer *l);
-t_token	*lex_keyword(t_lexer *l);
+t_token	*new_token(t_token_type t, t_lexer *l, int size);
 
 // Lexer utils
 void	read_char(t_lexer *l);

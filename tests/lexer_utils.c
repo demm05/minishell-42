@@ -50,5 +50,4 @@ Test(eat_whitespaces, first)
 	eat_whitespaces(l);
 	cr_expect(l->ch == 'D', "Failed basic test");
 	free(l);
-
 }

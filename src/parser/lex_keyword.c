@@ -1,9 +1,7 @@
 #include "../../inc/parser.h"
-#include "../../inc/minishell.h"
 #include "libft.h"
-#include <stdlib.h>
 
-t_token	*lex_keyword(t_lexer *l)
+int	lex_keyword(t_lexer *l)
 {
 	static const t_keyword	keys[] = {
 	{"echo", ECHO, 4}, {"pwd", PWD, 3}, {"cd", CD, 2}, {"export", EXPORT, 6},
@@ -14,7 +12,7 @@ t_token	*lex_keyword(t_lexer *l)
 	char	c;
 
 	if (!ft_isalpha(l->ch) || !ft_isalpha(peek_char(l)))
-		return (NULL);
+		return (0);
 
 	i = -1;
 	size = sizeof(keys) / sizeof(keys[0]);
@@ -27,7 +25,7 @@ t_token	*lex_keyword(t_lexer *l)
 		c = l->input[l->position + keys[i].size];
 		if (c && !ft_isspace(c))
 			break ;
-		return (new_token(keys[i].type, l, keys[i].size));
+		return (!append_token(l, keys[i].type, keys[i].size));
 	}
-	return (NULL);
+	return (0);
 }

@@ -46,3 +46,19 @@ void	eat_whitespaces(t_lexer *l)
 	while (l->ch == ' ' || l->ch == '\t' || l->ch == '\r' || l->ch == '\n')
 		read_char(l);
 }
+
+void	free_lexer(t_lexer *l)
+{
+	t_token	*next;
+
+	if (!l)
+		return ;
+
+	while (l->tokens)
+	{
+		next = l->tokens->next;
+		free(l->tokens);
+		l->tokens = next;
+	}
+	free(l);
+}
