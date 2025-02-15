@@ -1,30 +1,49 @@
 #include "../../inc/parser.h"
 #include "../../inc/minishell.h"
-#include "libft.h"
 #include <stdlib.h>
 
-//static inline t_token *get_single_ch_token(t_lexer *l);
-//static inline t_token *get_multi_ch_token(t_lexer *l);
-//static inline t_token *get_keyword_token(t_lexer *l);
-//
-t_token *get_next_token(t_lexer *l)
+void	generate_tokens(t_lexer	*l)
 {
-	t_token	*tok;
-
-	eat_whitespaces(l);
-	
-	if (!l->ch)
-		tok = new_token(EOL, l, 0);
-	else if ((tok = lex_env_var(l)))
-		;
-	else if ((tok = lex_keyword(l)))
-		;
-	else
-		tok = new_token(ILLEGAL, l, 1);
-	return (tok);
+	while (l->position < l->size - 1)
+	{
+		eat_whitespaces(l);
+		if (l->ch == '$')
+			lex_env_var(l);
+		//else if (l->ch == '<' || l->ch == '>')
+		//	;
+		else if (lex_keyword(l))
+			;
+		else
+			append_token(l, ILLEGAL, 1);
+	}
+	append_token(l, EOL, 0);
 }
 
-t_token	*new_token(t_token_type t, t_lexer *l, int size)
+// On completion this func will return 0 if the node 
+// was added to the list of tokens otherwise 1
+int	append_token(t_lexer *l, t_token_type type, int size)
+{
+	t_token	*new;
+
+	if (!l || size < 0)
+		return (1);
+	new = new_token(type, l, size);
+	if (!new)
+		return (1);
+	if (!l->tokens)
+	{
+		new->prev = new;
+		l->tokens = new;
+		return (0);
+	}
+	else
+		new->prev = l->tokens;
+	l->tokens->prev->next = new;
+	l->tokens->prev = new;
+	return (0);
+}
+
+t_token	*new_token(t_token_type type, t_lexer *l, int size)
 {
 	t_token	*tok;
 
@@ -33,9 +52,11 @@ t_token	*new_token(t_token_type t, t_lexer *l, int size)
 	tok = malloc(sizeof(t_token));
 	if (!tok)
 		return (NULL);
-	tok->type = t;
+	tok->type = type;
 	tok->size = size;
 	tok->literal = l->input + l->position;
+	tok->next = NULL;
+	tok->prev = NULL;
 	if (size > 0)
 	{
 		l->read_postion += size - 1;
@@ -43,48 +64,3 @@ t_token	*new_token(t_token_type t, t_lexer *l, int size)
 	}
 	return (tok);
 }
-
-//static inline t_token *get_keyword_token(t_lexer *l)
-//{
-//	return (NULL);
-//}
-//
-//static inline t_token *get_single_ch_token(t_lexer *l)
-//{
-//	if (l->ch == 0)
-//		return (new_token(EOL, "", 0));
-//	else if (l->ch == '\'')
-//		return (new_token(SQUOTE, "'", 0));
-//	else if (l->ch == '\"')
-//		return (new_token(DQUOTE, "\"", 0));
-//	else if (l->ch == '|')
-//		return (new_token(PIPE, "|", 0));
-//	else if (l->ch == '$')
-//		return (new_token(DSIGN, "$", 0));
-//	return (NULL);
-//}
-//
-//static inline t_token *get_multi_ch_token(t_lexer *l)
-//{
-//	if (l->ch == '<')
-//	{
-//		if (peek_char(l) == '<')
-//		{
-//			read_char(l);
-//			return (new_token(DLT, "<<", 0));
-//		}
-//		else
-//			return (new_token(LT, "<", 0));
-//	}
-//	else if (l->ch == '>')
-//	{
-//		if (peek_char(l) == '>')
-//		{
-//			read_char(l);
-//			return (new_token(DGT, ">>", 0));
-//		}
-//		else
-//			return (new_token(GT, ">", 0));
-//	}
-//	return (NULL);
-//}

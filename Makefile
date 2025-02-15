@@ -65,6 +65,7 @@ n norm:
 re: fclean all
 
 r run: $(NAME)
+	@clear
 	$(Q)./$(NAME)
 
 .PHONY: all clean fclean re test n norm 
