@@ -38,7 +38,7 @@ t_lexer	*new_lexer(const char *str)
 
 bool	ft_isspace(char ch)
 {
-	return ((ch == ' ' || ch == '\t' || ch == 'r' || ch == 'n'));
+	return (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n');
 }
 
 void	eat_whitespaces(t_lexer *l)

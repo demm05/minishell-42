@@ -8,7 +8,7 @@ NAME				=	minishell
 #VPATH				=	$(SDIR):$(SDIR)/parser:$(SDIR)/exec
 
 CC					?=	gcc
-CFLAGS				?=	-g -Wall -Wextra -fsanitize=address -I$(HDIR)
+CFLAGS				?=	-g -Wall -Wextra -I$(HDIR)
 MAKE_LIB			=	@make --no-print-directory -C
 DIRS				=	$(sort $(dir $(OBJS)))
 
@@ -79,4 +79,10 @@ else ifeq ($(V),1)
 else
     Q = @
     ECHO = @:
+endif
+
+ifeq ($(F), 1)
+
+else
+	CFLAGS += -fsanitize=address
 endif

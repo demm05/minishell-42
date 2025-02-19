@@ -1,20 +1,34 @@
 #include "../../inc/parser.h"
-#include "../../inc/minishell.h"
-#include <stdlib.h>
+#include <stdio.h>
 
 void	generate_tokens(t_lexer	*l)
 {
-	while (l->position < l->size - 1)
+	int	i = 0;
+	while (l->position < l->size && i++ < 10)
 	{
 		eat_whitespaces(l);
-		if (l->ch == '$')
+		if (!l->ch)
+			break ;
+		else if (l->ch == '$')
 			lex_env_var(l);
-		//else if (l->ch == '<' || l->ch == '>')
-		//	;
-		else if (lex_keyword(l))
+		else if (l->ch == '|')
+		{
+			if (peek_char(l) == '|')
+				append_token(l, OR, 2);
+			else
+				append_token(l, PIPE, 1);
+		}
+		else if (l->ch == '&')
+		{
+			if (peek_char(l) == '&')
+				append_token(l, AND, 2);
+			else
+				append_token(l, ILLEGAL, 1);
+		}
+		else if (!is_there_exec(l) && (lex_keyword(l) || lex_executable(l)))
 			;
 		else
-			append_token(l, ILLEGAL, 1);
+			append_token(l, WORD, get_pos_next_whitespace(l));
 	}
 	append_token(l, EOL, 0);
 }
@@ -64,3 +78,20 @@ t_token	*new_token(t_token_type type, t_lexer *l, int size)
 	}
 	return (tok);
 }
+
+int	get_pos_next_whitespace(t_lexer *l)
+{
+	int		i;
+
+	i = l->read_postion;
+	while (i < l->size)
+	{
+		if (ft_isspace(l->input[i]))
+			break ;
+		if (!l->input[i])
+			break ;
+		i++;
+	}
+	return (i - l->read_postion + 1);
+}
+

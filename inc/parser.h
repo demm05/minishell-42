@@ -5,11 +5,6 @@
 
 typedef enum e_tokentype
 {
-	ILLEGAL,	// When invalid input
-	EOL,		// End of line
-	SQUOTE,		// '
-	DQUOTE,		// "
-	PIPE,		// |
 	LT,			// <
 	GT,			// >
 	DLT,		// <<
@@ -17,6 +12,25 @@ typedef enum e_tokentype
 	DSIGN,		// $
 	RPATH,		// ./minishell
 	ABSPATH,	// /bin
+	SQUOTE,		// '
+	DQUOTE,		// "
+
+	// Better names
+	EOL,		// End of line
+	ILLEGAL,	// When invalid input
+	EXIT_STATUS,// $?
+	AND,		// &&
+	OR,			// ||
+	REDIR_OUT,	// >
+	REDIR_IN,	// <
+	REDIR_OUT_A,// >>
+	HERE_DOC,	// <<	
+	PIPE,		// |
+	VAR_EXP,	// $
+	EXEC,		// Executable like ls wc grep 
+	WORD,		// It could be an argument or file
+	
+	// Built in shell
 	CD,
 	ECHO,
 	PWD,
@@ -24,8 +38,6 @@ typedef enum e_tokentype
 	UNSET,
 	ENV,
 	EXIT,
-	CLEAR,
-	EXIT_STATUS,
 }	t_token_type;
 
 typedef struct s_keyword
@@ -55,11 +67,16 @@ typedef struct s_lexer {
 
 t_lexer	*new_lexer(const char *str);
 void	generate_tokens(t_lexer	*l);
+
 int		lex_env_var(t_lexer *l);
 int		lex_keyword(t_lexer *l);
+int		lex_executable(t_lexer *l);
+int		lex_word(t_lexer *l);
+
+int		is_there_exec(t_lexer *l);
+
 int		append_token(t_lexer *l, t_token_type type, int size);
 void	free_lexer(t_lexer *l);
-
 t_token	*new_token(t_token_type t, t_lexer *l, int size);
 
 // Lexer utils
@@ -69,6 +86,7 @@ t_lexer	*new_lexer(const char *str);
 bool	is_letter(char c);
 void	eat_whitespaces(t_lexer *l);
 bool	ft_isspace(char ch);
+int		get_pos_next_whitespace(t_lexer *l);
 // Lexer utils
 
 #endif
