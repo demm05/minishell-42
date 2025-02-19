@@ -5,7 +5,7 @@ int	lex_keyword(t_lexer *l)
 {
 	static const t_keyword	keys[] = {
 	{"echo", ECHO, 4}, {"pwd", PWD, 3}, {"cd", CD, 2}, {"export", EXPORT, 6},
-	{"env", ENV, 3}, {"unset", UNSET, 5}, {"exit", EXIT, 4}, {"clear", CLEAR, 5}
+	{"env", ENV, 3}, {"unset", UNSET, 5}, {"exit", EXIT, 4}
 	};
 	int		i;
 	int		size;

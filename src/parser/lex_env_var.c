@@ -1,25 +1,5 @@
 #include "../../inc/parser.h"
 
-static inline int	get_pos_next_whitespace(t_lexer *l)
-{
-	int		i;
-
-	i = -1;
-	while (1)
-	{
-		i++;
-		if (l->position + i > l->size)
-			break ;
-		if (ft_isspace(l->input[l->position + i]))
-			break ;
-		while (l->position + i > l->size && l->input[l->position + i] == '$')
-			i++;
-	}
-	if (i > l->size)
-		i = l->size;
-	return (i);
-}
-
 static inline bool	is_valid_ch(char c)
 {
 	return (((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) || c == '_' || (c >= '0' && c <= '9'));

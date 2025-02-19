@@ -1,0 +1,81 @@
+cat Makefile | wc -l | wc -l
+#VALID
+PIPE
+  |--Pipe
+    |--cat Makefile
+    |--wc -l
+  |--wc -l
+
+#################################################################
+cat Makefile | wc -l | wc -l | wc -l
+#INVALID
+PIPE
+  |--Pipe
+    |--cat Makefile
+    |--wc -l
+  |--Pipe
+    |-- wc -l
+    |-- wc -l
+#VALID
+PIPE
+  |--PIPE
+    |--PIPE
+      |--cat Makefile
+      |--wc -l
+    |--wc -l
+  |--wc -l
+
+#################################################################
+cat Makefile | wc -l | wc -l | wc -l | wc -l
+#INVALID
+PIPE
+  |--Pipe
+    |--cat Makefile
+    |--wc -l
+  |--Pipe
+    |-- Pipe
+      |--wc -l
+      |--wc -l
+    |-- wc -l
+#VALID
+PIPE
+  |--PIPE
+    |--PIPE
+      |--PIPE
+        |--cat Makefile
+        |--wc -l
+      |--wc -l
+    |--wc -l
+  |--wc -l
+  
+#################################################################
+cat Makefile | wc -l && echo "YES"
+#VALID
+AND
+  |--Pipe
+    |-- cat Makefile
+    |--wc -l
+  |--echo
+
+#################################################################
+cat Makefile | wc -l && echo "YES" && echo "Y" && echo "D"
+#INVALID
+AND
+  |--Pipe
+    |-- cat Makefile
+    |--wc -l
+  |--AND
+    |-- AND
+      |-- echo "YES"
+      |-- echo "Y"
+    |-- echo "D"
+#VALID
+AND
+  |--PIPE
+    |--cat Makefile
+    |--wc -l
+  |--AND
+    |--echo "YES"
+    |--AND
+      |--echo "Y"
+      |--echo "D"
