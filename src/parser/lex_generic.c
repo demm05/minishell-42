@@ -7,8 +7,7 @@ int	is_there_exec(t_lexer *l)
 	unsigned int		i;
 	static t_token_type	t[] = {
 		EXEC, CD, ECHO, PWD, EXPORT, UNSET,
-		ENV, EXIT, REDIR_IN, REDIR_OUT,
-		REDIR_OUT_A, HERE_DOC};
+		ENV, EXIT};
 
 	if (!l->tokens)
 		return (0);
@@ -19,7 +18,9 @@ int	is_there_exec(t_lexer *l)
 		while (i < sizeof(t) / sizeof(t[0]))
 		{
 			if (t[i++] == last->type)
+			{
 				return (1);
+			}
 		}
 		if (last->type == AND || last->type == OR || last->type == PIPE)
 			break ;

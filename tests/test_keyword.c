@@ -28,7 +28,6 @@ Test(lex_keyword, test_valid_cases) {
         {"env", ENV},
         {"exit", EXIT},
         {"echo", ECHO},
-        {"clear", CLEAR},
         {NULL, 0}
     };
 

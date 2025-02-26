@@ -79,3 +79,21 @@ AND
     |--AND
       |--echo "Y"
       |--echo "D"
+
+cat Makefile && echo "YES"
+AND
+  |-- cat Makefile
+  |-- echo "YES"
+
+> Makefile | wc -l
+tokens: REDIR_OUT PATH PIPE EXEC WORD 
+PIPE
+  |-- REDIR_OUT (Makefile)
+  |-- EXEC (wc -l)
+
+cat Makefile > t | wc -l
+tokens: EXEC WORD REDIR_OUT PATH PIPE EXEC WORD 
+PIPE
+  |-- REDIR_OUT (t)
+    |-- EXEC (cat Makefile)
+  |-- EXEC (wc -l)
