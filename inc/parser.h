@@ -26,11 +26,13 @@ typedef enum e_tokentype
 	REDIR_OUT_A,// >>
 	HERE_DOC,	// <<	
 	PIPE,		// |
+	EXPAND_VAR,	// $ better
 	VAR_EXP,	// $
 	EXEC,		// Executable like ls wc grep 
 	WORD,		// It could be an argument or file
+	PATH,		// Can be relative or absolute eg ./ or /
 	
-	// Built in shell
+	// Built in shell exec
 	CD,
 	ECHO,
 	PWD,
@@ -67,14 +69,11 @@ typedef struct s_lexer {
 
 t_lexer	*new_lexer(const char *str);
 void	generate_tokens(t_lexer	*l);
-
 int		lex_env_var(t_lexer *l);
 int		lex_keyword(t_lexer *l);
 int		lex_executable(t_lexer *l);
 int		lex_word(t_lexer *l);
-
 int		is_there_exec(t_lexer *l);
-
 int		append_token(t_lexer *l, t_token_type type, int size);
 void	free_lexer(t_lexer *l);
 t_token	*new_token(t_token_type t, t_lexer *l, int size);
@@ -88,5 +87,24 @@ void	eat_whitespaces(t_lexer *l);
 bool	ft_isspace(char ch);
 int		get_pos_next_whitespace(t_lexer *l);
 // Lexer utils
+
+typedef struct s_astnode
+{
+	struct s_astnode	**children;
+	const char			*literal;
+	int					lit_size;
+	int					childs;
+	t_token_type		type;
+}	t_astnode;
+
+t_astnode	*new_astnode(t_token *tok);
+void		add_child(t_astnode *parent, t_astnode *child);
+void		print_ast(t_astnode *node, int depth);
+
+char		*decode(t_token_type t);
+bool	is_token_exec(t_token_type t);
+t_astnode	*parse_exec(t_token *token);
+int		analyze_tokens(t_token *token);
+bool	match(t_token *token, t_token_type expected[], int size);
 
 #endif

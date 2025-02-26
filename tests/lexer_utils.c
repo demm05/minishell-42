@@ -51,3 +51,13 @@ Test(eat_whitespaces, first)
 	cr_expect(l->ch == 'D', "Failed basic test");
 	free(l);
 }
+
+Test(is_there_exec, first)
+{
+	l = new_lexer("HELLO");
+	cr_assert_not_null(l);
+	append_token(l, REDIR_OUT, 1);
+	append_token(l, WORD, 1);
+	cr_expect(is_there_exec(l) == 0);
+	free_lexer(l);
+}

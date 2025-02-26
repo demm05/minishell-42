@@ -12,4 +12,11 @@
 # include <sys/types.h>
 # include "libft.h"
 
+typedef struct s_node
+{
+	void 			*context;
+	struct s_node	*next;
+	struct s_node	*prev;
+}	t_node;
+
 #endif
