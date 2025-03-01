@@ -26,9 +26,9 @@ int	main(int argc, char **argv)
 		l = new_lexer(line);
 		generate_tokens(l);
 		head = parse(l);
-		print_tokens(l->tokens);
 		if (head)
 		{
+			print_tokens(l->tokens);
 			print_ast(head, 0);
 			printf("\n");
 			free_ast(&head);

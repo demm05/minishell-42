@@ -9,24 +9,24 @@ t_astnode	*new_astnode(t_token *tok)
 	node->lit_size = tok->size;
 	node->literal = tok->literal;
 	node->children = NULL;
+	node->next = NULL;
+	node->prev = NULL;
 	node->childs = 0;
 	return (node);
 }
 
 void add_child(t_astnode *parent, t_astnode *child)
 {
-	t_astnode	**old_children;
-
 	if (!parent || !child)
 		return ;
-	old_children = parent->children;
-	parent->childs++;
-	parent->children = malloc(sizeof(t_astnode *) * parent->childs);
 	if (!parent->children)
+	{
+		parent->children = child;
+		parent->prev = child;
 		return ;
-	ft_memcpy(parent->children, old_children, sizeof(t_astnode *) * (parent->childs - 1));
-	parent->children[parent->childs - 1] = child;
-	free(old_children);
+	}
+	parent->prev->next = child;
+	parent->prev = child;
 }
 
 void	print_ast(t_astnode *node, int depth)
@@ -47,20 +47,25 @@ void	print_ast(t_astnode *node, int depth)
 	printf(")");
 	printf("\n");
 
-	i = 0;
-	while (i < node->childs)
-		print_ast(node->children[i++], depth + 1);
+	while (node->children)
+	{
+		print_ast(node->children, depth + 1);
+		node->children = node->children->next;
+	}
 }
 
 void	free_ast(t_astnode **node)
 {
-	int	i;
+	t_astnode	*cur;
 
 	if (!node || !*node)
 		return ;
-	i = 0;
-	while (i < (*node)->childs)
-		free_ast(&(*node)->children[i++]);
+	cur = (*node)->children;
+	while (cur)
+	{
+		free_ast(&cur);
+		cur = cur->next;
+	}
 	free(*node);
 	*node = NULL;
 }

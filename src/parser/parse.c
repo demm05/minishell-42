@@ -9,7 +9,7 @@ t_astnode	*parse(t_lexer *l)
 	t_astnode	*head;
 	int			status;
 
-	if (!l || !l->tokens)
+	if (!l || !l->tokens || l->tokens->type == EOL)
 	{
 		free_lexer(l);
 		return (NULL);

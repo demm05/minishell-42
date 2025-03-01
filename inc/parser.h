@@ -69,7 +69,9 @@ typedef struct s_lexer {
 
 typedef struct s_astnode
 {
-	struct s_astnode	**children;
+	struct s_astnode	*next;
+	struct s_astnode	*prev;
+	struct s_astnode	*children;
 	const char			*literal;
 	int					lit_size;
 	int					childs;
