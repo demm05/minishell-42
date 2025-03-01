@@ -31,7 +31,8 @@ void add_child(t_astnode *parent, t_astnode *child)
 
 void	print_ast(t_astnode *node, int depth)
 {
-	int	i;
+	int			i;
+	t_astnode	*cur;
 
 	if (depth == 0)
 		printf("Abstract syntax tree: \n");
@@ -47,24 +48,25 @@ void	print_ast(t_astnode *node, int depth)
 	printf(")");
 	printf("\n");
 
-	while (node->children)
+	cur = node->children;
+	while (cur)
 	{
-		print_ast(node->children, depth + 1);
-		node->children = node->children->next;
+		print_ast(cur, depth + 1);
+		cur = cur->next;
 	}
 }
 
 void	free_ast(t_astnode **node)
 {
-	t_astnode	*cur;
+	t_astnode	*next;
 
 	if (!node || !*node)
 		return ;
-	cur = (*node)->children;
-	while (cur)
+	while ((*node)->children)
 	{
-		free_ast(&cur);
-		cur = cur->next;
+		next = (*node)->children->next;;
+		free_ast(&(*node)->children);
+		(*node)->children = next;
 	}
 	free(*node);
 	*node = NULL;
