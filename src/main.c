@@ -1,17 +1,5 @@
 # include "../inc/parser.h"
 
-void	print_tokens(t_token *token)
-{
-	printf("Stream of tokens: ");
-	while (token->next)
-	{
-		printf("%s -> ", decode(token->type));
-		token = token->next;
-	}
-	printf("%s", decode(token->type));
-	printf("\n\n");
-}
-
 int	main(int argc, char **argv)
 {
 	t_lexer	*l;

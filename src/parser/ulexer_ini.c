@@ -49,7 +49,7 @@ int	append_token(t_lexer *l, t_token_type type, int size)
 		return (0);
 	}
 	else
-		new->prev = l->tokens;
+		new->prev = l->tokens->prev;
 	l->tokens->prev->next = new;
 	l->tokens->prev = new;
 	return (0);

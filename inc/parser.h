@@ -81,6 +81,7 @@ typedef struct s_astnode
 	t_token_type		type;
 }	t_astnode;
 
+void		print_tokens(t_token *token);
 void		generate_tokens(t_lexer	*l);
 void		free_lexer(t_lexer *l);
 void		read_char(t_lexer *l);
@@ -92,6 +93,7 @@ int			lex_env_var(t_lexer *l);
 int			lex_keyword(t_lexer *l);
 int			lex_executable(t_lexer *l);
 int			lex_word(t_lexer *l);
+int			lex_quote(t_lexer *l);
 int			is_there_exec(t_lexer *l);
 int			append_token(t_lexer *l, t_token_type type, int size);
 int			analyze_tokens(t_lexer *l);

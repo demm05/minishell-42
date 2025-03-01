@@ -1,7 +1,7 @@
 #include "parser.h"
 
 
-int	main(void)
+/*int	main(void)
 {
 	t_lexer	*l = NULL;
 	t_astnode	*node = NULL;
@@ -15,4 +15,4 @@ int	main(void)
 	else
 		printf("Error got null\n");
 	free_lexer(l);
-}
+}*/
