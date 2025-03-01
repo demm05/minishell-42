@@ -1,7 +1,9 @@
+#include "parser.h"
 #include "../inc/test.h"
 
 t_lexer	*l = NULL;
 t_astnode	*node = NULL;
+t_token	*head = NULL;
 
 Test(utils, new_astnode)
 {
@@ -63,7 +65,7 @@ Test(parse, analyze_tokens)
 	cr_assert_not_null(l);
 	generate_tokens(l);
 	cr_assert_not_null(l->tokens, "Failed to generate tokens");
-	cr_expect(analyze_tokens(l->tokens) != 0, "I expected to get analyze status error for: '%s'", s); 
+	cr_expect(analyze_tokens(l) != 0, "I expected to get analyze status error for: '%s'", s); 
 	free_lexer(l);
 }
 
@@ -72,10 +74,14 @@ Test(parse, parse_exec_1)
 	l = new_lexer("echo $? env >> t");	
 	cr_assert_not_null(l);
 	generate_tokens(l);
-	node = parse_exec(l->tokens);
+	head = l->tokens;
+	node = parse_exec(&head);
 	cr_assert_not_null(node);
-	cr_expect(node->type == ECHO);
-	cr_expect(node->childs == 4, "expected: %d childs intsead got: %d", 4, node->childs);
+	cr_expect(node->type == REDIR_OUT_A);
+	cr_expect(node->childs == 2);
+	cr_expect(node->children[0]->type == PATH);
+	cr_expect(node->children[1]->type == ECHO);
 	print_ast(node, 0);
 	free_lexer(l);
+	free_ast(&node);
 }

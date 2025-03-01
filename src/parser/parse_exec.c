@@ -3,7 +3,7 @@
 bool	consume_redir(t_astnode **parent, t_token **token);
 bool	consume_exec_args(t_astnode *parent, t_token **token);
 
-t_astnode	*parse_exec(t_token *token)
+t_astnode	*parse_exec(t_token **token)
 {
 	t_astnode	*exec_node;
 	t_astnode	*return_node;
@@ -12,19 +12,19 @@ t_astnode	*parse_exec(t_token *token)
 	exec_node = NULL;
 	while (token)
 	{
-		if (consume_redir(&return_node, &token))
+		if (consume_redir(&return_node, token))
 			continue ;
 		else if (!exec_node)
 		{
-			if (!is_token_exec(token->type))
+			if (!is_token_exec((*token)->type))
 			{
-				printf("Unexpected token: %s; Expected: %s\n", decode(token->type), decode(EXEC));
+				printf("Unexpected token: %s; Expected: %s\n", decode((*token)->type), decode(EXEC));
 				return (NULL);
 			}
-			exec_node = new_astnode(token);
-			token = token->next;
+			exec_node = new_astnode(*token);
+			*token = (*token)->next;
 		}
-		else if (consume_exec_args(exec_node, &token))
+		else if (consume_exec_args(exec_node, token))
 			continue ;
 		else
 			break ;

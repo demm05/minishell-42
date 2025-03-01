@@ -13,32 +13,56 @@ t_astnode	*new_astnode(t_token *tok)
 	return (node);
 }
 
-void		add_child(t_astnode *parent, t_astnode *child)
+void add_child(t_astnode *parent, t_astnode *child)
 {
+	t_astnode	**old_children;
+
+	if (!parent || !child)
+		return ;
+	old_children = parent->children;
 	parent->childs++;
-	parent->children = realloc(parent->children, parent->childs* sizeof(t_astnode *));
-	parent->children[parent->childs- 1] = child;
+	parent->children = malloc(sizeof(t_astnode *) * parent->childs);
+	if (!parent->children)
+		return ;
+	ft_memcpy(parent->children, old_children, sizeof(t_astnode *) * (parent->childs - 1));
+	parent->children[parent->childs - 1] = child;
+	free(old_children);
 }
 
 void	print_ast(t_astnode *node, int depth)
 {
 	int	i;
 
-	// Print indentation
-	for (i = 0; i < depth; i++)
+	if (depth == 0)
+		printf("Abstract syntax tree: \n");
+	i = 0;
+	while (i++ < depth)
 		printf("  ");
 
-	// Print node type and literal
 	printf("%s", decode(node->type));
 	printf(" (");
-	for (i = 0; i < node->lit_size; i++)
-		printf("%c", node->literal[i]);
+	i = 0;
+	while (i < node->lit_size)
+		printf("%c", node->literal[i++]);
 	printf(")");
 	printf("\n");
 
-	// Print children
-	for (i = 0; i < node->childs; i++)
-		print_ast(node->children[i], depth + 1);
+	i = 0;
+	while (i < node->childs)
+		print_ast(node->children[i++], depth + 1);
+}
+
+void	free_ast(t_astnode **node)
+{
+	int	i;
+
+	if (!node || !*node)
+		return ;
+	i = 0;
+	while (i < (*node)->childs)
+		free_ast(&(*node)->children[i++]);
+	free(*node);
+	*node = NULL;
 }
 
 bool	match(t_token *token, t_token_type expected[], int size)
