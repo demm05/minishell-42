@@ -1,36 +1,40 @@
 # include "../inc/parser.h"
 
-char	*decode(t_token_type t);
+void	print_tokens(t_token *token)
+{
+	printf("Stream of tokens: ");
+	while (token->next)
+	{
+		printf("%s -> ", decode(token->type));
+		token = token->next;
+	}
+	printf("%s", decode(token->type));
+	printf("\n\n");
+}
 
 int	main(int argc, char **argv)
 {
 	t_lexer	*l;
-	t_token	*t;
 	char	*line;
-	int		i;
-	int		exit_s = 0;
+	t_astnode	*head;
 
-	while (!exit_s)
+	while (1)
 	{
 		line = readline("Promt > ");
 		if (!line)
 			break ;
 		l = new_lexer(line);
 		generate_tokens(l);
-		t = l->tokens;
-		while (t)
+		head = parse(l);
+		print_tokens(l->tokens);
+		if (head)
 		{
-			if (t->type == EXIT)
-				exit(0);
-			printf("Type: %s\t\tLiteral: ", decode(t->type));
-			i = 0;
-			while (i < t->size)
-				printf("%c", t->literal[i++]);
+			print_ast(head, 0);
 			printf("\n");
-			t = t->next;
+			free_ast(&head);
+			free_lexer(l);
 		}
 		free(line);
-		free_lexer(l);
 	}
 	return (0);
 }

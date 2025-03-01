@@ -1,52 +1,66 @@
 #include "../../inc/parser.h"
 
-t_astnode	*parse_and(t_token *token);
+t_astnode	*parse_logical_exp(t_token **token);
+t_astnode	*parse_pipe(t_token **token);
 
-int	analyze_tokens(t_token *token)
+t_astnode	*parse(t_lexer *l)
 {
-	while (token)
+	t_token		*t_head;
+	t_astnode	*head;
+	int			status;
+
+	if (!l || !l->tokens)
 	{
-		if (token->type == ILLEGAL)
-			return (1);
-		else if (token->type == REDIR_OUT || token->type == REDIR_OUT_A || token->type == REDIR_IN)
-			if (token->next->type == EOL)
-				return (2);
-		token = token->next;
+		free_lexer(l);
+		return (NULL);
 	}
-	return (0);
-}
-
-void	parse(char *line)
-{
-	t_lexer	*l;
-	int		status;
-
-	l = new_lexer(line);
-	generate_tokens(l);
-	status = analyze_tokens(l->tokens);
-	if (!status)
+	status = analyze_tokens(l);
+	if (status)
 	{
-		printf("Error syntax error: %d\n", status);
+		free_lexer(l);
+		return (NULL);
 	}
-	else
-		parse_and(l->tokens);
+	t_head = l->tokens;
+	head = parse_logical_exp(&t_head);
+	if (!head)
+	{
+		free_lexer(l);
+		return (NULL);
+	}
+	return (head);
 }
 
-t_astnode	*parse_logical_exp(t_token *token)
+t_astnode	*parse_logical_exp(t_token **token)
 {
-
-}
-
-t_astnode	*parse_pipe(t_token *token)
-{
+	static	t_token_type	exp[] = {AND, OR};
 	t_astnode	*left;	
-
-	left = parse_exec(token);
-}
-
-t_astnode	*parse_and(t_token *token)
-{
-	t_astnode	*left;	
+	t_astnode	*head;
 
 	left = parse_pipe(token);
+	if (match(*token, exp, 2))
+	{
+		head = new_astnode(*token);
+		*token = (*token)->next;
+		add_child(head, left);
+		add_child(head, parse_logical_exp(token));
+		return (head);
+	}
+	return (left);
+}
+
+t_astnode	*parse_pipe(t_token **token)
+{
+	t_astnode	*left;	
+	t_astnode	*head;
+
+	left = parse_exec(token);
+	if ((*token)->type == PIPE)
+	{
+		head = new_astnode(*token);
+		*token = (*token)->next;
+		add_child(head, left);
+		add_child(head, parse_pipe(token));
+		return (head);
+	}
+	return (left);
 }
