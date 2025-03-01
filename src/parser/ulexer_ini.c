@@ -22,7 +22,6 @@ void	free_lexer(t_lexer *l)
 
 	if (!l)
 		return ;
-
 	while (l->tokens)
 	{
 		next = l->tokens->next;

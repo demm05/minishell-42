@@ -14,7 +14,6 @@ typedef enum e_tokentype
 	ABSPATH,	// /bin
 	SQUOTE,		// '
 	DQUOTE,		// "
-
 	// Better names
 	EOL,		// End of line
 	ILLEGAL,	// When invalid input
@@ -31,7 +30,6 @@ typedef enum e_tokentype
 	EXEC,		// Executable like ls wc grep 
 	WORD,		// It could be an argument or file
 	PATH,		// Can be relative or absolute eg ./ or /
-	
 	// Built in shell exec
 	CD,
 	ECHO,
@@ -58,13 +56,18 @@ typedef struct s_token
 	int				size;
 }	t_token;
 
-typedef struct s_lexer {
+typedef struct s_lexer
+{
 	const char	*input;
 	t_token		*tokens;
-	int			position;  // current position in input (points to current char)
-	int			read_postion; // current reading position in input (after current char)
+	// current position in input (points to current char)
+	int			position;
+	// current reading position in input (after current char)
+	int			read_postion;
+	// lenght of input
 	int			size;
-	char		ch; // current char under examination
+	// current char under examination(poistiob)
+	char		ch;
 }	t_lexer;
 
 typedef struct s_astnode

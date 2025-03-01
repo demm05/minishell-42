@@ -32,9 +32,9 @@ t_astnode	*parse(t_lexer *l)
 
 t_astnode	*parse_logical_exp(t_token **token)
 {
-	static	t_token_type	exp[] = {AND, OR};
-	t_astnode	*left;	
-	t_astnode	*head;
+	static t_token_type	exp[] = {AND, OR};
+	t_astnode			*left;	
+	t_astnode			*head;
 
 	left = parse_pipe(token);
 	if (match(*token, exp, 2))
