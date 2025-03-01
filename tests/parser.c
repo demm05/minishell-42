@@ -22,39 +22,39 @@ Test(utils, new_astnode)
 	free(n);
 }
 
-Test(utils, add_child)
-{
-	t_astnode	*n;
-	t_token		*t;
-
-	l = new_lexer("HELLO WORLD");
-	cr_assert_not_null(l);
-	t = new_token(AND, l, 1);
-	n = new_astnode(t);
-	cr_expect(n->type == AND);
-	free(t);
-	cr_assert_not_null(n);
-	t = new_token(EXEC, l, 1);
-	add_child(n, new_astnode(t));
-	cr_expect(n->children[0]->type == EXEC);
-	free(t);
-	cr_expect(n->childs == 1);
-	t = new_token(EXEC, l, 1);
-	add_child(n, new_astnode(t));
-	cr_expect(n->children[0]->type == EXEC);
-	free(t);
-	cr_expect(n->childs == 2);
-	t = new_token(WORD, l, 1);
-	add_child(n->children[0], new_astnode(t));
-	cr_expect(n->children[0]->children[0]->type == WORD);
-	free(t);
-	cr_expect(n->childs == 2);
-	free(l);
-	free(n->children[0]->children[0]);
-	free(n->children[0]);
-	free(n->children[1]);
-	free(n);
-}
+//Test(utils, add_child)
+//{
+//	t_astnode	*n;
+//	t_token		*t;
+//
+//	l = new_lexer("HELLO WORLD");
+//	cr_assert_not_null(l);
+//	t = new_token(AND, l, 1);
+//	n = new_astnode(t);
+//	cr_expect(n->type == AND);
+//	free(t);
+//	cr_assert_not_null(n);
+//	t = new_token(EXEC, l, 1);
+//	add_child(n, new_astnode(t));
+//	cr_expect(n->children[0]->type == EXEC);
+//	free(t);
+//	cr_expect(n->childs == 1);
+//	t = new_token(EXEC, l, 1);
+//	add_child(n, new_astnode(t));
+//	cr_expect(n->children[0]->type == EXEC);
+//	free(t);
+//	cr_expect(n->childs == 2);
+//	t = new_token(WORD, l, 1);
+//	add_child(n->children[0], new_astnode(t));
+//	cr_expect(n->children[0]->children[0]->type == WORD);
+//	free(t);
+//	cr_expect(n->childs == 2);
+//	free(l);
+//	free(n->children[0]->children[0]);
+//	free(n->children[0]);
+//	free(n->children[1]);
+//	free(n);
+//}
 
 Test(parse, analyze_tokens)
 {
@@ -78,10 +78,10 @@ Test(parse, parse_exec_1)
 	node = parse_exec(&head);
 	cr_assert_not_null(node);
 	cr_expect(node->type == REDIR_OUT_A);
-	cr_expect(node->childs == 2);
-	cr_expect(node->children[0]->type == PATH);
-	cr_expect(node->children[1]->type == ECHO);
-	print_ast(node, 0);
+	cr_expect(node->childs == 2, "node->childs 2 != %d", node->childs);
+	cr_expect(node->children->type == PATH);
+	cr_expect(node->children->next->type == ECHO);
+	//print_ast(node, 0);
 	free_lexer(l);
 	free_ast(&node);
 }

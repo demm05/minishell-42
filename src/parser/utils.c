@@ -18,6 +18,7 @@ char *decode(t_token_type t)
 {
 	switch (t)
 	{
+		case EXPAND_VAR: return "EXPAND_VAR";
 		case PATH: return "PATH";
 		case ECHO: return "ECHO";
 		case LT: return "LT";
@@ -50,4 +51,16 @@ char *decode(t_token_type t)
 		case EXIT: return "EXIT";
 		default: return "UNKNOWN";
 	}
+}
+
+void	print_tokens(t_token *token)
+{
+	printf("Stream of tokens: ");
+	while (token->next)
+	{
+		printf("%s -> ", decode(token->type));
+		token = token->next;
+	}
+	printf("%s", decode(token->type));
+	printf("\n\n");
 }

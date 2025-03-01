@@ -24,6 +24,6 @@ int	lex_env_var(t_lexer *l)
 	str = l->input + l->position;
 	while (len < l->size && is_valid_ch(str[len]))
 		len++;
-	append_token(l, DSIGN, len);
+	append_token(l, EXPAND_VAR, len);
 	return (1);
 }

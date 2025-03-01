@@ -19,6 +19,7 @@ void	add_child(t_astnode *parent, t_astnode *child)
 {
 	if (!parent || !child)
 		return ;
+	parent->childs++;
 	if (!parent->children)
 	{
 		parent->children = child;

@@ -1,4 +1,5 @@
 #include "../inc/test.h"
+#include "parser.h"
 
 t_lexer	*l = NULL;
 
@@ -10,13 +11,13 @@ Test(lex_env_var, extra_1)
 	cr_assert_not_null(l);
 	cr_expect(lex_env_var(l) == 1);
 	t = l->tokens->prev;
-	cr_expect(t->type == DSIGN, "Expected %d got %d %s", ILLEGAL, t->type, t->literal);
+	cr_expect(t->type == EXPAND_VAR, "Expected %d got %d %s", EXPAND_VAR, t->type, t->literal);
 	cr_expect(lex_env_var(l) == 1);
 	t = l->tokens->prev;
-	cr_expect(t->type == DSIGN, "Expected %d got %d %s", DSIGN, t->type, t->literal);
+	cr_expect(t->type == EXPAND_VAR, "Expected %d got %d %s", EXPAND_VAR, t->type, t->literal);
 	cr_expect(lex_env_var(l) == 1);
 	t = l->tokens->prev;
-	cr_expect(t->type == EXIT_STATUS, "Expected %d got %d %s", DSIGN, t->type, t->literal);
+	cr_expect(t->type == EXIT_STATUS, "Expected %d got %d %s", EXIT_STATUS, t->type, t->literal);
 }
 
 Test(lex_env_var, valid_whitespaces)
@@ -35,7 +36,7 @@ Test(lex_env_var, valid_whitespaces)
 		tok = l->tokens->prev;
 		cr_assert_not_null(tok, "Failed on initializing env token, current lexer input: %s", l->input + l->position);
 		cr_expect(strncmp(vars[i] + 1, tok->literal, strlen(vars[i]) - 1) == 0, "Expecetd %s got size:%d and s:%s", vars[i]+1, tok->size, tok->literal);
-		cr_expect(tok->type == DSIGN, "%d: Expected typed: %d insteadt got %d", i, DSIGN, tok->type);
+		cr_expect(tok->type == EXPAND_VAR, "%d: Expected typed: %d insteadt got %d", i, EXPAND_VAR, tok->type);
 		free(vars[i]);
 		i++;
 	}

@@ -27,6 +27,8 @@ void	generate_tokens(t_lexer	*l)
 			break ;
 		else if (l->ch == '$')
 			lex_env_var(l);
+		if (l->ch == '\'' || l->ch == '"')
+			lex_quote(l);
 		else if (l->ch == '|')
 		{
 			if (peek_char(l) == '|')
