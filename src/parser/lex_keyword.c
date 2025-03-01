@@ -3,17 +3,16 @@
 
 int	lex_keyword(t_lexer *l)
 {
-	static const t_keyword	keys[] = {
+	static t_keyword	keys[] = {
 	{"echo", ECHO, 4}, {"pwd", PWD, 3}, {"cd", CD, 2}, {"export", EXPORT, 6},
 	{"env", ENV, 3}, {"unset", UNSET, 5}, {"exit", EXIT, 4}
 	};
-	int		i;
-	int		size;
-	char	c;
+	int					i;
+	int					size;
+	char				c;
 
 	if (!ft_isalpha(l->ch) || !ft_isalpha(peek_char(l)))
 		return (0);
-
 	i = -1;
 	size = sizeof(keys) / sizeof(keys[0]);
 	while (++i < size)

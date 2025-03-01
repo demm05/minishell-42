@@ -15,7 +15,7 @@ t_astnode	*new_astnode(t_token *tok)
 	return (node);
 }
 
-void add_child(t_astnode *parent, t_astnode *child)
+void	add_child(t_astnode *parent, t_astnode *child)
 {
 	if (!parent || !child)
 		return ;
@@ -39,7 +39,6 @@ void	print_ast(t_astnode *node, int depth)
 	i = 0;
 	while (i++ < depth)
 		printf("  ");
-
 	printf("%s", decode(node->type));
 	printf(" (");
 	i = 0;
@@ -47,7 +46,6 @@ void	print_ast(t_astnode *node, int depth)
 		printf("%c", node->literal[i++]);
 	printf(")");
 	printf("\n");
-
 	cur = node->children;
 	while (cur)
 	{
@@ -64,7 +62,7 @@ void	free_ast(t_astnode **node)
 		return ;
 	while ((*node)->children)
 	{
-		next = (*node)->children->next;;
+		next = (*node)->children->next;
 		free_ast(&(*node)->children);
 		(*node)->children = next;
 	}

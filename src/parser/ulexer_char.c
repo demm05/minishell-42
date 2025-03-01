@@ -2,7 +2,7 @@
 
 void	read_char(t_lexer *l)
 {
-	if (l->read_postion >= l->size) 
+	if (l->read_postion >= l->size)
 		l->ch = 0;
 	else
 		l->ch = l->input[l->read_postion];

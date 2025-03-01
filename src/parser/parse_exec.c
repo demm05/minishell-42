@@ -7,7 +7,7 @@ t_astnode	*parse_exec(t_token **token)
 {
 	t_astnode	*exec_node;
 	t_astnode	*return_node;
-	
+
 	return_node = NULL;
 	exec_node = NULL;
 	while (token)
@@ -18,7 +18,8 @@ t_astnode	*parse_exec(t_token **token)
 		{
 			if (!is_token_exec((*token)->type))
 			{
-				printf("Unexpected token: %s; Expected: %s\n", decode((*token)->type), decode(EXEC));
+				printf("Unexpected token: %s; Expected: %s\n",
+					decode((*token)->type), decode(EXEC));
 				return (NULL);
 			}
 			exec_node = new_astnode(*token);
