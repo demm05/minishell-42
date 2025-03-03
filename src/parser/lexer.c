@@ -50,10 +50,17 @@ void	generate_tokens(t_lexer	*l)
 			else
 				append_token(l, REDIR_OUT, 1);
 		}
-		else if (l->tokens && l->tokens->prev && \
-			(l->tokens->prev->type == REDIR_OUT || \
-			l->tokens->prev->type == REDIR_OUT_A))
-			add_word(l);
+		else if (l->ch == '<')
+		{
+			if (peek_char(l) == '<')
+				append_token(l, HERE_DOC, 2);
+			else
+				append_token(l, REDIR_IN, 1);
+		}
+		//else if (l->tokens && l->tokens->prev && \
+		//	(l->tokens->prev->type == REDIR_OUT || \
+		//	l->tokens->prev->type == REDIR_OUT_A))
+		//	add_word(l);
 		else if (!is_there_exec(l))
 		{
 			if (lex_keyword(l))

@@ -23,11 +23,11 @@ void	add_child(t_astnode *parent, t_astnode *child)
 	if (!parent->children)
 	{
 		parent->children = child;
-		parent->prev = child;
+		parent->children->prev = child;
 		return ;
 	}
-	parent->prev->next = child;
-	parent->prev = child;
+	parent->children->prev->next = child;
+	parent->children->prev = child;
 }
 
 void	print_ast(t_astnode *node, int depth)
@@ -73,6 +73,8 @@ void	free_ast(t_astnode **node)
 
 bool	match(t_token *token, t_token_type expected[], int size)
 {
+	if (!token)
+		return (0);
 	while (size-- > 0)
 	{
 		if (*expected == token->type)
