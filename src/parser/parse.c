@@ -37,7 +37,7 @@ t_astnode	*parse_logical_exp(t_token **token)
 	t_astnode			*head;
 
 	left = parse_pipe(token);
-	if (match(*token, exp, 2))
+	if (left && match(*token, exp, 2))
 	{
 		head = new_astnode(*token);
 		*token = (*token)->next;
@@ -53,8 +53,8 @@ t_astnode	*parse_pipe(t_token **token)
 	t_astnode	*left;	
 	t_astnode	*head;
 
-	left = parse_exec(token);
-	if ((*token)->type == PIPE)
+	left = parse_redir(token);
+	if (left && *token && (*token)->type == PIPE)
 	{
 		head = new_astnode(*token);
 		*token = (*token)->next;
