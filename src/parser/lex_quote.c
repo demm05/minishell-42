@@ -1,49 +1,37 @@
 #include "../../inc/parser.h"
 
-int	expecting = 0;
-
 static void	read_squote(t_lexer *l)
 {
 	int	pos;
-	
-	read_char(l);
-	if (l->ch == '\'') 
-	{
-		read_char(l);
-		return ;
-	}
+
 	pos = l->position;
-	while (pos < l->size)
-	{
-		if (l->input[pos] == '\'')
-		{
-			append_token(l, WORD, pos - l->position);
-			read_char(l);
-			break;
-		}
+	while (pos < l->size && l->input[pos] != '\'')
 		pos++;
+
+	if (l->input[pos] == '\'')
+	{
+		append_token(l, WORD, pos - l->position);
+		read_char(l);
 	}
+	else
+		append_token(l, ILLEGAL, pos - --l->position);
 }
 
 static void	read_dquote(t_lexer *l)
 {
 	int	pos;
 
-	if (l->ch == '"') 
-	{
-		read_char(l);
-		return ;
-	}
 	pos = l->position;
-	while(pos < l->size)
+	while (pos < l->size)
 	{
-		if (l->input[pos] == '"')
+		if (l->ch == '\\')
 		{
-			if (pos > l->position)
-				append_token(l, WORD, pos - l->position);
+			append_token(l, WORD, pos - l->position - 1);
 			read_char(l);
-			break ;
+			pos = l->position;
 		}
+		else if (l->input[pos] == '"')
+			break ;
 		else if (l->input[pos] == '$')
 		{
 			append_token(l, WORD, pos - l->position);
@@ -53,18 +41,35 @@ static void	read_dquote(t_lexer *l)
 		else
 			pos++;
 	}
+	if (l->input[pos] == '"')
+	{
+		if (pos > l->position)
+			append_token(l, WORD, pos - l->position);
+		read_char(l);
+	}
+	else
+		append_token(l, ILLEGAL, pos - --l->position);
 }
 
 int	lex_quote(t_lexer *l)
 {
+	if (l->ch != '\'' && l->ch != '"')
+		return (0);
 	if (l->ch == '\'')
-		read_squote(l);
+	{
+		read_char(l);
+		if (l->ch == '\'')
+			read_char(l);
+		else
+			read_squote(l);
+	}
 	else if (l->ch == '"')
 	{
 		read_char(l);
-		read_dquote(l);
+		if (l->ch == '"')
+			read_char(l);
+		else
+			read_dquote(l);
 	}
-	else
-		return (0);
 	return (1);
 }
