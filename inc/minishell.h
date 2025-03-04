@@ -22,11 +22,15 @@ typedef struct s_here_doc
 	bool	missing_quote;
 }	t_here_doc;
 
+
 typedef struct s_data
 {
 	char		*prompt;
 	t_lexer		*l;
 	t_astnode	*head;
+	int			exit_status;
 }	t_data;
+
+void	exec(t_data *data);
 
 #endif

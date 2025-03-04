@@ -55,6 +55,7 @@ int	lex_quote(t_lexer *l)
 {
 	if (l->ch != '\'' && l->ch != '"')
 		return (0);
+	// TODO: add token as quote so exec could enter heredoc when quote is missing
 	if (l->ch == '\'')
 	{
 		read_char(l);
