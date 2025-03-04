@@ -31,6 +31,8 @@ bool	eval(t_astnode *head, t_data *data)
 		return (handle_exec(head, data));
 	if (is_built_in(head->type))
 		return(is_built_in(head->type)(head, data));
+	if (is_redir(head->type))
+		return (handle_redir(head, data));
 	if (head->type == PIPE)
 		return (handle_pipe(head, data));
 	return (1);

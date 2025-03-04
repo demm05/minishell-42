@@ -12,22 +12,15 @@
 # include <sys/types.h>
 # include "libft.h"
 # include "parser/types.h"
-
-// here_doc and missing quote is very simmiliar so it's combined
-typedef struct s_here_doc
-{
-	char	*prompt;
-	char	*key;
-	bool	expansion;
-	bool	missing_quote;
-}	t_here_doc;
-
+# include "exec/types.h"
 
 typedef struct s_data
 {
 	char		*prompt;
+	char		*line;
 	t_lexer		*l;
 	t_astnode	*head;
+	t_env		*env;
 	int			exit_status;
 }	t_data;
 

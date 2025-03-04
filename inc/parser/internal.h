@@ -1,5 +1,5 @@
-#ifndef INTERNAL_H
-# define INTERNAL_H
+#ifndef PINTERNAL_H
+# define PINTERNAL_H
 
 # include "./types.h"
 
