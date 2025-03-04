@@ -1,5 +1,5 @@
-#ifndef TYPES_H
-# define TYPES_H
+#ifndef PTYPES_H
+# define PTYPES_H
 
 typedef enum e_tokentype
 {
