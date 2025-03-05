@@ -1,6 +1,4 @@
 #include "../../inc/exec.h"
-#include <csignal>
-#include <signal.h>
 
 static char	**build_envp(t_env *env);
 static char	**build_args(t_astnode *head);
