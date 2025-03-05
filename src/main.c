@@ -19,6 +19,7 @@ t_data	*init(int argc, char **argv, char **envp)
 	if (!data)
 		return (NULL);
 	data->env = init_env(envp);
+	data->exit_status = 0;
 	return (data);
 }
 
