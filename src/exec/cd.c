@@ -98,6 +98,7 @@ static bool	update_pwd_environment(t_env *pwd, t_env *old_pwd)
 	return (pwd->value != NULL);
 }
 
+// TODO: DELETE IT UNNECESSARY FUNCTION, BUT FIRST LEXER SHOULD BE MOIDIFIED
 char	*temp_strdup(t_astnode *head)
 {
 	char	*r;
