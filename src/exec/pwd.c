@@ -2,8 +2,12 @@
 
 bool	handle_pwd(t_astnode *head, t_data *data)
 {
-	char	cwd[1024];
-	getcwd(cwd, sizeof(cwd));
-	printf("%s\n", cwd);
+	char	*buf;
+
+	buf = get_curent_dir();
+	if (!buf)
+		return (1);
+	puts(buf);
+	free(buf);
 	return (0);
 }

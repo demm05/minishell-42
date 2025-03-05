@@ -5,15 +5,15 @@ bool	handle_export(t_astnode *head, t_data *data)
 	return (0);
 }
 
-void	append_env(t_env **head, char *key, char *value)
+t_env	*append_env(t_env **head, char *key, char *value)
 {
 	t_env	*new;
 
 	if (!head)
-		return ;
+		return (NULL);
 	new = malloc(sizeof(t_env));
 	if (!new)
-		return ;
+		return (NULL);
 	new->next = NULL;
 	new->key = key;
 	new->value = value;
@@ -22,8 +22,12 @@ void	append_env(t_env **head, char *key, char *value)
 		new->prev = new;
 		*head = new;
 	}
-	(*head)->prev->next = new;
-	(*head)->prev = new;
+	else
+	{
+		(*head)->prev->next = new;
+		(*head)->prev = new;
+	}
+	return (new);
 }
 
 t_env	*init_env(char **envp)

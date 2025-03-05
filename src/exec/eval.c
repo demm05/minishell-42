@@ -1,7 +1,8 @@
 #include "../../inc/exec.h"
 
-bool			eval(t_astnode *head, t_data *data);
-builtin_func_ptr is_built_in(t_token_type type);
+bool				eval(t_astnode *head, t_data *data);
+builtin_func_ptr	is_built_in(t_token_type type);
+bool				is_redir(t_token_type type);
 
 void	exec(t_data *data)
 {
@@ -36,6 +37,19 @@ bool	eval(t_astnode *head, t_data *data)
 	if (head->type == PIPE)
 		return (handle_pipe(head, data));
 	return (1);
+}
+
+bool	is_redir(t_token_type type)
+{
+	if (type == REDIR_IN)
+		return (true);
+	if (type == REDIR_OUT)
+		return (true);
+	if (type == REDIR_OUT_A)
+		return (true);
+	if (type == HERE_DOC)
+		return (true);
+	return (false);
 }
 
 builtin_func_ptr is_built_in(t_token_type type)
