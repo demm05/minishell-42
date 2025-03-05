@@ -4,7 +4,10 @@
 int	free_data(t_data *data)
 {
 	if (data->l)
+	{
 		free_lexer(data->l);
+		data->l = NULL;
+	}
 	if (data->head)
 		free_ast(&data->head);
 	free(data->line);
@@ -18,14 +21,15 @@ t_data	*init(int argc, char **argv, char **envp)
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (NULL);
+	ft_bzero(data, sizeof(t_data));
 	data->env = init_env(envp);
-	data->exit_status = 0;
 	return (data);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	*data;
+	int		status;
 
 	data = init(argc, argv, envp);
 	while (1)
@@ -46,5 +50,8 @@ int	main(int argc, char **argv, char **envp)
 	}
 	if (data->env)
 		free_env(&data->env);
-	return (0);
+	free_data(data);
+	status = data->exit_status;
+	free(data);
+	return (status);
 }
