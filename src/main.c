@@ -34,7 +34,7 @@ t_data	*init(int argc, char **argv, char **envp)
 	if (!data)
 		return (NULL);
 	ft_bzero(data, sizeof(t_data));
-	data->env = init_env(envp);
+	data->env = init_env(argv, envp);
 	return (data);
 }
 
