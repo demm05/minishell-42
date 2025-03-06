@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_env_init.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/06 13:44:25 by dmelnyk           #+#    #+#             */
+/*   Updated: 2025/03/06 13:44:25 by dmelnyk          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/exec.h"
 
 static void	increment_shlvl(t_env *shlvl);
@@ -31,6 +43,12 @@ t_env	*init_env(char **envp)
 	return (head);
 }
 
+/**
+ * Increments the shell level in environment variables
+ * Handles edge cases like invalid SHLVL values
+ *
+ * @param shlvl Pointer to the SHLVL environment variable
+ */
 static void	increment_shlvl(t_env *shlvl)
 {
 	char	*s;
@@ -55,6 +73,16 @@ static void	increment_shlvl(t_env *shlvl)
 	shlvl->value = ft_itoa(lvl);
 }
 
+/**
+ * Fills the environment with default variables if they don't already exist
+ * 
+ * Sets up essential shell environment variables:
+ * - PWD: Current working directory (from get_curent_dir())
+ * - SHLVL: Shell level (set to 1 or incremented if exists)
+ * - _: Last executed command (initialized to empty string)
+ *
+ * @param head Double pointer to the head of the environment list
+ */
 static void	fill_env_with_default(t_env **head)
 {
 	if (!getenv_val(*head, "PWD"))

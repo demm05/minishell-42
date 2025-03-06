@@ -1,10 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/06 13:40:39 by dmelnyk           #+#    #+#             */
+/*   Updated: 2025/03/06 13:43:27 by dmelnyk          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/exec.h"
 
 static bool	validate_env_vars(t_env **pwd, t_env **old_pwd, t_data *data);
+static char	*resolve_cd_path(t_astnode *head, t_env *old_pwd, t_data *data,
+				bool *to_free);
 static bool	perform_chdir(char *path, t_data *data, bool to_free);
 static bool	update_pwd_environment(t_env *pwd, t_env *old_pwd);
-char		*resolve_cd_path(t_astnode *head, t_env *old_pwd, t_data *data, bool *to_free);
-char		*temp_strdup(t_astnode *head);
+static char	*temp_strdup(t_astnode *head);
 
 bool	handle_cd(t_astnode *head, t_data *data)
 {
@@ -34,7 +47,17 @@ bool	handle_cd(t_astnode *head, t_data *data)
 	return (0);
 }
 
-bool	validate_env_vars(t_env **pwd, t_env **old_pwd, t_data *data)
+/**
+ * Validates and ensures PWD and OLDPWD environment variables exist
+ * 
+ * Creates these variables if they don't exist using the current directory.
+ *
+ * @param pwd Double pointer to store the PWD environment variable
+ * @param old_pwd Double pointer to store the OLDPWD environment variable
+ * @param data Data structure containing environment and status information
+ * @return true if validation succeeds, false if it fails
+ */
+static bool	validate_env_vars(t_env **pwd, t_env **old_pwd, t_data *data)
 {
 	*pwd = getenv_val(data->env, "PWD");
 	*old_pwd = getenv_val(data->env, "OLDPWD");
@@ -52,7 +75,22 @@ bool	validate_env_vars(t_env **pwd, t_env **old_pwd, t_data *data)
 	return (true);
 }
 
-char	*resolve_cd_path(t_astnode *head, t_env *old_pwd, t_data *data, bool *to_free)
+/**
+ * Resolves the target path for cd command
+ * 
+ * Handles cases: no arguments (HOME), "-" (previous directory), 
+ * 		and path arguments.
+ * Sets to_free flag if memory is allocated for the returned path.
+ *
+ * @param head AST node containing command arguments
+ * @param old_pwd OLDPWD environment variable
+ * @param data Data structure containing environment and status
+ * @param to_free Pointer to bool that indicates if 
+ * 			returned path should be freed
+ * @return Target directory path or NULL on error
+ */
+static char	*resolve_cd_path(t_astnode *head, t_env *old_pwd, t_data *data,
+					bool *to_free)
 {
 	t_env	*temp;
 
@@ -75,6 +113,17 @@ char	*resolve_cd_path(t_astnode *head, t_env *old_pwd, t_data *data, bool *to_fr
 	return (temp_strdup(head->children));
 }
 
+/**
+ * Performs the directory change operation
+ * 
+ * Changes the directory and handles potential errors.
+ * Frees the path if to_free is true.
+ *
+ * @param path Directory path to change to
+ * @param data Data structure containing environment and status
+ * @param to_free Whether the path should be freed
+ * @return true on success, false on failure
+ */
 static bool	perform_chdir(char *path, t_data *data, bool to_free)
 {
 	if (chdir(path) != 0)
@@ -90,6 +139,16 @@ static bool	perform_chdir(char *path, t_data *data, bool to_free)
 	return (1);
 }
 
+/**
+ * Updates PWD and OLDPWD environment variables after directory change
+ * 
+ * Sets OLDPWD to the previous PWD value and
+ * updates PWD to the current directory.
+ *
+ * @param pwd PWD environment variable
+ * @param old_pwd OLDPWD environment variable
+ * @return true if update succeeds, false if it fails
+ */
 static bool	update_pwd_environment(t_env *pwd, t_env *old_pwd)
 {
 	free(old_pwd->value);
@@ -98,8 +157,15 @@ static bool	update_pwd_environment(t_env *pwd, t_env *old_pwd)
 	return (pwd->value != NULL);
 }
 
-// TODO: DELETE IT UNNECESSARY FUNCTION, BUT FIRST LEXER SHOULD BE MOIDIFIED
-char	*temp_strdup(t_astnode *head)
+/**
+ * Creates a duplicate of the AST node's literal string
+ * 
+ * TODO: DELETE IT UNNECESSARY FUNCTION, BUT FIRST LEXER SHOULD BE MODIFIED
+ *
+ * @param head AST node containing the literal to duplicate
+ * @return Newly allocated copy of the string or NULL on error
+ */
+static char	*temp_strdup(t_astnode *head)
 {
 	char	*r;
 
