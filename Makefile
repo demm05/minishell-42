@@ -59,6 +59,10 @@ c clean:
 	$(Q)$(MAKE_LIB) $(LIBFT_DIR) clean
 	$(ECHO) "Clean is done!"
 
+i init:
+	@git submodule init
+	@git submodule update 
+
 f fclean: clean
 	$(Q)rm -rf $(NAME)
 	$(Q)$(MAKE_LIB) $(LIBFT_DIR) fclean
