@@ -4,7 +4,7 @@ t_lexer	*new_lexer(const char *str)
 {
 	t_lexer	*l;
 
-	if (!str)
+	if (!str || !*str)
 		return (NULL);
 	l = malloc(sizeof(t_lexer));
 	if (!l)
