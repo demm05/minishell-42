@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/06 13:40:22 by dmelnyk           #+#    #+#             */
+/*   Updated: 2025/03/06 13:43:47 by dmelnyk          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/exec.h"
 
 static char	**build_envp(t_env *env);
 static char	**build_args(t_astnode *head);
-void		free_envp(char **envp);
+static void	free_envp(char **envp);
 
 bool	handle_exec(t_astnode *head, t_data *data)
 {
@@ -31,6 +43,13 @@ bool	handle_exec(t_astnode *head, t_data *data)
 	return (0);
 }
 
+/*
+ * Builds an argument array for execve.  Currently incomplete, but intended
+ * to function similarly to build_envp.  It will likely traverse the AST
+ * rooted at 'head' to construct a NULL-terminated array of strings.
+ * Returns NULL for now, but will eventually return the 
+ * 		constructed array, or NULL on failure.
+ */
 static char	**build_args(t_astnode *head)
 {
 	char	**args;
@@ -40,7 +59,12 @@ static char	**build_args(t_astnode *head)
 	return (NULL);
 }
 
-void	free_envp(char **envp)
+/*
+ * Frees a NULL-terminated array of strings (like the one created by build_envp).
+ * Iterates through the array, freeing each individual string, and then frees
+ * the array itself.  Handles NULL input gracefully.
+ */
+static void	free_envp(char **envp)
 {
 	int	i;
 
@@ -52,6 +76,22 @@ void	free_envp(char **envp)
 	free(envp);
 }
 
+/*
+ * Builds an environment variable array suitable for use with execve.
+ * Takes a linked list of environment variables ('t_env') and converts it
+ * into a dynamically allocated, NULL-terminated array of strings, where each
+ * string is in the format "key=value".
+ *
+ * - Iterates through the 't_env' list to determine the number of environment variables.
+ * - Allocates memory for the resulting array of char pointers (plus a NULL terminator).
+ * - Iterates through the 't_env' list again, creating a new string for each
+ *   key-value pair.  Each string is allocated enough space for the key,
+ *   the '=', the value, and a null terminator.
+ * - Copies the key, '=', and value into the newly allocated string.
+ * - Sets the last element of the array to NULL.
+ * - Handles allocation failures by freeing any previously allocated memory and returning NULL.
+ * - Returns NULL if the input 'env' is NULL.
+ */
 static char	**build_envp(t_env *env)
 {
 	char	**envp;
