@@ -1,8 +1,5 @@
 #include "../../inc/parser.h"
 
-t_astnode	*parse_logical_exp(t_token **token);
-t_astnode	*parse_pipe(t_token **token);
-
 t_astnode	*parse(t_lexer *l)
 {
 	t_token		*t_head;
