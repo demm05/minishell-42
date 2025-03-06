@@ -44,9 +44,10 @@ bool	handle_redir(t_astnode *head, t_data *data);
  * Initializes environment list with envp and default env variables
  *
  * @param envp Environment variables array from main
+ * @param argv Arguments array from main
  * @return Pointer to the head of the environment list
  */
-t_env	*init_env(char **envp);
+t_env	*init_env(char **argv, char **envp);
 
 /**
  * Searches the environment list for a specific key
