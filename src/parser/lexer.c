@@ -4,6 +4,8 @@ static void	add_word(t_lexer *l);
 
 void	generate_tokens(t_lexer	*l)
 {
+	if (!l)
+		return ;
 	while (l->position < l->size)
 	{
 		eat_whitespaces(l);
