@@ -3,8 +3,8 @@
 
 # include "../parser/types.h"
 
-typedef struct s_data t_data;
-typedef bool (*builtin_func_ptr)(t_astnode *head, t_data *data);
+typedef struct s_data	t_data;
+typedef bool			(*t_builtin_func_ptr)(t_astnode *head, t_data *data);
 
 // here_doc and missing quote is very simmiliar so it's combined
 typedef struct s_here_doc
@@ -17,8 +17,8 @@ typedef struct s_here_doc
 
 typedef struct s_env
 {
-	char	*key;
-	char	*value;
+	char			*key;
+	char			*value;
 	struct s_env	*next;
 	struct s_env	*prev;
 }	t_env;
