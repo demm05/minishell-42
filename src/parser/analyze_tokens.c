@@ -1,6 +1,6 @@
 #include "../../inc/parser.h"
 
-void	show_where_illegal(t_token *ileg, t_lexer *l)
+static void	show_where_illegal(t_token *ileg, t_lexer *l)
 {
 	int	i;
 	int	len;

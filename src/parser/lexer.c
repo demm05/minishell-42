@@ -1,22 +1,6 @@
 #include "../../inc/parser.h"
 
-void	add_word(t_lexer *l)
-{
-	int		i;
-	int		w;
-	char	c;
-
-	w = get_pos_next_whitespace(l);
-	i = 0;
-	while (i < w)
-	{
-		c = l->input[l->position + i];
-		if (c == '|' || c == '&')
-			break ;
-		i++;
-	}
-	append_token(l, WORD, i);
-}
+static void	add_word(t_lexer *l);
 
 void	generate_tokens(t_lexer	*l)
 {
@@ -69,3 +53,29 @@ void	generate_tokens(t_lexer	*l)
 	}
 	append_token(l, EOL, 0);
 }
+
+/**
+ * @brief Adds a WORD token to the lexer's token list.
+ *
+ * Extracts a word from input, stops at delimiters.
+ *
+ * @param l Pointer to the lexer struct.
+ */
+static void	add_word(t_lexer *l)
+{
+	int		i;
+	int		w;
+	char	c;
+
+	w = get_pos_next_whitespace(l);
+	i = 0;
+	while (i < w)
+	{
+		c = l->input[l->position + i];
+		if (c == '|' || c == '&')
+			break ;
+		i++;
+	}
+	append_token(l, WORD, i);
+}
+
