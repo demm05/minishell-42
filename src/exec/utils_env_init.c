@@ -11,11 +11,12 @@
 /* ************************************************************************** */
 
 #include "../../inc/exec.h"
+#include <string.h>
 
 static void	increment_shlvl(t_env *shlvl);
-static void	fill_env_with_default(t_env **head);
+static void	fill_env_with_default(char **argv, t_env **head);
 
-t_env	*init_env(char **envp)
+t_env	*init_env(char **argv, char **envp)
 {
 	t_env	*head;
 	char	*c;
@@ -39,7 +40,7 @@ t_env	*init_env(char **envp)
 			append_env(&head, key, ft_strdup(++c));
 		}
 	}
-	fill_env_with_default(&head);
+	fill_env_with_default(argv, &head);
 	return (head);
 }
 
@@ -83,15 +84,22 @@ static void	increment_shlvl(t_env *shlvl)
  *
  * @param head Double pointer to the head of the environment list
  */
-static void	fill_env_with_default(t_env **head)
+static void	fill_env_with_default(char **argv, t_env **head)
 {
-	if (!getenv_val(*head, "PWD"))
-		append_env(head, ft_strdup("PWD"), get_curent_dir());
+	t_env	*pwd;
+	char	*s;
+
+	pwd = getenv_val(*head, "PWD");
+	if (!pwd)
+		pwd = append_env(head, ft_strdup("PWD"), get_curent_dir());
 	if (!getenv_val(*head, "SHLVL"))
 		append_env(head, ft_strdup("SHLVL"), ft_strdup("1"));
 	else
 		increment_shlvl(getenv_val(*head, "SHLVL"));
-	// TODO:
 	if (!getenv_val(*head, "_"))
-		append_env(head, ft_strdup("_"), ft_strdup(""));
+	{
+		s = ft_strjoin(pwd->value, "/");
+		append_env(head, ft_strdup("_"), ft_strjoin(s, argv[0]));
+		free(s);
+	}
 }
