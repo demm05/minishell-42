@@ -102,6 +102,12 @@ char		peek_char(t_lexer *l);
  */
 int			append_token(t_lexer *l, t_token_type type, int size);
 
+/* Creates new token with literal and type
+ * literal must be null terminated
+ * Advanes lexer postion by advance 
+ * */
+int	append_advance(t_lexer *l, char *literal, unsigned int advance, t_token_type type);
+
 /**
  * @brief Analyzes the tokens for syntax errors.
  *

@@ -18,30 +18,38 @@ void	generate_tokens(t_lexer	*l)
 		else if (l->ch == '|')
 		{
 			if (peek_char(l) == '|')
-				append_token(l, OR, 2);
+				append_advance(l, NULL, 2, OR);
+//				append_token(l, OR, 2);
 			else
-				append_token(l, PIPE, 1);
+				append_advance(l, NULL, 1, PIPE);
+				//append_token(l, PIPE, 1);
 		}
 		else if (l->ch == '&')
 		{
 			if (peek_char(l) == '&')
-				append_token(l, AND, 2);
+				append_advance(l, NULL, 2, AND);
+				//append_token(l, AND, 2);
 			else
-				append_token(l, ILLEGAL, 2);
+				append_advance(l, NULL, 2, ILLEGAL);
+				//append_token(l, ILLEGAL, 2);
 		}
 		else if (l->ch == '>')
 		{
 			if (peek_char(l) == '>')
-				append_token(l, REDIR_OUT_A, 2);
+				append_advance(l, NULL, 2, REDIR_OUT_A);
+				//append_token(l, REDIR_OUT_A, 2);
 			else
-				append_token(l, REDIR_OUT, 1);
+				append_advance(l, NULL, 1, REDIR_OUT);
+				//append_token(l, REDIR_OUT, 1);
 		}
 		else if (l->ch == '<')
 		{
 			if (peek_char(l) == '<')
-				append_token(l, HERE_DOC, 2);
+				append_advance(l, NULL, 2, HERE_DOC);
+//				append_token(l, HERE_DOC, 2);
 			else
-				append_token(l, REDIR_IN, 1);
+				append_advance(l, NULL, 1, REDIR_IN);
+//				append_token(l, REDIR_IN, 1);
 		}
 		else if (!is_there_exec(l))
 		{
