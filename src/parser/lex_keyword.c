@@ -24,7 +24,7 @@ int	lex_keyword(t_lexer *l)
 		c = l->input[l->position + keys[i].size];
 		if (c && !ft_isspace(c))
 			break ;
-		return (!append_token(l, keys[i].type, keys[i].size));
+		return (!append_advance(l, NULL, keys[i].size, keys[i].type));
 	}
 	return (0);
 }
