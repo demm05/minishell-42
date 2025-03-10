@@ -91,21 +91,49 @@ void		read_char(t_lexer *l);
 char		peek_char(t_lexer *l);
 
 /**
- * @brief Appends a new token to the lexer's token list.
+ * @brief Appends a token to the lexer's token list
  *
- * Creates and adds a token to the circular doubly-linked list.
+ * If the list is empty, initializes the list with the new token.
+ * Implements a circular doubly-linked list structure for tokens.
  *
- * @param l Pointer to the lexer struct.
- * @param type The type of the token to add.
- * @param size The size (length) of the token's literal.
- * @return 0 on success, 1 on failure.
+ * @param l Pointer to a lexer structure that contains the token list
+ * @param new Pointer to the new token to append
+ *
+ * @return 1 if there is any fail 
+ * @return Implicitly returns on successful append
  */
-int			append_token(t_lexer *l, t_token_type type, int size);
+int	append_token(t_lexer *l, t_token *new_token);
 
-/* Creates new token with literal and type
- * literal must be null terminated
- * Advanes lexer postion by advance 
- * */
+/**
+ * Allocates memory for a string, copies characters from the lexer's input starting at the current position,
+ * and appends the token to the lexer's token list.
+ *
+ * @param l Pointer to a lexer structure
+ * @param type The type of token to create
+ * @param size The number of characters to copy from the input
+ *
+ * @return 1 if lexer pointer is NULL, memory allocation fails, or appending the token fails
+ * @return Result of append_token on success
+ *
+ * @note This function allocates memory for the string literal that will be stored in the token.
+ *       The lexer is responsible for freeing this memory when the token is no longer needed.
+ */
+int	append_alloc(t_lexer *l, t_token_type type, int size);
+
+/**
+ * @brief Creates a new token and advances the lexer's position
+ *
+ * Creates a new token with the specified literal and type, advances the lexer's position
+ * by the specified amount, and appends the token to the lexer's token list.
+ *
+ * @param l Pointer to a lexer structure
+ * @param literal String literal to associate with the token (must be null-terminated)
+ * @param advance Number of positions to advance the lexer after creating the token
+ * @param type The type of token to create
+ *
+ * @return 1 if lexer pointer is NULL, creating the token fails, or appending the token fails
+ * @return Result of append_token on success
+ */
 int	append_advance(t_lexer *l, char *literal, unsigned int advance, t_token_type type);
 
 /**
@@ -146,8 +174,22 @@ int			lex_quote(t_lexer *l);
  * @return True if the token matches, false otherwise.
  */
 bool		match(t_token *token, t_token_type expected[], int size);
+
+/**
+ * @brief Creates a new token with the specified type, string literal, and size
+ *
+ * @param l Pointer to a lexer structure (used for validation)
+ * @param type The type of token to create
+ * @param s String literal to associate with the token
+ * @param s_size Size of the string literal
+ *
+ * @return Pointer to the newly created token, or NULL if lexer is invalid or if memory allocation fails
+ *
+ * @note This function allocates memory for the token structure, but not for the string literal.
+ *       The caller is responsible for managing the memory of the string passed in the 's' parameter.
+ */
+t_token		*new_tok(t_lexer *l, t_token_type type, char *s, unsigned int s_size);
 t_lexer		*new_lexer(const char *str);
-t_token		*new_token(t_token_type t, t_lexer *l, int size);
 void		free_lexer(t_lexer *l);
 void		print_tokens(t_token *token);
 char		*decode(t_token_type t);

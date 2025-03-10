@@ -49,7 +49,7 @@ typedef struct s_token
 {
 	struct s_token	*next;
 	struct s_token	*prev;
-	const char		*literal;
+	char			*literal;
 	t_token_type	type;
 	int				size;
 }	t_token;
@@ -73,7 +73,7 @@ typedef struct s_astnode
 	struct s_astnode	*next;
 	struct s_astnode	*prev;
 	struct s_astnode	*children;
-	const char			*literal;
+	char				*literal;
 	int					lit_size;
 	int					childs;
 	t_token_type		type;

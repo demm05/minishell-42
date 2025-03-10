@@ -19,37 +19,29 @@ void	generate_tokens(t_lexer	*l)
 		{
 			if (peek_char(l) == '|')
 				append_advance(l, NULL, 2, OR);
-//				append_token(l, OR, 2);
 			else
 				append_advance(l, NULL, 1, PIPE);
-				//append_token(l, PIPE, 1);
 		}
 		else if (l->ch == '&')
 		{
 			if (peek_char(l) == '&')
 				append_advance(l, NULL, 2, AND);
-				//append_token(l, AND, 2);
 			else
 				append_advance(l, NULL, 2, ILLEGAL);
-				//append_token(l, ILLEGAL, 2);
 		}
 		else if (l->ch == '>')
 		{
 			if (peek_char(l) == '>')
 				append_advance(l, NULL, 2, REDIR_OUT_A);
-				//append_token(l, REDIR_OUT_A, 2);
 			else
 				append_advance(l, NULL, 1, REDIR_OUT);
-				//append_token(l, REDIR_OUT, 1);
 		}
 		else if (l->ch == '<')
 		{
 			if (peek_char(l) == '<')
 				append_advance(l, NULL, 2, HERE_DOC);
-//				append_token(l, HERE_DOC, 2);
 			else
 				append_advance(l, NULL, 1, REDIR_IN);
-//				append_token(l, REDIR_IN, 1);
 		}
 		else if (!is_there_exec(l))
 		{
@@ -61,7 +53,7 @@ void	generate_tokens(t_lexer	*l)
 		else
 			add_word(l);
 	}
-	append_token(l, EOL, 0);
+	append_advance(l, NULL, EOL, 0);
 }
 
 /**
@@ -86,6 +78,5 @@ static void	add_word(t_lexer *l)
 			break ;
 		i++;
 	}
-	append_token(l, WORD, i);
+	append_alloc(l, WORD, i);
 }
-
