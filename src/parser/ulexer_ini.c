@@ -16,6 +16,96 @@ t_lexer	*new_lexer(const char *str)
 	return (l);
 }
 
+t_token	*new_tok(t_lexer *l, t_token_type type, char *s, unsigned int s_size)
+{
+	t_token	*tok;
+
+	if (!l)
+		return (NULL);
+	tok = malloc(sizeof(t_token));
+	if (!tok)
+		return (NULL);
+	tok->type = type;
+	tok->size = s_size;
+	tok->literal = s; 
+	tok->next = NULL;
+	tok->prev = NULL;
+	return (tok);
+}
+
+int	append_token(t_lexer *l, t_token *new)
+{
+	if (!l)
+		return (1);
+	if (!new)
+		return (0);
+	if (!l->tokens)
+	{
+		new->prev = new;
+		l->tokens = new;
+	}
+	else
+	{
+		new->prev = l->tokens->prev;
+		l->tokens->prev->next = new;
+		l->tokens->prev = new;
+	}
+	return (0);
+}
+
+int	append_alloc(t_lexer *l, t_token_type type, int size)
+{
+	t_token	*new;
+	char	*s;
+	int		i;
+	int		j;
+
+	if (!l)
+		return (1);
+	s = malloc(sizeof(char) * (size + 1));
+	if (!s)
+		return (1);
+	i = 0;
+	j = l->position;
+	while (i < size && j < l->size)
+		s[i++] = l->input[j++];
+	s[i] = 0;
+	new = new_tok(l, type, s, size);
+	if (!new)
+		free(s);
+	l->read_postion += size - 1;
+	read_char(l);
+	return (append_token(l, new));
+}
+
+int	append_advance(t_lexer *l, char *literal, unsigned int advance, t_token_type type)
+{
+	t_token			*new;
+	unsigned int	size;
+
+	if (!l)
+	{
+		free(literal);
+		return (1);
+	}
+	if (!literal)
+		size = 0;
+	else
+		size = ft_strlen(literal);
+	new = new_tok(l, type, literal, size);
+	if (!new)
+	{
+		free(literal);
+		return (1);
+	}
+	if (advance)
+	{
+		l->read_postion += advance - 1;
+		read_char(l);
+	}
+	return (append_token(l, new));
+}
+
 void	free_lexer(t_lexer *l)
 {
 	t_token	*next;
@@ -29,50 +119,4 @@ void	free_lexer(t_lexer *l)
 		l->tokens = next;
 	}
 	free(l);
-}
-
-// On completion this func will return 0 if the node 
-// was added to the list of tokens otherwise 1
-int	append_token(t_lexer *l, t_token_type type, int size)
-{
-	t_token	*new;
-
-	if (!l || size < 0)
-		return (1);
-	new = new_token(type, l, size);
-	if (!new)
-		return (1);
-	if (!l->tokens)
-	{
-		new->prev = new;
-		l->tokens = new;
-		return (0);
-	}
-	else
-		new->prev = l->tokens->prev;
-	l->tokens->prev->next = new;
-	l->tokens->prev = new;
-	return (0);
-}
-
-t_token	*new_token(t_token_type type, t_lexer *l, int size)
-{
-	t_token	*tok;
-
-	if (!l)
-		return (NULL);
-	tok = malloc(sizeof(t_token));
-	if (!tok)
-		return (NULL);
-	tok->type = type;
-	tok->size = size;
-	tok->literal = l->input + l->position;
-	tok->next = NULL;
-	tok->prev = NULL;
-	if (size > 0)
-	{
-		l->read_postion += size - 1;
-		read_char(l);
-	}
-	return (tok);
 }
