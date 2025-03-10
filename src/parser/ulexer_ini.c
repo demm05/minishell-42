@@ -16,21 +16,6 @@ t_lexer	*new_lexer(const char *str)
 	return (l);
 }
 
-void	free_lexer(t_lexer *l)
-{
-	t_token	*next;
-
-	if (!l)
-		return ;
-	while (l->tokens)
-	{
-		next = l->tokens->next;
-		free(l->tokens);
-		l->tokens = next;
-	}
-	free(l);
-}
-
 t_token	*new_tok(t_lexer *l, t_token_type type, char *s, unsigned int s_size)
 {
 	t_token	*tok;
@@ -48,29 +33,12 @@ t_token	*new_tok(t_lexer *l, t_token_type type, char *s, unsigned int s_size)
 	return (tok);
 }
 
-/* Creates new token with literal and type
- * literal must be null terminated
- * Advanes lexer postion by advance 
- * */
-int	append_advance(t_lexer *l, char *literal, unsigned int advance, t_token_type type)
+int	append_token(t_lexer *l, t_token *new)
 {
-	t_token			*new;
-	unsigned int	size;
-
 	if (!l)
 		return (1);
-	if (!literal)
-		size = 0;
-	else
-		size = ft_strlen(literal);
-	new = new_tok(l, type, literal, size);
 	if (!new)
-		return (1);
-	if (advance)
-	{
-		l->read_postion += advance- 1;
-		read_char(l);
-	}
+		return (0);
 	if (!l->tokens)
 	{
 		new->prev = new;
@@ -85,48 +53,70 @@ int	append_advance(t_lexer *l, char *literal, unsigned int advance, t_token_type
 	return (0);
 }
 
-// On completion this func will return 0 if the node 
-// was added to the list of tokens otherwise 1
-int	append_token(t_lexer *l, t_token_type type, int size)
+int	append_alloc(t_lexer *l, t_token_type type, int size)
 {
 	t_token	*new;
-
-	if (!l || size < 0)
-		return (1);
-	new = new_token(type, l, size);
-	if (!new)
-		return (1);
-	if (!l->tokens)
-	{
-		new->prev = new;
-		l->tokens = new;
-		return (0);
-	}
-	else
-		new->prev = l->tokens->prev;
-	l->tokens->prev->next = new;
-	l->tokens->prev = new;
-	return (0);
-}
-
-t_token	*new_token(t_token_type type, t_lexer *l, int size)
-{
-	t_token	*tok;
+	char	*s;
+	int		i;
+	int		j;
 
 	if (!l)
-		return (NULL);
-	tok = malloc(sizeof(t_token));
-	if (!tok)
-		return (NULL);
-	tok->type = type;
-	tok->size = size;
-	tok->literal = l->input + l->position;
-	tok->next = NULL;
-	tok->prev = NULL;
-	if (size > 0)
+		return (1);
+	s = malloc(sizeof(char) * (size + 1));
+	if (!s)
+		return (1);
+	i = 0;
+	j = l->position;
+	while (i < size && j < l->size)
+		s[i++] = l->input[j++];
+	s[i] = 0;
+	new = new_tok(l, type, s, size);
+	if (!new)
+		free(s);
+	l->read_postion += size - 1;
+	read_char(l);
+	return (append_token(l, new));
+}
+
+int	append_advance(t_lexer *l, char *literal, unsigned int advance, t_token_type type)
+{
+	t_token			*new;
+	unsigned int	size;
+
+	if (!l)
 	{
-		l->read_postion += size - 1;
+		free(literal);
+		return (1);
+	}
+	if (!literal)
+		size = 0;
+	else
+		size = ft_strlen(literal);
+	new = new_tok(l, type, literal, size);
+	if (!new)
+	{
+		free(literal);
+		return (1);
+	}
+	if (advance)
+	{
+		l->read_postion += advance - 1;
 		read_char(l);
 	}
-	return (tok);
+	return (append_token(l, new));
+}
+
+void	free_lexer(t_lexer *l)
+{
+	t_token	*next;
+
+	if (!l)
+		return ;
+	while (l->tokens)
+	{
+		next = l->tokens->next;
+		free(l->tokens);
+		l->tokens = next;
+	}
+	free(l);
 }

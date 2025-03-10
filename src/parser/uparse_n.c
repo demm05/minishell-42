@@ -64,6 +64,7 @@ void	free_ast(t_astnode **node)
 	while ((*node)->children)
 	{
 		next = (*node)->children->next;
+		free((*node)->literal);
 		free_ast(&(*node)->children);
 		(*node)->children = next;
 	}

@@ -10,11 +10,11 @@ static void	read_squote(t_lexer *l)
 
 	if (l->input[pos] == '\'')
 	{
-		append_token(l, WORD, pos - l->position);
+		append_alloc(l, WORD, pos - l->position);
 		read_char(l);
 	}
 	else
-		append_token(l, ILLEGAL, pos - --l->position);
+		append_alloc(l, ILLEGAL, pos - --l->position);
 }
 
 static void	read_dquote(t_lexer *l)
@@ -26,7 +26,7 @@ static void	read_dquote(t_lexer *l)
 	{
 		if (l->ch == '\\')
 		{
-			append_token(l, WORD, pos - l->position - 1);
+			append_alloc(l, WORD, pos - l->position - 1);
 			read_char(l);
 			pos = l->position;
 		}
@@ -34,7 +34,7 @@ static void	read_dquote(t_lexer *l)
 			break ;
 		else if (l->input[pos] == '$')
 		{
-			append_token(l, WORD, pos - l->position);
+			append_alloc(l, WORD, pos - l->position);
 			lex_env_var(l);
 			pos = l->position;
 		}
@@ -44,11 +44,11 @@ static void	read_dquote(t_lexer *l)
 	if (l->input[pos] == '"')
 	{
 		if (pos > l->position)
-			append_token(l, WORD, pos - l->position);
+			append_alloc(l, WORD, pos - l->position);
 		read_char(l);
 	}
 	else
-		append_token(l, ILLEGAL, pos - --l->position);
+		append_alloc(l, ILLEGAL, pos - --l->position);
 }
 
 int	lex_quote(t_lexer *l)

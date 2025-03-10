@@ -22,12 +22,12 @@ int	is_there_exec(t_lexer *l)
 
 int	lex_executable(t_lexer *l)
 {
-	append_token(l, EXEC, get_pos_next_whitespace(l));
+	append_alloc(l, EXEC, get_pos_next_whitespace(l));
 	return (1);
 }
 
 int	lex_word(t_lexer *l)
 {
-	append_token(l, WORD, get_pos_next_whitespace(l));
+	append_alloc(l, WORD, get_pos_next_whitespace(l));
 	return (1);
 }
