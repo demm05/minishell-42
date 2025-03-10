@@ -181,14 +181,13 @@ bool		match(t_token *token, t_token_type expected[], int size);
  * @param l Pointer to a lexer structure (used for validation)
  * @param type The type of token to create
  * @param s String literal to associate with the token
- * @param s_size Size of the string literal
  *
  * @return Pointer to the newly created token, or NULL if lexer is invalid or if memory allocation fails
  *
  * @note This function allocates memory for the token structure, but not for the string literal.
  *       The caller is responsible for managing the memory of the string passed in the 's' parameter.
  */
-t_token		*new_tok(t_lexer *l, t_token_type type, char *s, unsigned int s_size);
+t_token		*new_tok(t_lexer *l, t_token_type type, char *s);
 t_lexer		*new_lexer(const char *str);
 void		free_lexer(t_lexer *l);
 void		print_tokens(t_token *token);

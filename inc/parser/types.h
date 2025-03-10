@@ -51,7 +51,6 @@ typedef struct s_token
 	struct s_token	*prev;
 	char			*literal;
 	t_token_type	type;
-	int				size;
 }	t_token;
 
 typedef struct s_lexer
@@ -74,7 +73,6 @@ typedef struct s_astnode
 	struct s_astnode	*prev;
 	struct s_astnode	*children;
 	char				*literal;
-	int					lit_size;
 	int					childs;
 	t_token_type		type;
 }	t_astnode;

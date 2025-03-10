@@ -6,7 +6,6 @@ t_astnode	*new_astnode(t_token *tok)
 
 	node = malloc(sizeof(t_astnode));
 	node->type = tok->type;
-	node->lit_size = tok->size;
 	node->literal = tok->literal;
 	node->children = NULL;
 	node->next = NULL;
@@ -41,12 +40,7 @@ void	print_ast(t_astnode *node, int depth)
 	while (i++ < depth)
 		printf("  ");
 	printf("%s", decode(node->type));
-	printf(" (");
-	i = 0;
-	while (i < node->lit_size)
-		printf("%c", node->literal[i++]);
-	printf(")");
-	printf("\n");
+	printf(" (%s)\n", node->literal);
 	cur = node->children;
 	while (cur)
 	{
@@ -64,10 +58,10 @@ void	free_ast(t_astnode **node)
 	while ((*node)->children)
 	{
 		next = (*node)->children->next;
-		free((*node)->literal);
 		free_ast(&(*node)->children);
 		(*node)->children = next;
 	}
+	free((*node)->literal);
 	free(*node);
 	*node = NULL;
 }

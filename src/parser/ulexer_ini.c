@@ -16,7 +16,7 @@ t_lexer	*new_lexer(const char *str)
 	return (l);
 }
 
-t_token	*new_tok(t_lexer *l, t_token_type type, char *s, unsigned int s_size)
+t_token	*new_tok(t_lexer *l, t_token_type type, char *s)
 {
 	t_token	*tok;
 
@@ -26,7 +26,6 @@ t_token	*new_tok(t_lexer *l, t_token_type type, char *s, unsigned int s_size)
 	if (!tok)
 		return (NULL);
 	tok->type = type;
-	tok->size = s_size;
 	tok->literal = s; 
 	tok->next = NULL;
 	tok->prev = NULL;
@@ -70,7 +69,7 @@ int	append_alloc(t_lexer *l, t_token_type type, int size)
 	while (i < size && j < l->size)
 		s[i++] = l->input[j++];
 	s[i] = 0;
-	new = new_tok(l, type, s, size);
+	new = new_tok(l, type, s);
 	if (!new)
 		free(s);
 	l->read_postion += size - 1;
@@ -92,7 +91,7 @@ int	append_advance(t_lexer *l, char *literal, unsigned int advance, t_token_type
 		size = 0;
 	else
 		size = ft_strlen(literal);
-	new = new_tok(l, type, literal, size);
+	new = new_tok(l, type, literal);
 	if (!new)
 	{
 		free(literal);
