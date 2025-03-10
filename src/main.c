@@ -35,6 +35,7 @@ t_data	*init(int argc, char **argv, char **envp)
 		return (NULL);
 	ft_bzero(data, sizeof(t_data));
 	data->env = init_env(argv, envp);
+	data->prompt = " > ";
 	return (data);
 }
 
@@ -46,7 +47,7 @@ int	main(int argc, char **argv, char **envp)
 	data = init(argc, argv, envp);
 	while (1)
 	{
-		data->line = readline("Prompt > ");
+		data->line = mini_read(data->prompt);
 		if (!data->line)
 			break ;
 		data->l = new_lexer(data->line);
@@ -54,6 +55,7 @@ int	main(int argc, char **argv, char **envp)
 		data->head = parse(data->l);
 		if (data->head)
 		{
+			print_tokens(data->l->tokens);
 			print_ast(data->head, 0);
 			printf("\nResult: \n");
 			exec(data);

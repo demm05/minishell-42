@@ -24,6 +24,16 @@ typedef struct s_data
 	int			exit_status;
 }	t_data;
 
+typedef struct s_quote_state
+{
+	bool	escape;
+	bool	in_single_quote;
+	bool	in_double_quote;
+	int		in_parentheses;
+}	t_quote_state;
+
+
 void	exec(t_data *data);
+char	*mini_read(char *prompt);
 
 #endif
