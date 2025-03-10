@@ -14,17 +14,17 @@
 
 static char	**build_envp(t_env *env);
 static char	**build_args(t_astnode *head);
+static char	*get_path(t_env *env, char *literal);
 static void	free_envp(char **envp);
 
 bool	handle_exec(t_astnode *head, t_data *data)
 {
 	int		pid;
 	int		status;
+	char	*path;
 	char	**envp;
 	char	**args;
 
-	// Prototype
-	/*
 	pid = fork();
 	if (pid == -1)
 		return (1);
@@ -33,14 +33,71 @@ bool	handle_exec(t_astnode *head, t_data *data)
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		envp = build_envp(data->env);
-		args = build_args(head->children);
-		free_envp(envp);
-		execve(head->literal, args, envp);
+		args = build_args(head);
+		path = get_path(getenv_val(data->env, "PATH"), head->literal);
+		args[0] = path;
+		execve(path, args, envp);
+		puts("child");
+		exit(127);
 	}
 	else
 		waitpid(pid, &status, 0);
-	*/
+	data->exit_status = status >> 8;
+	if (status)
+		return (1);
 	return (0);
+}
+
+static char	*get_path(t_env *env, char *literal)
+{
+	char	**dir;
+	char	*path;
+	char	*temp_path;
+	int		len;
+	int		i, k;
+	int		dir_len;
+
+	path = NULL;
+	len = 0;
+	if (literal && (literal[0] == '/' || ft_strncmp(literal, "./", 2) == 0))
+		path = ft_strdup(literal);
+	else if (literal && access(literal, X_OK) == 0)
+		path = ft_strdup(literal);
+	else if (!env || !*env->value)
+		dir = ft_split("usr/bin:/bin", ':');
+	else
+		dir = ft_split(env->value, ':');
+	if (!path)
+	{
+		if (literal)
+			len = ft_strlen(literal);
+		i = 0;
+		while (dir[i])
+		{
+			if (!path)
+			{
+				dir_len = ft_strlen(dir[i]);
+				temp_path = malloc(sizeof(char) * (dir_len + len + 2));	
+				int	j = 0;
+				k = 0;
+				while (k < dir_len)
+					temp_path[j++] = dir[i][k++];
+				temp_path[j++] = '/';
+				k = 0;
+				while (k < len)
+					temp_path[j++] = literal[k++];
+				temp_path[j] = 0;
+				if (access(temp_path, X_OK) == 0)
+					path = temp_path;
+				else
+					free(temp_path);
+			}
+			free(dir[i++]);
+		}
+		free(dir);
+	}
+	// TODO: check for execution right and if it's directory
+	return (path);
 }
 
 /*
@@ -52,28 +109,24 @@ bool	handle_exec(t_astnode *head, t_data *data)
  */
 static char	**build_args(t_astnode *head)
 {
-	char	**args;
+	t_astnode	*child;
+	char		**args;
+	int			i;
 
 	if (!head)
 		return (NULL);
-	return (NULL);
-}
-
-/*
- * Frees a NULL-terminated array of strings (like the one created by build_envp).
- * Iterates through the array, freeing each individual string, and then frees
- * the array itself.  Handles NULL input gracefully.
- */
-static void	free_envp(char **envp)
-{
-	int	i;
-
-	if (!envp)
-		return ;
-	i = 0;
-	while (envp[i])
-		free(envp[i++]);
-	free(envp);
+	args = malloc((head->childs + 2) * sizeof(char *));
+	if (!args)
+		return (NULL);
+	i = 1;
+	child = head->children;
+	while (child && i - 1 < head->childs)
+	{
+		args[i++] = child->literal; 
+		child = child->next;
+	}
+	args[i] = NULL;
+	return (args);
 }
 
 /*
