@@ -53,7 +53,7 @@ void	generate_tokens(t_lexer	*l)
 		else
 			add_word(l);
 	}
-	append_advance(l, NULL, EOL, 0);
+	append_advance(l, NULL, 0, EOL);
 }
 
 /**
