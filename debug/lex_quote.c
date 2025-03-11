@@ -24,5 +24,4 @@ int	main(void)
 	else
 		printf("Error got null\n");
 	free_lexer(l);
-}
-*/
+}*/
