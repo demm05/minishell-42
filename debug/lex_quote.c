@@ -1,6 +1,6 @@
 #include "parser.h"
 
-
+/*
 int	main(void)
 {
 	t_lexer	*l = NULL;
@@ -25,3 +25,4 @@ int	main(void)
 		printf("Error got null\n");
 	free_lexer(l);
 }
+*/

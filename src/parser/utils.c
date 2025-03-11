@@ -19,6 +19,7 @@ char *decode(t_token_type t)
 	switch (t)
 	{
 		case EXPAND_VAR: return "EXPAND_VAR";
+		case EOL: return "EOL";
 		case PATH: return "PATH";
 		case ECHO: return "ECHO";
 		case LT: return "LT";
@@ -28,7 +29,6 @@ char *decode(t_token_type t)
 		case DSIGN: return "DSIGN";
 		case RPATH: return "RPATH";
 		case ABSPATH: return "ABSPATH";
-		case EOL: return "EOL";
 		case ILLEGAL: return "ILLEGAL";
 		case EXIT_STATUS: return "EXIT_STATUS";
 		case SQUOTE: return "SQUOTE";
@@ -61,6 +61,6 @@ void	print_tokens(t_token *token)
 		printf("%s -> ", decode(token->type));
 		token = token->next;
 	}
-	printf("%s", decode(token->type));
+	printf("%s %d", decode(token->type), token->type);
 	printf("\n\n");
 }
