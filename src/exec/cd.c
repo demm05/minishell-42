@@ -104,7 +104,7 @@ static char	*resolve_cd_path(t_astnode *head, t_env *old_pwd, t_data *data)
 	if (old_pwd->value && *head->children->literal && \
 		*head->children->literal == '-')
 		return (old_pwd->value);
-	return (head->literal);
+	return (head->children->literal);
 }
 
 /**

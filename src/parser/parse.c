@@ -7,23 +7,14 @@ t_astnode	*parse(t_lexer *l)
 	int			status;
 
 	if (!l || !l->tokens || l->tokens->type == EOL)
-	{
-		free_lexer(l);
 		return (NULL);
-	}
 	status = analyze_tokens(l);
 	if (status)
-	{
-		free_lexer(l);
 		return (NULL);
-	}
 	t_head = l->tokens;
 	head = parse_logical_exp(&t_head);
 	if (!head)
-	{
-		free_lexer(l);
 		return (NULL);
-	}
 	return (head);
 }
 

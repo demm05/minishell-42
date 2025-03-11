@@ -26,7 +26,7 @@ int	analyze_tokens(t_lexer *l)
 	{
 		if (token->type == ILLEGAL)
 		{
-			show_where_illegal(token, l);
+			//show_where_illegal(token, l);
 			return (1);
 		}
 		token = token->next;
