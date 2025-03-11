@@ -6,23 +6,27 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 13:40:12 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/06 13:40:12 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/11 17:06:06 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../inc/parser.h"
 # include "../inc/exec.h"
+#include <readline/readline.h>
 
 int	free_data(t_data *data)
 {
 	if (data->l)
 	{
+		if (data->l->tokens && data->l->tokens->type == EOL)
+			free(data->l->tokens);
 		free_lexer(data->l);
 		data->l = NULL;
 	}
 	if (data->head)
 		free_ast(&data->head);
 	free(data->line);
+	data->line = NULL;
 	return (0);
 }
 
@@ -35,7 +39,7 @@ t_data	*init(int argc, char **argv, char **envp)
 		return (NULL);
 	ft_bzero(data, sizeof(t_data));
 	data->env = init_env(argv, envp);
-	data->prompt = " > ";
+	data->prompt = "Prompt > ";
 	return (data);
 }
 
@@ -47,15 +51,16 @@ int	main(int argc, char **argv, char **envp)
 	data = init(argc, argv, envp);
 	while (1)
 	{
-		data->line = mini_read(data->prompt);
+		mini_read(data);
 		if (!data->line)
 			break ;
 		data->l = new_lexer(data->line);
 		generate_tokens(data->l);
 		data->head = parse(data->l);
-		if (data->head)
+		printf("line: %s\n", data->line);
+		print_tokens(data->l->tokens);
+		if (data->head && data->l->tokens && data->l->tokens->type != EOL)
 		{
-			print_tokens(data->l->tokens);
 			print_ast(data->head, 0);
 			printf("\nResult: \n");
 			exec(data);
@@ -66,6 +71,7 @@ int	main(int argc, char **argv, char **envp)
 		free_env(&data->env);
 	free_data(data);
 	status = data->exit_status;
+	rl_clear_history();
 	free(data);
 	return (status);
 }
