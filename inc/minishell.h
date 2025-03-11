@@ -16,24 +16,17 @@
 
 typedef struct s_data
 {
-	char		*prompt;
-	char		*line;
-	t_lexer		*l;
-	t_astnode	*head;
-	t_env		*env;
-	int			exit_status;
+	char					*prompt;
+	char					*line;
+	t_lexer					*l;
+	t_astnode				*head;
+	t_env					*env;
+	int						exit_status;
+	int						signal;
 }	t_data;
 
-typedef struct s_quote_state
-{
-	bool	escape;
-	bool	in_single_quote;
-	bool	in_double_quote;
-	int		in_parentheses;
-}	t_quote_state;
-
-
 void	exec(t_data *data);
-char	*mini_read(char *prompt);
+void	mini_read(t_data *data);
+void	reset_signals(void);
 
 #endif
