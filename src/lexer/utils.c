@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 12:26:16 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/12 16:20:52 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/12 17:43:31 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,69 +24,69 @@ bool	is_token_exec(t_token_type t)
 
 char *decode(t_token_type t)
 {
-	if (EXPAND_VAR)
+	if (t == EXPAND_VAR)
 		return ("EXPAND_VAR");
-	else if (EOL)
+	else if (t == EOL)
 		return ("EOL");
-	else if (SSPACE)
+	else if (t == SSPACE)
 		return ("SPACE");
-	else if (PATH)
+	else if (t == PATH)
 		return ("PATH");
-	else if (ECHO)
+	else if (t == ECHO)
 		return ("ECHO");
-	else if (LT)
+	else if (t == LT)
 		return ("LT");
-	else if (GT)
+	else if (t == GT)
 		return ("GT");
-	else if (DLT)
+	else if (t == DLT)
 		return ("DLT");
-	else if (DGT)
+	else if (t == DGT)
 		return ("DGT");
-	else if (DSIGN)
+	else if (t == DSIGN)
 		return ("DSIGN");
-	else if (RPATH)
+	else if (t == RPATH)
 		return ("RPATH");
-	else if (ABSPATH)
+	else if (t == ABSPATH)
 		return ("ABSPATH");
-	else if (ILLEGAL)
+	else if (t == ILLEGAL)
 		return ("ILLEGAL");
-	else if (EXIT_STATUS)
+	else if (t == EXIT_STATUS)
 		return ("EXIT_STATUS");
-	else if (SQUOTE)
+	else if (t == SQUOTE)
 		return ("SQUOTE");
-	else if (DQUOTE)
+	else if (t == DQUOTE)
 		return ("DQUOTE");
-	else if (AND)
+	else if (t == AND)
 		return ("AND");
-	else if (OR)
+	else if (t == OR)
 		return ("OR");
-	else if (REDIR_OUT)
+	else if (t == REDIR_OUT)
 		return ("REDIR_OUT");
-	else if (REDIR_IN)
+	else if (t == REDIR_IN)
 		return ("REDIR_IN");
-	else if (REDIR_OUT_A)
+	else if (t == REDIR_OUT_A)
 		return ("REDIR_OUT_A");
-	else if (HERE_DOC)
+	else if (t == HERE_DOC)
 		return ("HERE_DOC");
-	else if (PIPE)
+	else if (t == PIPE)
 		return ("PIPE");
-	else if (VAR_EXP)
+	else if (t == VAR_EXP)
 		return ("VAR_EXP");
-	else if (EXEC)
+	else if (t == EXEC)
 		return ("EXEC");
-	else if (WORD)
+	else if (t == WORD)
 		return ("WORD");
-	else if (CD)
+	else if (t == CD)
 		return ("CD");
-	else if (PWD)
+	else if (t == PWD)
 		return ("PWD");
-	else if (EXPORT)
+	else if (t == EXPORT)
 		return ("EXPORT");
-	else if (UNSET)
+	else if (t == UNSET)
 		return ("UNSET");
-	else if (ENV)
+	else if (t == ENV)
 		return ("ENV");
-	else if (EXIT)
+	else if (t == EXIT)
 		return ("EXIT");
 	return ("UNKNOWN");
 }
