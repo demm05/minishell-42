@@ -75,7 +75,7 @@ f fclean: clean
 n norm:
 	@-norminette $(SDIR)
 	@echo
-	@-norminette $(HDIR)
+	@-norminette $(HDIR)/minishell.h
 
 d debug: $(DEBUG_OBJS) $(TEST_OBJS) $(LIBFT)
 	$(Q) $(CC) -g $(CFLAGS) $^ -o $@ -lreadline
