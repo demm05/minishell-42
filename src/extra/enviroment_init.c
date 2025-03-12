@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 13:44:25 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/12 12:56:29 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/12 17:37:48 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static void	increment_shlvl(t_env *shlvl)
 		fprintf(stderr, "warning: shell level too high, reseting to 1\n");
 		lvl = 1;
 	}
-	else if (s)
+	else if (*s)
 		lvl = 1;
 	free(shlvl->value);
 	shlvl->value = ft_itoa(lvl);
