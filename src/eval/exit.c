@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.h                                             :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/12 14:24:40 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/12 14:54:17 by dmelnyk          ###   ########.fr       */
+/*   Created: 2025/03/06 13:40:06 by dmelnyk           #+#    #+#             */
+/*   Updated: 2025/03/12 12:47:15 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TEST_H
-# define TEST_H
+#include "./eval_private.h"
+#include "../lexer/lexer.h"
+#include <stdlib.h>
+#include <stdio.h>
 
-# include "criterion/include/criterion/criterion.h"
-#include "../src/ast/ast.h"
-#include "../src/ast/ast_private.h"
-#include "../src/eval/eval.h"
-#include "../src/eval/eval_private.h"
-#include "../src/lexer/lexer.h"
-#include "../src/lexer/lexer_private.h"
-#include "../src/extra/extra.h"
+bool	handle_exit(t_astnode *head, t_data *data)
+{
+	int	status;
 
-#endif
+	status = data->exit_status;
+	if (data->l)
+		free_lexer(data->l);
+	if (data->head)
+		free_ast(&data->head);
+	if (data->env)
+		free_env(&data->env);
+	free(data->line);
+	fprintf(stderr, "exit\n");
+	exit(status);
+}

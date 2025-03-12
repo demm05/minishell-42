@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.h                                             :+:      :+:    :+:   */
+/*   ast_private.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/12 14:24:40 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/12 14:54:17 by dmelnyk          ###   ########.fr       */
+/*   Created: 2025/03/12 12:30:41 by dmelnyk           #+#    #+#             */
+/*   Updated: 2025/03/12 12:34:44 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TEST_H
-# define TEST_H
+#ifndef AST_PRIVATE_H
+# define AST_PRIVATE_H
 
-# include "criterion/include/criterion/criterion.h"
-#include "../src/ast/ast.h"
-#include "../src/ast/ast_private.h"
-#include "../src/eval/eval.h"
-#include "../src/eval/eval_private.h"
-#include "../src/lexer/lexer.h"
-#include "../src/lexer/lexer_private.h"
-#include "../src/extra/extra.h"
+# include "./ast.h"
+
+t_astnode	*new_astnode(t_token *tok);
+void		add_child(t_astnode *parent, t_astnode *child);
+bool		match(t_token *token, t_token_type expected[], int size);
+
+t_astnode	*parse_exec(t_token *token);
+t_astnode	*parse_redir(t_token **token);
+t_astnode	*parse_logical_exp(t_token **token);
+t_astnode	*parse_pipe(t_token **token);
 
 #endif
