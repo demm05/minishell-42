@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 11:15:42 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/12 12:34:47 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/12 19:07:51 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,13 @@ typedef struct s_astnode
 t_astnode	*parse(t_lexer *l);
 void		print_ast(t_astnode *node, int depth);
 void		free_ast(t_astnode **node);
+
+/**
+ * @brief Removes a node from the AST.
+ *
+ * @param head A double pointer to the head of the AST.
+ * @param node A double pointer to the node to be removed.
+ */
+void		ast_pop(t_astnode **head, t_astnode **node);
 
 #endif
