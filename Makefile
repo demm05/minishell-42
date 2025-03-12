@@ -11,6 +11,9 @@ CC					?=	gcc
 CFLAGS				?=	-g -Wall -Wextra -I$(HDIR)
 MAKE_LIB			=	@make --no-print-directory -C
 DIRS				=	$(sort $(dir $(OBJS)))
+CFLAGS				+=	-Iast/ast.h -Ieva/eval.h -Iextra/extra.h -Ilexer/lexer.h
+CRITERION_PATH		=	$(HDIR)/criterion
+TEST_FLAGS			=	-I$(CRITERION_PATH)/include -L$(CRITERION_PATH)/lib
 
 LIBFT_DIR			=	$(LDIR)/libft
 LIBFT_FILE			=	libft.a
@@ -27,6 +30,8 @@ TEST_BINS			:=	$(patsubst $(TDIR)/%.c,$(TDIR)/bin/%, $(TEST_SRCS))
 DEBUG_SRCS			:=	$(shell find ./debug -name "*.c")
 DEBUG_OBJS			:=	$(patsubst debug/%.c,$(ODIR)/debug/%.o, $(DEBUG_SRCS))
 
+export LD_LIBRARY_PATH=$(CRITERION_PATH)/lib:$LD_LIBRARY_PATH
+
 all: $(LIBFT) $(NAME)
 
 $(OBJS): $(ODIR)/%.o: $(SDIR)/%.c | $(DIRS)
@@ -39,7 +44,7 @@ $(NAME): $(OBJS) $(LIBFT)
 	$(Q)$(CC) $(CFLAGS) $^ -o $@ -lreadline
 
 $(TDIR)/bin/%: $(TDIR)/%.c $(TEST_OBJS)
-	$(Q)$(CC) $(CFLAGS) $^ $(LIBFT) -o $@ -lcriterion
+	$(Q)$(CC) $(CFLAGS) $(TEST_FLAGS) $^ $(LIBFT) -o $@ -lcriterion -lreadline
 	$(Q)chmod +x $@
 
 $(DIRS) $(TDIR)/bin:
