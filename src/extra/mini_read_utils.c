@@ -10,12 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "libft.h"
-# include "./extra_private.h"
-# include <readline/readline.h>
-# include <unistd.h>
-# include <signal.h>
-# include <stdlib.h>
+#include "libft.h"
+#include "./extra_private.h"
+#include <stdio.h>
+#include <readline/readline.h>
+#include <unistd.h>
+#include <signal.h>
+#include <stdlib.h>
 
 static char	*join(char *s1, char *s2);
 static bool	is_there_missing_char(t_quote_state *state, char *line);

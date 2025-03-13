@@ -12,6 +12,7 @@
 
 #include "libft.h"
 #include "./extra_private.h"
+#include <stdio.h>
 #include <readline/history.h>
 #include <unistd.h>
 #include <signal.h>
