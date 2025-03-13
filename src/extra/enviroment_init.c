@@ -72,6 +72,8 @@ static void	increment_shlvl(t_env *shlvl)
 	}
 	else if (*s)
 		lvl = 1;
+	else
+		lvl++;
 	free(shlvl->value);
 	shlvl->value = ft_itoa(lvl);
 }

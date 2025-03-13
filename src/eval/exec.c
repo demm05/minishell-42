@@ -15,6 +15,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/wait.h>
+#include "libft.h"
 
 static char	**build_envp(t_env *env);
 static char	**build_args(t_astnode *head);
@@ -29,13 +30,13 @@ bool	handle_exec(t_astnode *head, t_data *data)
 	char	**envp;
 	char	**args;
 
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
 		return (1);
 	if (pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
 		envp = build_envp(data->env);
 		args = build_args(head);
 		path = get_path(getenv_val(data->env, "PATH"), head->literal);
@@ -115,18 +116,28 @@ static char	**build_args(t_astnode *head)
 {
 	t_astnode	*child;
 	char		**args;
+	int			len;
 	int			i;
 
 	if (!head)
 		return (NULL);
-	args = malloc((head->childs + 2) * sizeof(char *));
+	child = head->children;
+	len = 2;
+	while (child)
+	{
+		if (child->type != SSPACE)
+			len++;
+		child = child->next;
+	}
+	args = malloc(len * sizeof(char *));
 	if (!args)
 		return (NULL);
 	i = 1;
 	child = head->children;
 	while (child && i - 1 < head->childs)
 	{
-		args[i++] = child->literal; 
+		if (child->type != SSPACE)
+			args[i++] = child->literal; 
 		child = child->next;
 	}
 	args[i] = NULL;

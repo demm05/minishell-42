@@ -16,7 +16,6 @@
 # include "./ast.h"
 
 t_astnode	*new_astnode(t_token *tok);
-void		add_child(t_astnode *parent, t_astnode *child);
 bool		match(t_token *token, t_token_type expected[], int size);
 
 t_astnode	*parse_exec(t_token *token);

@@ -50,6 +50,20 @@ t_env	*append_env(t_env **head, char *key, char *value)
 	return (new);
 }
 
+t_env	*add_env(t_env **head, char *key, char *value)
+{
+	t_env	*new;
+
+	if (!head)
+		return (NULL);
+	new = getenv_val(*head, key);
+	if (!new)
+		return (append_env(head, key, value));
+	free(new->value);
+	new->value = value;
+	return (new);
+}
+
 void	free_env(t_env **head)
 {
 	t_env	*cur;

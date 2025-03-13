@@ -37,5 +37,6 @@ void		free_ast(t_astnode **node);
  * @param node A double pointer to the node to be removed.
  */
 void		ast_pop(t_astnode **head, t_astnode **node);
+void		add_child(t_astnode *parent, t_astnode *child);
 
 #endif

@@ -75,5 +75,6 @@ t_data	*init(int argc, char **argv, char **envp);
  * @return Always 0.
  */
 int		free_data(t_data *data);
+t_env	*add_env(t_env **head, char *key, char *value);
 
 #endif

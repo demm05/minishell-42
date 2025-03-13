@@ -25,6 +25,7 @@ void	exec(t_data *data)
 
 bool	eval(t_astnode *head, t_data *data)
 {
+	expand_tree(data, head);
 	if (head->type == AND)
 	{
 		if (eval(head->children, data))

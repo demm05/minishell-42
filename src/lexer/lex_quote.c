@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "./lexer_private.h"
+#include <stdlib.h>
 
 static void	read_squote(t_lexer *l)
 {
@@ -46,7 +47,8 @@ static void	read_dquote(t_lexer *l)
 			break ;
 		else if (l->input[pos] == '$')
 		{
-			append_alloc(l, WORD, pos - l->position);
+			if (pos - l->position)
+				append_alloc(l, WORD, pos - l->position);
 			lex_env_var(l);
 			pos = l->position;
 		}
@@ -55,9 +57,9 @@ static void	read_dquote(t_lexer *l)
 	}
 	if (l->input[pos] == '"')
 	{
-		if (pos > l->position)
+		if (pos - l->position)
 			append_alloc(l, WORD, pos - l->position);
-		read_char(l);
+		append_advance(l, NULL, 1, DQUOTE);
 	}
 	else
 		append_alloc(l, ILLEGAL, pos - --l->position);
@@ -78,9 +80,9 @@ int	lex_quote(t_lexer *l)
 	}
 	else if (l->ch == '"')
 	{
-		read_char(l);
+		append_advance(l, NULL, 1, DQUOTE);
 		if (l->ch == '"')
-			read_char(l);
+			append_advance(l, NULL, 1, DQUOTE);
 		else
 			read_dquote(l);
 	}

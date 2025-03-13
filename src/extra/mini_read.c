@@ -12,10 +12,11 @@
 
 #include "libft.h"
 #include "./extra_private.h"
-#include <readline/history.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
 #include <stdlib.h>
+#include <readline/history.h>
 
 static bool	is_empty(t_data *data);
 static void	pritn_eol_error(t_quote_state *state);
