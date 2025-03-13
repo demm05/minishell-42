@@ -36,14 +36,14 @@ bool	ft_isspace(char ch);
 t_env	*getenv_val(t_env *head, char *key);
 
 /**
- * @brief Appends an environment variable to the list.
+ * @brief Adds an environment variable to the list.
  *
  * @param head  A pointer to the head of the env list (double pointer).
  * @param key   The key of the variable.
  * @param value The value of the variable.
  * @return A pointer to the new t_env node, or NULL on failure.
  */
-t_env	*append_env(t_env **head, char *key, char *value);
+t_env	*add_env(t_env **head, char *key, char *value);
 
 /**
  * @brief Frees the environment variables list.

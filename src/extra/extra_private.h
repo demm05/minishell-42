@@ -39,5 +39,6 @@ void	read_full_line(t_data *data, t_quote_state *state);
  * @return A pointer to the head of the environment variables list.
  */
 t_env	*init_env(char **argv, char **envp);
+t_env	*append_env(t_env **head, char *key, char *value);
 
 #endif
