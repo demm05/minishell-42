@@ -29,13 +29,13 @@ bool	handle_exec(t_astnode *head, t_data *data)
 	char	**envp;
 	char	**args;
 
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
 		return (1);
 	if (pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
 		envp = build_envp(data->env);
 		args = build_args(head);
 		path = get_path(getenv_val(data->env, "PATH"), head->literal);
