@@ -9,6 +9,7 @@
 /*   Updated: 2025/03/12 12:46:02 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "./eval_private.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -148,4 +149,3 @@ static bool	update_pwd_environment(t_env *pwd, t_env *old_pwd)
 	pwd->value = get_curent_dir();
 	return (pwd->value != NULL);
 }
-
