@@ -9,7 +9,6 @@
 /*   Updated: 2025/03/12 12:46:02 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "./eval_private.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,7 +25,7 @@ bool	handle_cd(t_astnode *head, t_data *data)
 	t_env	*old_pwd;
 	char	*new_pwd;
 
-	if (!validate_env_vars(&pwd, & old_pwd, data))
+	if (!validate_env_vars(&pwd, &old_pwd, data))
 		return (1);
 	if (head->childs > 1)
 	{
@@ -62,9 +61,9 @@ static bool	validate_env_vars(t_env **pwd, t_env **old_pwd, t_data *data)
 	*pwd = getenv_val(data->env, "PWD");
 	*old_pwd = getenv_val(data->env, "OLDPWD");
 	if (!*pwd)
-		*pwd = append_env(&data->env, ft_strdup("PWD"), get_curent_dir());
+		*pwd = add_env(&data->env, ft_strdup("PWD"), get_curent_dir());
 	if (!*old_pwd)
-		*old_pwd = append_env(&data->env,
+		*old_pwd = add_env(&data->env,
 				ft_strdup("OLDPWD"), get_curent_dir());
 	if (!*pwd || !*old_pwd)
 	{
@@ -149,3 +148,4 @@ static bool	update_pwd_environment(t_env *pwd, t_env *old_pwd)
 	pwd->value = get_curent_dir();
 	return (pwd->value != NULL);
 }
+
