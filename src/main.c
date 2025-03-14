@@ -23,7 +23,6 @@ int	main(int argc, char **argv, char **envp)
 	t_data	*data;
 	int		status;
 
-	printf("%d \n", argc);
 	data = init(argc, argv, envp);
 	while (1)
 	{
@@ -35,9 +34,9 @@ int	main(int argc, char **argv, char **envp)
 		data->head = parse(data->l);
 		if (data->head && data->l->tokens && data->l->tokens->type != EOL)
 		{
-			print_tokens(data->l->tokens);
-			print_ast(data->head, 0);
-			printf("\nResult: \n");
+			//print_tokens(data->l->tokens);
+			//print_ast(data->head, 0);
+			//printf("\nResult: \n");
 			exec(data);
 		}
 		free_data(data);

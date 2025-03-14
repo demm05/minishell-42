@@ -34,5 +34,6 @@ bool	handle_redir(t_astnode *head, t_data *data);
 
 void	expand_tree(t_astnode *parent, t_data *data);
 void	exec_command(t_astnode *head, t_data *data);
+t_builtin_func_ptr	is_built_in(t_token_type type);
 
 #endif
