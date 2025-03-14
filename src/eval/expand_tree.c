@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 13:30:43 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/14 14:06:07 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/14 15:02:52 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ void	expand_tree(t_astnode *parent, t_data *data)
 	cur = parent->children;
 	while (cur)
 	{
+		if (cur->type == SSPACE)
+		{
+			exp.to_delete[exp.td] = cur;
+			cur = cur->next;
+			continue ;
+		}
 		i = 0;
 		cur->type = WORD;
 		mark_nodes(cur, &exp, SSPACE);
@@ -52,8 +58,13 @@ void	expand_tree(t_astnode *parent, t_data *data)
 		free(exp.to_delete[i++]);
 	}
 	i = 0;
+	parent->children = NULL;
 	while (i < exp.tk)
+	{
+		exp.to_keep[i]->next = NULL;
+		exp.to_keep[i]->prev = NULL;
 		add_child(parent, exp.to_keep[i++]);
+	}
 }
 
 static void	mark_nodes(t_astnode *head, t_expand *exp, t_token_type key)
@@ -127,6 +138,8 @@ static bool	init_expand(t_astnode *parent, t_expand *expand)
 		free(expand->to_delete);
 		return (1);
 	}
+	expand->tk = 0;
+	expand->td = 0;
 	return (0);
 }
 

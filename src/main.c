@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 13:40:12 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/12 12:55:40 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/14 15:11:34 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	main(int argc, char **argv, char **envp)
 	t_data	*data;
 	int		status;
 
+	printf("%d \n", argc);
 	data = init(argc, argv, envp);
 	while (1)
 	{

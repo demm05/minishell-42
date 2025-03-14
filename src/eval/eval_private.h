@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 12:27:19 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/14 13:30:53 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/14 15:47:25 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,6 @@ bool	handle_pipe(t_astnode *head, t_data *data);
 bool	handle_redir(t_astnode *head, t_data *data);
 
 void	expand_tree(t_astnode *parent, t_data *data);
+void	exec_command(t_astnode *head, t_data *data);
 
 #endif
