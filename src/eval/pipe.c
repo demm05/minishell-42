@@ -48,7 +48,7 @@ bool	handle_pipe(t_astnode *head, t_data *data)
 			exec_command(head->children, data);
 		else if (head->children->type == PIPE)
 			handle_pipe(head->children, data);
-		exit(127);
+		exit(data->exit_status);
 	}
 	pid[1] = fork();
 	if (pid[1] == -1)
@@ -67,7 +67,7 @@ bool	handle_pipe(t_astnode *head, t_data *data)
 			exec_command(head->children->next, data);
 		else if (head->children->next && head->children->next->type == PIPE)
 			handle_pipe(head->children->next, data);
-		exit(127);
+		exit(data->exit_status);
 	}
 	close(pipefd[0]);
 	close(pipefd[1]);
