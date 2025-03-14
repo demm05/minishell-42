@@ -6,11 +6,11 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 13:44:25 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/12 17:37:48 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/14 14:35:54 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./extra.h"
+#include "./extra_private.h"
 #include "libft.h"
 #include <stdlib.h>
 #include <stdio.h>

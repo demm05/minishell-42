@@ -22,7 +22,7 @@ Test(init_env, shlvl_test1, .fini=my_free)
 	cr_assert_not_null(env);
 	temp = getenv_val(env, "SHLVL"); 
 	cr_assert_not_null(temp);
-	cr_expect(atoi(temp->value) == 10, "Expected SHLVL 10 != %d", atoi(temp->value));
+	cr_expect(atoi(temp->value) == 11, "Expected SHLVL 11 != %d", atoi(temp->value));
 }
 
 Test(init_env, shlvl_test2, .fini=my_free)
@@ -46,7 +46,7 @@ Test(init_env, shlvl_test3, .fini=my_free)
 	cr_assert_not_null(env);
 	temp = getenv_val(env, "SHLVL"); 
 	cr_assert_not_null(temp);
-	cr_expect(atoi(temp->value) == 998, "Expected SHLVL 998 != %d", atoi(temp->value));
+	cr_expect(atoi(temp->value) == 999, "Expected SHLVL 999 != %d", atoi(temp->value));
 }
 
 Test(init_env, shlvl_test4, .fini=my_free)
