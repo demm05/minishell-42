@@ -80,6 +80,7 @@ void	ast_pop(t_astnode **head, t_astnode **node)
 		return ;
 	prev = (*node)->prev;
 	next = (*node)->next;
+	free((*node)->literal);
 	free(*node);
 	*node = NULL;
 	if (!*head)
@@ -87,7 +88,7 @@ void	ast_pop(t_astnode **head, t_astnode **node)
 	prev->next = next;
 	if (!(*head)->next)
 		(*head)->prev = *head;
-	else
+	else if (!next)
 		(*head)->prev = prev;
 }
 
