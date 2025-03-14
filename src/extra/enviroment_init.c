@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 13:44:25 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/12 17:37:48 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/14 14:21:50 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ static void	fill_env_with_default(char **argv, t_env **head)
 		increment_shlvl(getenv_val(*head, "SHLVL"));
 	if (!getenv_val(*head, "_"))
 	{
+
+		printf("%d %s\n", pwd == NULL, pwd->value);
 		s = ft_strjoin(pwd->value, "/");
 		append_env(head, ft_strdup("_"), ft_strjoin(s, argv[0]));
 		free(s);
