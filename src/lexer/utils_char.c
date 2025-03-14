@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 12:26:22 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/12 12:26:23 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/14 15:21:06 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ char	peek_char(t_lexer *l)
 
 void	eat_whitespaces(t_lexer *l)
 {
-	if (l->tokens && l->tokens->prev->type != SSPACE && ft_isspace(l->ch))
-		append_token(l, new_token(SSPACE, NULL));
+	//if (l->tokens && l->tokens->prev->type != SSPACE && ft_isspace(l->ch))
+	//	append_token(l, new_token(SSPACE, NULL));
 	while (l->ch == ' ' || l->ch == '\t' || l->ch == '\r' || l->ch == '\n')
 		read_char(l);
 }
