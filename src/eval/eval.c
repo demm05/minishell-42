@@ -13,8 +13,6 @@
 #include "./eval_private.h"
 #include <stdlib.h>
 
-static bool					is_redir(t_token_type type);
-
 void	exec(t_data *data)
 {
 	if (!data->head)
@@ -56,7 +54,7 @@ bool	eval(t_astnode *head, t_data *data)
  * @param type The token type to check.
  * @return `true` if the token is a redirection operator, `false` otherwise.
  */
-static bool	is_redir(t_token_type type)
+bool	is_redir(t_token_type type)
 {
 	if (type == REDIR_IN)
 		return (true);

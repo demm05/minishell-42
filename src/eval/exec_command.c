@@ -29,9 +29,9 @@ void	exec_command(t_astnode *head, t_data *data)
 	envp = build_envp(data->env);
 	args = build_args(head);
 	path = get_path(getenv_val(data->env, "PATH"), head->literal);
-	args[0] = path;
+	args[0] = head->literal;
 	execve(path, args, envp);
-	puts("child");
+	fprintf(stderr, "%s: command not found\n", args[0]);
 	exit(127);
 }
 

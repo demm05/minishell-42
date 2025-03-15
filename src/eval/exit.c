@@ -27,6 +27,6 @@ bool	handle_exit(t_astnode *head, t_data *data)
 	if (data->env)
 		free_env(&data->env);
 	free(data->line);
-	fprintf(stderr, "exit\n");
+	//fprintf(stderr, "exit\n");
 	exit(status);
 }
