@@ -13,10 +13,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <readline/readline.h>
+#include <unistd.h>
 #include "../inc/minishell.h"
 #include "extra/extra.h"
 #include "lexer/lexer.h"
 #include "ast/ast.h"
+#include "libft.h"
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -26,7 +28,10 @@ int	main(int argc, char **argv, char **envp)
 	data = init(argc, argv, envp);
 	while (1)
 	{
-		mini_read(data);
+		if (isatty(fileno(stdin)))
+			mini_read(data);
+		else
+			data->line = get_next_line(fileno(stdin));
 		if (!data->line)
 			break ;
 		data->l = new_lexer(data->line);
@@ -35,7 +40,7 @@ int	main(int argc, char **argv, char **envp)
 		if (data->head && data->l->tokens && data->l->tokens->type != EOL)
 		{
 			//print_tokens(data->l->tokens);
-			//print_ast(data->head, 0);
+			print_ast(data->head, 0);
 			//printf("\nResult: \n");
 			exec(data);
 		}
@@ -47,6 +52,6 @@ int	main(int argc, char **argv, char **envp)
 	status = data->exit_status;
 	rl_clear_history();
 	free(data);
-	fprintf(stderr, "exit\n");
+	//fprintf(stderr, "exit\n");
 	return (status);
 }
