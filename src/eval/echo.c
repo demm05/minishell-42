@@ -20,6 +20,7 @@ bool	handle_echo(t_astnode *head, t_data *data)
 	t_astnode	*cur;
 	int			i;
 
+	(void)data;
 	if (!head)
 		return (1);
 	newline = true;
