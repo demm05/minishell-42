@@ -37,6 +37,12 @@ int	analyze_tokens(t_lexer *l)
 	token = l->tokens;
 	while (token)
 	{
+		//TODO: heredoc should be here
+		//read from left to right and if it finds heredoc, call handle_heredoc function
+		//if it finds syntacs error go into the following condition.
+		if (token->type == HERE_DOC)
+			//printf("%u\n", token->next->type);
+			hendle_heredoc(token->next->literal);
 		if (token->type == ILLEGAL)
 		{
 			//show_where_illegal(token, l);
