@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_char.c                                       :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/12 12:26:22 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/14 15:21:06 by dmelnyk          ###   ########.fr       */
+/*   Created: 2025/03/18 10:53:57 by dmelnyk           #+#    #+#             */
+/*   Updated: 2025/03/18 11:15:31 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,28 @@ char	peek_char(t_lexer *l)
 
 void	eat_whitespaces(t_lexer *l)
 {
-	//if (l->tokens && l->tokens->prev->type != SSPACE && ft_isspace(l->ch))
-	//	append_token(l, new_token(SSPACE, NULL));
-	while (l->ch == ' ' || l->ch == '\t' || l->ch == '\r' || l->ch == '\n')
+	while (ft_isspace(l->ch))
 		read_char(l);
 }
 
-int	get_pos_next_whitespace(t_lexer *l)
+bool	is_token_exec(t_token_type t)
 {
-	int		i;
+	if (t == EXEC || t == CD || t == ECHO || t == PWD)
+		return (1);
+	if (t == EXPORT || t == UNSET || t == ENV || t == EXIT)
+		return (1);
+	return (0);
+}
 
-	i = l->read_postion;
-	while (i < l->size)
+bool	match(t_token *token, t_token_type expected[], int size)
+{
+	if (!token)
+		return (0);
+	while (size-- > 0)
 	{
-		if (ft_isspace(l->input[i]))
-			break ;
-		if (!l->input[i])
-			break ;
-		i++;
+		if (*expected == token->type)
+			return (1);
+		expected++;
 	}
-	return (i - l->read_postion + 1);
+	return (0);
 }

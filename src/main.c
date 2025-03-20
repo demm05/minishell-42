@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 13:40:12 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/14 15:11:34 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/18 11:02:20 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,22 @@
 #include <unistd.h>
 #include "../inc/minishell.h"
 #include "extra/extra.h"
-#include "lexer/lexer.h"
+#include "tokenization/lexer.h"
 #include "ast/ast.h"
 #include "libft.h"
+
+void	prepare_for_the_next_loop(t_data *data)
+{
+	free(data->line);
+	data->line = NULL;
+	if (data->l)
+	{
+		free_tokens(&data->l->tokens);
+		ft_bzero(data->l, sizeof(t_lexer));
+	}
+	if (data->head)
+		free_ast(&data->head);
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -26,6 +39,7 @@ int	main(int argc, char **argv, char **envp)
 	int		status;
 
 	data = init(argc, argv, envp);
+	printf("%s\n", argv[1]);
 	while (1)
 	{
 		if (isatty(fileno(stdin)))
@@ -34,24 +48,14 @@ int	main(int argc, char **argv, char **envp)
 			data->line = get_next_line(fileno(stdin));
 		if (!data->line)
 			break ;
-		data->l = new_lexer(data->line);
-		generate_tokens(data->l);
-		data->head = parse(data->l);
-		if (data->head && data->l->tokens && data->l->tokens->type != EOL)
-		{
-			//print_tokens(data->l->tokens);
-			print_ast(data->head, 0);
-			//printf("\nResult: \n");
-			exec(data);
-		}
-		free_data(data);
+		create_ast(data);
+		//exec(data);
+		prepare_for_the_next_loop(data);
 	}
 	if (data->env)
 		free_env(&data->env);
-	free_data(data);
 	status = data->exit_status;
 	rl_clear_history();
 	free(data);
-	//fprintf(stderr, "exit\n");
 	return (status);
 }

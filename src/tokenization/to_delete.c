@@ -1,61 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   to_delete.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/12 12:26:16 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/12 17:43:31 by dmelnyk          ###   ########.fr       */
+/*   Created: 2025/03/18 10:57:40 by dmelnyk           #+#    #+#             */
+/*   Updated: 2025/03/18 10:59:06 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./lexer_private.h"
 #include <stdio.h>
 
-bool	is_token_exec(t_token_type t)
-{
-	if (t == EXEC || t == CD || t == ECHO || t == PWD)
-		return (1);
-	if (t == EXPORT || t == UNSET || t == ENV || t == EXIT)
-		return (1);
-	return (0);
-}
-
 char *decode(t_token_type t)
 {
-	if (t == EXPAND_VAR)
-		return ("EXPAND_VAR");
-	else if (t == EOL)
+	if (t == EOL)
 		return ("EOL");
-	else if (t == SSPACE)
-		return ("SPACE");
 	else if (t == PATH)
 		return ("PATH");
 	else if (t == ECHO)
 		return ("ECHO");
-	else if (t == LT)
-		return ("LT");
-	else if (t == GT)
-		return ("GT");
-	else if (t == DLT)
-		return ("DLT");
-	else if (t == DGT)
-		return ("DGT");
-	else if (t == DSIGN)
-		return ("DSIGN");
-	else if (t == RPATH)
-		return ("RPATH");
-	else if (t == ABSPATH)
-		return ("ABSPATH");
+	else if (t == SSPACE)
+		return "SPACE";
 	else if (t == ILLEGAL)
 		return ("ILLEGAL");
-	else if (t == EXIT_STATUS)
-		return ("EXIT_STATUS");
-	else if (t == SQUOTE)
-		return ("SQUOTE");
-	else if (t == DQUOTE)
-		return ("DQUOTE");
 	else if (t == AND)
 		return ("AND");
 	else if (t == OR)
@@ -70,8 +39,6 @@ char *decode(t_token_type t)
 		return ("HERE_DOC");
 	else if (t == PIPE)
 		return ("PIPE");
-	else if (t == VAR_EXP)
-		return ("VAR_EXP");
 	else if (t == EXEC)
 		return ("EXEC");
 	else if (t == WORD)
