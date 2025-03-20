@@ -17,29 +17,34 @@ bool	handle_echo(t_astnode *head, t_data *data)
 {
 	bool		newline;
 	bool		first_arg;
-	t_astnode	*h;
+	t_astnode	*cur;
+	int			i;
 
 	if (!head)
 		return (1);
 	newline = true;
-	if (head->children)
+	cur = head->children;
+	while (cur && cur->literal[0] == '-' && cur->literal[1] == 'n')
 	{
-		if (ft_strncmp(head->children->literal, "-n", 2) == 0)
+		i = 1;
+		while (cur->literal[i] == 'n')
+			i++;
+		if (cur->literal[i] == '\0')
 		{
 			newline = false;
-			h = head->children->next;
+			cur = cur->next;
 		}
 		else
-			h = head->children;
-		first_arg = true;
-		while (h)
-		{
-			if (!first_arg)
-				write(STDOUT_FILENO, " ", 1);
-			first_arg = false;
-			write(STDOUT_FILENO, h->literal, ft_strlen(h->literal));
-			h = h->next;
-		}
+			break ;
+	}
+	first_arg = true;
+	while (cur)
+	{
+		if (!first_arg)
+			write(STDOUT_FILENO, " ", 1);
+		first_arg = false;
+		write(STDOUT_FILENO, cur->literal, ft_strlen(cur->literal));
+		cur = cur->next;
 	}
 	if (newline)
 		write(STDOUT_FILENO, "\n", 1);
