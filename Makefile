@@ -102,5 +102,5 @@ endif
 ifeq ($(F), 1)
 
 else
-	CFLAGS += -fsanitize=address
+	#CFLAGS += -fsanitize=address
 endif

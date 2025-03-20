@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_ini.c                                        :+:      :+:    :+:   */
+/*   initialization.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/12 12:26:24 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/12 15:32:41 by dmelnyk          ###   ########.fr       */
+/*   Created: 2025/03/18 10:41:07 by dmelnyk           #+#    #+#             */
+/*   Updated: 2025/03/18 10:55:23 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,16 @@
 #include "libft.h"
 #include <stdlib.h>
 
-t_lexer	*new_lexer(const char *str)
-{
-	t_lexer	*l;
-
-	if (!str || !*str)
-		return (NULL);
-	l = malloc(sizeof(t_lexer));
-	if (!l)
-		return (NULL);
-	ft_memset(l, 0, sizeof(t_lexer));
-	l->input = str;
-	l->size = ft_strlen(str);
-	read_char(l);
-	return (l);
-}
-
-t_token	*new_token(t_token_type type, char *s)
+t_token	*new_token(t_token_type type, char *s, unsigned int s_size)
 {
 	t_token	*tok;
 
-	tok = malloc(sizeof(t_token));
+	tok = ft_calloc(1, sizeof(t_token));
 	if (!tok)
 		return (NULL);
 	tok->type = type;
 	tok->literal = s; 
-	tok->next = NULL;
-	tok->prev = NULL;
+	tok->size = s_size;
 	return (tok);
 }
 
@@ -56,12 +39,12 @@ t_token	*new_token(t_token_type type, char *s)
  * @param new Token to append
  * @return int 0 on success, 1 if lexer is NULL, 0 if new token is NULL
  */
-int	append_token(t_lexer *l, t_token *new)
+t_token	*append_token(t_lexer *l, t_token *new)
 {
 	if (!l)
-		return (1);
+		return (NULL);
 	if (!new)
-		return (0);
+		return (NULL);
 	if (!l->tokens)
 	{
 		new->prev = new;
@@ -73,7 +56,7 @@ int	append_token(t_lexer *l, t_token *new)
 		l->tokens->prev->next = new;
 		l->tokens->prev = new;
 	}
-	return (0);
+	return (new);
 }
 
 /**
@@ -88,7 +71,7 @@ int	append_token(t_lexer *l, t_token *new)
  * @param size The size of memory to allocate for the token's literal value
  * @return int 0 on success, 1 if lexer is NULL, memory allocation fails, or token creation fails
  */
-int	append_alloc(t_lexer *l, t_token_type type, int size)
+t_token	*append_alloc(t_lexer *l, t_token_type type, int size)
 {
 	t_token	*new;
 	char	*s;
@@ -96,16 +79,16 @@ int	append_alloc(t_lexer *l, t_token_type type, int size)
 	int		j;
 
 	if (!l)
-		return (1);
+		return (NULL);
 	s = malloc(sizeof(char) * (size + 1));
 	if (!s)
-		return (1);
+		return (NULL);
 	i = 0;
 	j = l->position;
 	while (i < size && j < l->size)
 		s[i++] = l->input[j++];
 	s[i] = 0;
-	new = new_token(type, s);
+	new = new_token(type, s, size);
 	if (!new)
 		free(s);
 	l->read_postion += size - 1;
@@ -126,7 +109,7 @@ int	append_alloc(t_lexer *l, t_token_type type, int size)
  * @param type The type of the token to create
  * @return int 0 on success, 1 if lexer is NULL, memory allocation fails, or token creation fails
  */
-int	append_advance(t_lexer *l, char *literal, unsigned int advance, t_token_type type)
+t_token	*append_advance(t_lexer *l, char *literal, unsigned int advance, t_token_type type)
 {
 	t_token			*new;
 	unsigned int	size;
@@ -134,17 +117,17 @@ int	append_advance(t_lexer *l, char *literal, unsigned int advance, t_token_type
 	if (!l)
 	{
 		free(literal);
-		return (1);
+		return (NULL);
 	}
 	if (!literal)
 		size = 0;
 	else
 		size = ft_strlen(literal);
-	new = new_token(type, literal);
+	new = new_token(type, literal, size);
 	if (!new)
 	{
 		free(literal);
-		return (1);
+		return (NULL);
 	}
 	if (advance)
 	{
@@ -154,17 +137,17 @@ int	append_advance(t_lexer *l, char *literal, unsigned int advance, t_token_type
 	return (append_token(l, new));
 }
 
-void	free_lexer(t_lexer *l)
+void	free_tokens(t_token **head)
 {
 	t_token	*next;
 
-	if (!l)
+	if (!head)
 		return ;
-	while (l->tokens)
+	while (*head)
 	{
-		next = l->tokens->next;
-		free(l->tokens);
-		l->tokens = next;
+		next = (*head)->next;
+		free(*head);
+		*head = next;
 	}
-	free(l);
+	*head = NULL;
 }

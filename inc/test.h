@@ -17,7 +17,7 @@
 #include "criterion/include/criterion/redirect.h"
 #include "../src/ast/ast_private.h"
 #include "../src/eval/eval_private.h"
-#include "../src/lexer/lexer_private.h"
+#include "../src/tokenization/lexer_private.h"
 #include "../src/extra/extra_private.h"
 #include <stdlib.h>
 
