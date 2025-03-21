@@ -16,29 +16,25 @@
 t_astnode	*parse_exec(t_token *token)
 {
 	static t_token_type	end[] = {AND, OR, PIPE};
-	static t_token_type	fine[] = {WORD, PATH};
 	static t_token_type	redir[] = {REDIR_IN, REDIR_OUT, REDIR_OUT_A, HERE_DOC};
-	t_astnode	*head;
+	t_astnode			*head;
 
 	head = NULL;
 	while (token)
 	{
-		while (match(token, redir, 4))
+		while (token && match(token, redir, 4))
 		{
 			token = token->next;
-			if (token)
-				token = token->next;
+			token = token->next;
 		}
-		if (!head)
+		if (!head && token && token->type == WORD)
 		{
 			head = new_astnode(token);
 			head->type = EXEC;
-			token = token->next;
-			continue ;
 		}
-		if (!token || match(token, end, 3))
+		else if (!token || match(token, end, 3))
 			break ;
-		else if (match(token, fine, 2))
+		else if (token && (token->type == WORD))
 			add_child(head, new_astnode(token));
 		token = token->next;
 	}

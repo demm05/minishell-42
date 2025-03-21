@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:37:10 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/18 11:06:56 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/21 13:10:39 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,10 @@ bool	is_fixed_type(t_lexer *l)
 		append_advance(l, NULL, 2, HERE_DOC);
 	else if (l->ch == '<')
 		append_advance(l, NULL, 1, REDIR_IN);
+	else if (l->ch == '(')
+		append_advance(l, NULL, 1, LPAREN);
+	else if (l->ch == ')')
+		append_advance(l, NULL, 1, RPAREN);
 	else
 		return (0);
 	return (1);

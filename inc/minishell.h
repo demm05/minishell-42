@@ -6,7 +6,7 @@
 /*   by: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   created: 2025/03/12 11:18:36 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/12 15:39:57 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/21 16:51:03 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ typedef enum e_tokentype
 	SQUOTE,		// '
 	DQUOTE,		// "
 	SSPACE,
+	EXPAND_VAR,	// $ better
+	VAR_EXP,	// $
 	// Better names
 	EOL,		// End of line
 	ILLEGAL,	// When invalid input
@@ -62,11 +64,11 @@ typedef enum e_tokentype
 	REDIR_OUT_A,// >>
 	HERE_DOC,	// <<	
 	PIPE,		// |
-	EXPAND_VAR,	// $ better
-	VAR_EXP,	// $
 	EXEC,		// Executable like ls wc grep 
 	WORD,		// It could be an argument or file
 	PATH,		// Can be relative or absolute eg ./ or /
+	LPAREN,		// (
+	RPAREN,		// )
 	// Built in shell exec
 	CD,
 	ECHO,

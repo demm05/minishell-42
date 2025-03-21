@@ -39,7 +39,6 @@ int	main(int argc, char **argv, char **envp)
 	int		status;
 
 	data = init(argc, argv, envp);
-	printf("%s\n", argv[1]);
 	while (1)
 	{
 		if (isatty(fileno(stdin)))

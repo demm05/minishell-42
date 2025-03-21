@@ -48,10 +48,7 @@ void	add_word(t_lexer *l)
 			break ;
 	}
 	if (squote || dquote)
-	{
-		fprintf(stderr, "syntax error: unexpected end of file\n");
 		append_advance(l, NULL, 0, ILLEGAL);
-	}
 	else
 		append_alloc(l, WORD, i);
 }
