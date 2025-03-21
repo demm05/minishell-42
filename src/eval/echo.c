@@ -13,18 +13,10 @@
 #include "./eval_private.h"
 #include <stdbool.h>
 
-bool	handle_echo(t_astnode *head, t_data *data)
+static t_astnode	*skip_n_flags(t_astnode *cur, bool *newline)
 {
-	bool		newline;
-	bool		first_arg;
-	t_astnode	*cur;
-	int			i;
+	int	i;
 
-	(void)data;
-	if (!head)
-		return (1);
-	newline = true;
-	cur = head->children;
 	while (cur && cur->literal[0] == '-' && cur->literal[1] == 'n')
 	{
 		i = 1;
@@ -32,12 +24,26 @@ bool	handle_echo(t_astnode *head, t_data *data)
 			i++;
 		if (cur->literal[i] == '\0')
 		{
-			newline = false;
+			*newline = false;
 			cur = cur->next;
 		}
 		else
 			break ;
 	}
+	return (cur);
+}
+
+bool	handle_echo(t_astnode *head, t_data *data)
+{
+	bool		newline;
+	bool		first_arg;
+	t_astnode	*cur;
+
+	(void)data;
+	if (!head)
+		return (1);
+	newline = true;
+	cur = skip_n_flags(head->children, &newline);
 	first_arg = true;
 	while (cur)
 	{
