@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:57:40 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/18 10:59:06 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/21 17:06:29 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@ char *decode(t_token_type t)
 		return ("EOL");
 	else if (t == PATH)
 		return ("PATH");
+	else if (t == LPAREN)
+		return ("LPAREN");
+	else if (t == RPAREN)
+		return ("RPAREN");
 	else if (t == ECHO)
 		return ("ECHO");
 	else if (t == SSPACE)

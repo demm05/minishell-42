@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 12:04:12 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/18 11:23:58 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/21 14:19:29 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,6 @@ bool	analyze_tokens(t_token *head);
 void	print_tokens(t_token *token);
 void	free_tokens(t_token **head);
 bool	match(t_token *token, t_token_type expected[], int size);
+bool	is_redir(t_token_type t);
 
 #endif

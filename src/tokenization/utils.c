@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:53:57 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/18 11:15:31 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/21 14:19:23 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,3 +58,9 @@ bool	match(t_token *token, t_token_type expected[], int size)
 	}
 	return (0);
 }
+
+bool	is_redir(t_token_type t)
+{
+	return (t == REDIR_OUT || t == REDIR_OUT_A || t == REDIR_IN || t == HERE_DOC);
+}
+
