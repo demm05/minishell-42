@@ -28,7 +28,7 @@ static void	print_allenv(t_data *data)
 	}
 }
 
-static bool	is_valid_identifier(char *s)
+static bool	is_valid_identifier(const char *s)
 {
 	if (!s || !*s)
 		return (false);
@@ -47,24 +47,20 @@ static bool	is_valid_identifier(char *s)
 
 static bool	process_export_arg(char *arg, t_data *data)
 {
-	char		*equal_sign;
-	char		*key;
-	char		*value;
+	char	*equal_sign;
 
 	equal_sign = ft_strchr(arg, '=');
 	if (equal_sign)
 	{
 		*equal_sign = '\0';
-		key = arg;
-		value = equal_sign + 1;
-		if (!is_valid_identifier(key))
+		if (!is_valid_identifier(arg))
 		{
-			fprintf(stderr, "export: `%s': not a valid identifier\n", arg);
 			*equal_sign = '=';
+			fprintf(stderr, "export: `%s': not a valid identifier\n", arg);
 			return (true);
 		}
-		if (!add_env(&(data->env), ft_strdup(key), ft_strdup(value)))
-			fprintf(stderr, "export: failed to add/update variable: %s\n", key);
+		if (!add_env(&(data->env), ft_strdup(arg), ft_strdup(equal_sign + 1)))
+			fprintf(stderr, "export: failed to add/update variable: %s\n", arg);
 		*equal_sign = '=';
 	}
 	else if (!is_valid_identifier(arg))
