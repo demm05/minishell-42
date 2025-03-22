@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:37:12 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/12 15:47:28 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/22 18:13:00 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ typedef struct s_env
 	struct s_env	*next;
 	struct s_env	*prev;
 }	t_env;
-
-bool	ft_isspace(char ch);
 
 /**
  * @brief Gets an environment variable by key.

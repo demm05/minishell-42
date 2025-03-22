@@ -6,14 +6,13 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 13:40:03 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/12 12:46:10 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/22 14:22:44 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./eval_private.h"
+#include "../construct_word/const_word.h"
 #include <stdlib.h>
-
-static bool					is_redir(t_token_type type);
 
 void	exec(t_data *data)
 {
@@ -24,6 +23,7 @@ void	exec(t_data *data)
 
 bool	eval(t_astnode *head, t_data *data)
 {
+	expand_head(head, data);
 	if (head->type == AND)
 	{
 		if (eval(head->children, data))
@@ -48,25 +48,6 @@ bool	eval(t_astnode *head, t_data *data)
 	if (head->type == PIPE)
 		return (handle_pipe(head, data));
 	return (1);
-}
-
-/*
- * Checks if a given token type represents a redirection operation.
- *
- * @param type The token type to check.
- * @return `true` if the token is a redirection operator, `false` otherwise.
- */
-static bool	is_redir(t_token_type type)
-{
-	if (type == REDIR_IN)
-		return (true);
-	if (type == REDIR_OUT)
-		return (true);
-	if (type == REDIR_OUT_A)
-		return (true);
-	if (type == HERE_DOC)
-		return (true);
-	return (false);
 }
 
 /*
