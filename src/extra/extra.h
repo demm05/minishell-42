@@ -39,8 +39,8 @@ t_env	*getenv_val(t_env *head, char *key);
  * @brief Adds an environment variable to the list.
  *
  * @param head  A pointer to the head of the env list (double pointer).
- * @param key   The key of the variable.
- * @param value The value of the variable.
+ * @param key   The malloced key of the variable.
+ * @param value The malloced value of the variable.
  * @return A pointer to the new t_env node, or NULL on failure.
  */
 t_env	*add_env(t_env **head, char *key, char *value);
