@@ -64,6 +64,11 @@ t_env	*add_env(t_env **head, char *key, char *value)
 	return (new);
 }
 
+//TODO:
+// Removes a specified node.
+// Refer to ast_pop function in src/ast/utils.c
+void	remove_env(t_env **head, t_env **node);
+
 void	free_env(t_env **head)
 {
 	t_env	*cur;
