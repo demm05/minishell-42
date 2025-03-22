@@ -6,11 +6,12 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 13:40:03 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/21 14:19:12 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/22 14:22:44 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./eval_private.h"
+#include "../construct_word/const_word.h"
 #include <stdlib.h>
 
 void	exec(t_data *data)
@@ -22,6 +23,7 @@ void	exec(t_data *data)
 
 bool	eval(t_astnode *head, t_data *data)
 {
+	expand_head(head, data);
 	if (head->type == AND)
 	{
 		if (eval(head->children, data))

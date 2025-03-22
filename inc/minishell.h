@@ -6,12 +6,15 @@
 /*   by: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   created: 2025/03/12 11:18:36 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/21 16:51:03 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/22 11:47:41 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef minishell_h
 # define minishell_h
+
+#include <stdbool.h>
+#include "libft.h"
 
 typedef struct s_lexer		t_lexer;
 typedef struct s_astnode	t_astnode;
@@ -21,7 +24,6 @@ typedef struct s_data
 {
 	char					*prompt;
 	char					*line;
-	t_lexer					*l;
 	t_astnode				*head;
 	t_env					*env;
 	int						exit_status;
@@ -41,19 +43,6 @@ void	reset_signals(void);
 
 typedef enum e_tokentype
 {
-	LT,			// <
-	GT,			// >
-	DLT,		// <<
-	DGT,		// >>
-	DSIGN,		// $
-	RPATH,		// ./minishell
-	ABSPATH,	// /bin
-	SQUOTE,		// '
-	DQUOTE,		// "
-	SSPACE,
-	EXPAND_VAR,	// $ better
-	VAR_EXP,	// $
-	// Better names
 	EOL,		// End of line
 	ILLEGAL,	// When invalid input
 	EXIT_STATUS,// $?
@@ -69,6 +58,8 @@ typedef enum e_tokentype
 	PATH,		// Can be relative or absolute eg ./ or /
 	LPAREN,		// (
 	RPAREN,		// )
+	WILDCARD,	// *
+	EXPAND_VAR,	// $ better
 	// Built in shell exec
 	CD,
 	ECHO,

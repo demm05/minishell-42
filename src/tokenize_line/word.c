@@ -10,7 +10,7 @@
 /*                                                                           */
 /* ************************************************************************** */
 
-#include "./lexer_private.h"
+#include "tok_private.h"
 #include "../extra/extra.h"
 #include <stdio.h>
 

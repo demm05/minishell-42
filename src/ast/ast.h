@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 11:15:42 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/18 12:39:22 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/22 11:28:15 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define AST_H
 
 # include "../../inc/minishell.h"
-# include "../tokenization/lexer.h"
+# include "../tokenize_line/tok.h"
 
 typedef struct s_astnode
 {
