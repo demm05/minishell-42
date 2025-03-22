@@ -65,8 +65,7 @@ c clean:
 	$(ECHO) "Clean is done!"
 
 i init:
-	@git submodule init
-	@git submodule update 
+	@git submodule update --init --remote --recursive
 
 f fclean: clean
 	$(Q)rm -rf $(NAME)

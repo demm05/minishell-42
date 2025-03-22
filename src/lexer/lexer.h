@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 12:04:12 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/12 15:27:01 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/21 14:19:29 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 # define LEXER_H
 
 #include "../../inc/minishell.h"
-#include <stdbool.h>
 
 typedef struct s_token
 {
-	struct s_token	*next;
-	struct s_token	*prev;
-	char			*literal;
-	t_token_type	type;
+	int					size;
+	t_token_type		type;
+	char				*literal;
+	struct s_token		*next;
+	struct s_token		*prev;
 }	t_token;
 
 typedef struct s_lexer
@@ -38,20 +38,71 @@ typedef struct s_lexer
 	char		ch;
 }	t_lexer;
 
-bool	is_token_exec(t_token_type t);
-char 	*decode(t_token_type t);
+char	*decode(t_token_type t);
 void	print_tokens(t_token *token);
-int		analyze_tokens(t_lexer *l);
-void	free_lexer(t_lexer *l);
-void	generate_tokens(t_lexer	*l);
-t_lexer	*new_lexer(const char *str);
+void	free_tokens(t_token **head);
+bool	match(t_token *token, t_token_type expected[], int size);
+bool	is_redir(t_token_type t);
+bool	is_token_exec(t_token_type t);
 
 /**
- * @brief Creates a new lexer instance for the given input string
+ * @brief Creates a new token with the specified type and literal value
  *
- * @param str The input string to be tokenized
- * @return t_lexer* Pointer to the newly created lexer, or NULL if fails
+ * @param type The type of the token
+ * @param s The literal string value of the token
+ * @return t_token* Pointer to the newly created token, or NULL if fails
  */
-t_lexer	*new_lexer(const char *str);
+t_token	*new_token(t_token_type type, char *s, unsigned int size);
+
+/**
+ * @brief Appends a token to the lexer's token list
+ *
+ * @param l Pointer to the lexer
+ * @param token Token to append
+ * @return int 0 on success, 1 on error
+ */
+t_token	*append_token(t_lexer *l, t_token *token);
+
+/**
+ * @brief Creates a token with allocated memory for its literal value
+ * and appends it to the lexer
+ *
+ * @param l Pointer to the lexer
+ * @param type The type of the token to create
+ * @param size The size of memory to allocate for the token's literal value
+ * @return int 0 on success, 1 on error
+ */
+t_token	*append_alloc(t_lexer *l, t_token_type type, int size);
+
+/**
+ * @brief Creates a token with the given literal and advances the lexer position
+ *
+ * @param l Pointer to the lexer
+ * @param literal The literal string value for the token
+ * @param advance Number of positions to advance the lexer
+ * @param type The type of the token to create
+ * @return int 0 on success, 1 on error
+ */
+t_token	*append_advance(t_lexer *l, char *literal, unsigned int advance, t_token_type type);
+
+/**@brief Reads the next character from the input.
+ * Updates internal pointers and the current character (`ch`).
+ *
+ * @param l A pointer to the t_lexer structure.
+ */
+void	read_char(t_lexer *l);
+
+/**@brief Returns the next character without consuming it.
+ *
+ * @param l A pointer to the t_lexer structure.
+ * @return The next character or 0 at the end of input.
+ */
+char	peek_char(t_lexer *l);
+
+/**@brief Skips whitespace characters.
+ *
+ * @param l A pointer to the t_lexer structure.
+ */
+void	eat_whitespaces(t_lexer *l);
 
 #endif

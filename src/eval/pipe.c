@@ -48,10 +48,8 @@ bool	handle_pipe(t_astnode *head, t_data *data)
 		close(pipefd[1]);
 		if (head->children->type == EXEC)
 			exec_command(head->children, data);
-		else if (is_built_in(head->children->type))
-			is_built_in(head->children->type)(head->children, data);
-		else if (head->children->type == PIPE)
-			handle_pipe(head->children, data);
+		else
+			eval(head->children, data);
 		exit(data->exit_status);
 	}
 	pid[1] = fork();
@@ -69,10 +67,8 @@ bool	handle_pipe(t_astnode *head, t_data *data)
 		close(pipefd[0]);
 		if (head->children->next->type == EXEC)
 			exec_command(head->children->next, data);
-		else if (is_built_in(head->children->next->type))
-			is_built_in(head->children->next->type)(head->children->next, data);
-		else if (head->children->next->type == PIPE)
-			handle_pipe(head->children->next, data);
+		else
+			eval(head->children->next, data);
 		exit(data->exit_status);
 	}
 	close(pipefd[0]);

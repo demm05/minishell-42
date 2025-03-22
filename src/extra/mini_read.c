@@ -75,6 +75,7 @@ static void	handle_sigint(int original_fd, t_quote_state *state,
 	if (state->in_parentheses || state->in_dquote || state->in_squote)
 		write(STDIN_FILENO, "\n", 1);
 	data->signal = 0;
+	data->exit_status = 130;
 }
 
 static bool	is_empty(t_data *data)
