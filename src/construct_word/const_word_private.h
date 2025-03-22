@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:34:44 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/22 14:34:20 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/22 19:21:18 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,7 @@ void	lex_env(t_lexer *l);
 bool	is_valid_envv(const char *s);
 char	**expand_word(t_astnode *head, t_data *data);
 void	expand_variables(t_token *tok, t_data *data);
+t_token	**wildcard_it(t_token *head);
+char	**join_tokens(t_token **head);
 
 #endif

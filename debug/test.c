@@ -1,47 +1,24 @@
+#include <dirent.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <strings.h>
-#include <ctype.h>
 
-typedef struct	s_state
-{
-	int		**wildcards;
-	bool	dquote;
-	bool	squote;
-	bool	escape;
-}	t_state;
-
-// DONE: First we should expand all enviroment variables
-// DONE: Then we should save location of wildcards
-// DONE: Then we should remove quotes
-// TODO: Then we if there is wildcards we should wildcard it
-// TODO: Now we've got complete string
-
-char	*expand_vars(char *s)
-{
-	char	*anch;
-	int		len;
-	t_state	st;
-
-	if (!s)
-		return (NULL);
-	bzero(&st, sizeof(t_state));
-	anch = s;
-	while (*s)
-	{
-		if (*s == '"' && !st.squote)
-			st.dquote = !st.dquote;
-		else if (*s == '\'' && !st.dquote)
-			st.squote= !st.squote;
-		len++;
-	}
-}
-
-int	main(void)
-{
-	char *s = "$SHELL";
-	int	len;
-	char *res;
+int main() {
+    DIR *dir;
+    struct dirent *entry;
+    
+    dir = opendir(".");  // Open current directory
+    if (!dir) {
+        perror("opendir");
+        return 1;
+    }
+    
+    // Read each entry and skip those starting with '.'
+    while ((entry = readdir(dir)) != NULL) {
+        // Skip hidden files (those starting with '.')
+        if (entry->d_name[0] != '.') {
+            printf("%s\n", entry->d_name);
+        }
+    }
+    
+    closedir(dir);
+    return 0;
 }

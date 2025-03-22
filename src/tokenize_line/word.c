@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "tok_private.h"
-#include "../extra/extra.h"
+#include "libft.h"
 #include <stdio.h>
 
 static bool	condition(char c)
