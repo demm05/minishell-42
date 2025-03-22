@@ -1,22 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   to_delete.c                                        :+:      :+:    :+:   */
+/*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:57:40 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/21 17:06:29 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/22 13:09:16 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./lexer_private.h"
+#include "./lexer.h"
+#include "minishell.h"
 #include <stdio.h>
 
 char *decode(t_token_type t)
 {
 	if (t == EOL)
 		return ("EOL");
+	else if (t == EXIT_STATUS)
+		return ("EXIT_STATUS");
 	else if (t == PATH)
 		return ("PATH");
 	else if (t == LPAREN)
@@ -25,8 +28,6 @@ char *decode(t_token_type t)
 		return ("RPAREN");
 	else if (t == ECHO)
 		return ("ECHO");
-	else if (t == SSPACE)
-		return "SPACE";
 	else if (t == ILLEGAL)
 		return ("ILLEGAL");
 	else if (t == AND)
@@ -38,7 +39,7 @@ char *decode(t_token_type t)
 	else if (t == REDIR_IN)
 		return ("REDIR_IN");
 	else if (t == REDIR_OUT_A)
-		return ("REDIR_OUT_A");
+	return ("REDIR_OUT_A");
 	else if (t == HERE_DOC)
 		return ("HERE_DOC");
 	else if (t == PIPE)
@@ -59,6 +60,10 @@ char *decode(t_token_type t)
 		return ("ENV");
 	else if (t == EXIT)
 		return ("EXIT");
+	else if (t == WILDCARD)
+		return ("WILDCARD");
+	else if (t == EXPAND_VAR)
+		return ("EXPAND_VAR");
 	return ("UNKNOWN");
 }
 
@@ -67,9 +72,9 @@ void	print_tokens(t_token *token)
 	printf("Stream of tokens: ");
 	while (token->next)
 	{
-		printf("%s -> ", decode(token->type));
+		printf("%s (%s) -> ", decode(token->type), token->literal);
 		token = token->next;
 	}
-	printf("%s %d", decode(token->type), token->type);
+	printf("%s (%s)", decode(token->type), token->literal);
 	printf("\n\n");
 }

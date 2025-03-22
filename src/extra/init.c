@@ -6,15 +6,11 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 12:52:53 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/18 11:03:44 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/22 11:28:06 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./extra_private.h"
-#include "../tokenization/lexer.h"
-#include "../ast/ast.h"
-#include "libft.h"
-#include <stdlib.h>
+#include "extra_private.h"
 
 int	free_data(t_data *data)
 {
@@ -32,6 +28,5 @@ t_data	*init(int argc, char **argv, char **envp)
 		return (NULL);
 	data->env = init_env(argv, envp);
 	data->prompt = "Prompt > ";
-	data->l = ft_calloc(1, sizeof(t_lexer));
 	return (data);
 }

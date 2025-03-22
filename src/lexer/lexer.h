@@ -1,19 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_private.h                                    :+:      :+:    :+:   */
+/*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/12 12:11:31 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/18 10:58:37 by dmelnyk          ###   ########.fr       */
+/*   Created: 2025/03/12 12:04:12 by dmelnyk           #+#    #+#             */
+/*   Updated: 2025/03/21 14:19:29 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_PRIVATE_H
-# define LEXER_PRIVATE_H
+#ifndef LEXER_H
+# define LEXER_H
 
-# include "./lexer.h"
+#include "../../inc/minishell.h"
+
+typedef struct s_token
+{
+	int					size;
+	t_token_type		type;
+	char				*literal;
+	struct s_token		*next;
+	struct s_token		*prev;
+}	t_token;
+
+typedef struct s_lexer
+{
+	const char	*input;
+	t_token		*tokens;
+	// current position in input (points to current char)
+	int			position;
+	// current reading position in input (after current char)
+	int			read_postion;
+	// lenght of input
+	int			size;
+	// current char under examination(poistiob)
+	char		ch;
+}	t_lexer;
+
+char	*decode(t_token_type t);
+void	print_tokens(t_token *token);
+void	free_tokens(t_token **head);
+bool	match(t_token *token, t_token_type expected[], int size);
+bool	is_redir(t_token_type t);
+bool	is_token_exec(t_token_type t);
 
 /**
  * @brief Creates a new token with the specified type and literal value
@@ -74,14 +104,5 @@ char	peek_char(t_lexer *l);
  * @param l A pointer to the t_lexer structure.
  */
 void	eat_whitespaces(t_lexer *l);
-
-/**
- * @brief Calculates the distance to the next whitespace or end of input.
- *
- * @param l A pointer to the `t_lexer` structure.
- * @return The number of characters to the next whitespace or end of input.
- */
-
-void	lex_quote(t_lexer *l);
 
 #endif

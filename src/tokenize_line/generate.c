@@ -6,38 +6,38 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:37:10 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/21 13:10:39 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/22 11:22:24 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./lexer_private.h"
-#include "libft.h"
+#include "tok_private.h"
 #include <stdlib.h>
 
 bool	is_fixed_type(t_lexer *l);
 void	add_word(t_lexer *l);
 
-void	generate_tokens(t_data *data)
+t_token	*generate_tokens(char *line)
 {
-	t_lexer *l;
+	t_lexer l;
 
-	l = data->l;
-	l->input = data->line;
-	l->size = ft_strlen(data->line);
-	read_char(l);
-	while (l->position < l->size)
+	ft_bzero(&l, sizeof(t_lexer));
+	l.input = line;
+	l.size = ft_strlen(line);
+	read_char(&l);
+	while (l.position < l.size)
 	{
-		if (l->tokens && l->tokens->prev->type == ILLEGAL)
-			return ;
-		eat_whitespaces(l);
-		if (is_fixed_type(l))
+		if (l.tokens && l.tokens->prev->type == ILLEGAL)
+			return (l.tokens);
+		eat_whitespaces(&l);
+		if (is_fixed_type(&l))
 			continue ;
-		else if (l->ch)
-			add_word(l);
+		else if (l.ch)
+			add_word(&l);
 		else
 			break ;
 	}
-	append_advance(l, NULL, 0, EOL);
+	append_advance(&l, NULL, 0, EOL);
+	return (l.tokens);
 }
 
 bool	is_fixed_type(t_lexer *l)

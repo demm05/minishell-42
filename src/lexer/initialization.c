@@ -6,12 +6,11 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:41:07 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/18 10:55:23 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/22 11:32:12 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./lexer_private.h"
-#include "libft.h"
+#include "./lexer.h"
 #include <stdlib.h>
 
 t_token	*new_token(t_token_type type, char *s, unsigned int s_size)

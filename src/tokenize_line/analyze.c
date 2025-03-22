@@ -6,11 +6,11 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:24:08 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/21 14:53:26 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/22 11:22:48 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./lexer_private.h"
+#include "tok_private.h"
 #include <stdio.h>
 
 static bool	is_paran(t_token **head, int *paren);

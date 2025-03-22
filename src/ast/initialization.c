@@ -6,14 +6,14 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:26:53 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/18 12:40:09 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/22 13:24:59 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./ast_private.h"
+#include "../construct_word/const_word.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include "libft.h"
 
 t_astnode	*new_astnode(t_token *tok)
 {

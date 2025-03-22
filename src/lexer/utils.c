@@ -6,13 +6,12 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:53:57 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/21 14:19:23 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/03/22 11:29:12 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./lexer_private.h"
+#include "lexer.h"
 #include "../extra/extra.h"
-#include <stdlib.h>
 
 void	read_char(t_lexer *l)
 {
@@ -63,4 +62,3 @@ bool	is_redir(t_token_type t)
 {
 	return (t == REDIR_OUT || t == REDIR_OUT_A || t == REDIR_IN || t == HERE_DOC);
 }
-
