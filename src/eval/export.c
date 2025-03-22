@@ -13,17 +13,6 @@
 #include "./eval_private.h"
 #include <stdio.h>
 
-
-//static bool	is_valid_identifier(char *arg)
-//{
-//	while (*arg)
-//	{
-//		if (*arg++ == '=')
-//			return (false);
-//		if ()
-//	}
-//}
-
 static void	print_allenv(t_data *data)
 {
 	t_env	*cur;
@@ -39,7 +28,7 @@ static void	print_allenv(t_data *data)
 	}
 }
 
-bool	is_valid_identifier(char *s)
+static bool	is_valid_identifier(char *s)
 {
 	if (!s || !*s)
 		return (false);
@@ -49,24 +38,47 @@ bool	is_valid_identifier(char *s)
 	while (*s && *s != '=')
 	{
 		if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z')
-			|| (*s >='0' && *s <= '9') || *s == '_'))
+				|| (*s >= '0' && *s <= '9') || *s == '_'))
 			return (false);
 		s++;
 	}
 	return (true);
 }
 
-bool	handle_export(t_astnode *head, t_data *data)
+static bool	process_export_arg(char *arg, t_data *data)
 {
-	//TODO:
-	//use `add_env` function to add
-	// Value can start from _ or any alphabetical char and followed by _ or number or alphabet
-	// Inputting `export HELLO` doesn't set but `export HELLO=` sets empty string.
-	t_astnode	*cur;
-	char		*arg;
 	char		*equal_sign;
 	char		*key;
 	char		*value;
+
+	equal_sign = ft_strchr(arg, '=');
+	if (equal_sign)
+	{
+		*equal_sign = '\0';
+		key = arg;
+		value = equal_sign + 1;
+		if (!is_valid_identifier(key))
+		{
+			fprintf(stderr, "export: `%s': not a valid identifier\n", arg);
+			*equal_sign = '=';
+			return (true);
+		}
+		if (!add_env(&(data->env), ft_strdup(key), ft_strdup(value)))
+			fprintf(stderr, "export: failed to add/update variable: %s\n", key);
+		*equal_sign = '=';
+	}
+	else if (!is_valid_identifier(arg))
+	{
+		fprintf(stderr, "export: `%s': not a valid identifier\n", arg);
+		return (true);
+	}
+	return (false);
+}
+
+bool	handle_export(t_astnode *head, t_data *data)
+{
+	t_astnode	*cur;
+	bool		result;
 
 	cur = head->children;
 	if (!cur)
@@ -74,34 +86,14 @@ bool	handle_export(t_astnode *head, t_data *data)
 		print_allenv(data);
 		return (0);
 	}
+	result = 0;
 	while (cur)
 	{
-		arg = cur->literal;
-		equal_sign = ft_strchr(arg, '=');
-		if (equal_sign)
-		{
-			*equal_sign = '\0';
-			key = arg;
-			value = equal_sign + 1;
-			if (!is_valid_identifier(key))
-			{
-				printf("export: `%s': not a valid identifier\n", arg);
-				*equal_sign = '=';
-				cur = cur->next;
-				continue ;
-			}
-			//TODO:delete
-			printf("Key: %s, Value: %s\n", key, value);
-			if (!add_env(&(data->env), key, value))
-				printf("export: failed to add/update variable: %s\n", key);
-			*equal_sign = '=';
-		}
-		else
-		{
-			if (!is_valid_identifier(arg))
-				printf("export: `%s': not a valid identifier\n", arg);
-		}
+		if (process_export_arg(cur->literal, data))
+			result = 1;
 		cur = cur->next;
 	}
-	return (0);
+	if (result)
+		data->exit_status = 1;
+	return (result);
 }
