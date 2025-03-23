@@ -14,7 +14,7 @@
 #include <dirent.h>
 #include <stdio.h>
 
-static int	get_size(char *pwd)
+static inline int	get_size(char *pwd)
 {
 	DIR				*dir;
     struct dirent	*entry;
@@ -38,7 +38,7 @@ static int	get_size(char *pwd)
 	return (size);
 }
 
-t_token	**wildcard_it(t_token *head)
+t_token	**wildcard_it(t_token **head)
 {
 	t_token	**res;
 	int		size;
@@ -50,7 +50,8 @@ t_token	**wildcard_it(t_token *head)
 		res = malloc(sizeof(t_token *) * 2);
 	else
 		res = malloc(sizeof(t_token *) * (size + 1));
-	res[0] = head;
+	res[0] = *head;
+	*head = NULL;
 	res[1] = NULL;
 	return (res);
 }
