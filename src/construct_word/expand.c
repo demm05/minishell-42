@@ -13,9 +13,7 @@
 #include "const_word_private.h"
 #include <stdio.h>
 
-void	expand_variables(t_token *tok, t_data *data);
-
-char	**expand_word(t_astnode *head, t_data *data)
+static inline char	**expand_word(t_astnode *head, t_data *data)
 {
 	t_token	*token;
 	t_token	**arr;
@@ -27,20 +25,20 @@ char	**expand_word(t_astnode *head, t_data *data)
 	if (!token)
 		return (NULL);
 	expand_variables(token, data);
-	arr = wildcard_it(token);
 	//print_tokens(token);
+	arr = wildcard_it(&token);
 	//free_tokens(&token);
 	res = join_tokens(arr);
 	free(arr);
 	return (res);
 }
 
-static bool	statement(t_token_type t)
+static inline bool	statement(t_token_type t)
 {
 	return (t == WORD || t == PATH || t == EXEC);
 }
 
-static void	do_stuff_with_head(t_astnode *head, t_data *data)
+static inline void	do_stuff_with_head(t_astnode *head, t_data *data)
 {
 	char	**s;
 
@@ -60,10 +58,9 @@ void	expand_head(t_astnode *head, t_data *data)
 {
 	t_astnode	*cur;
 
-	if (!head || !data)
+	if (!head || !data || !statement(head->type))
 		return ;
-	if (!statement(head->type))
-		return ;
+	// TODO: there we have to split head->literal by whitespace and set type
 	do_stuff_with_head(head, data);
 	cur = head->children;
 	while (cur)

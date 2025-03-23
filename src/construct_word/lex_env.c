@@ -52,7 +52,7 @@ void	expand_variables(t_token *tok, t_data *data)
 				env = getenv_val(data->env, tok->literal);
 				free(tok->literal);
 				if (env)
-					tok->literal = env->value;
+					tok->literal = ft_strdup(env->value);
 				else
 					tok->literal = NULL;
 			}
@@ -62,10 +62,7 @@ void	expand_variables(t_token *tok, t_data *data)
 				tok->literal = ft_itoa(data->exit_status);
 			}
 			tok->type = WORD;
-			if (tok->literal)
-				tok->size = ft_strlen(tok->literal);
-			else
-				tok->size = 0;
+			tok->size = ft_strlen(tok->literal);
 		}
 		tok = tok->next;
 	}

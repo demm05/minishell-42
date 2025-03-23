@@ -13,7 +13,7 @@
 #include "const_word_private.h"
 #include <stdio.h>
 
-static unsigned int	get_list_size(t_token *head)
+static inline unsigned int	get_list_size(t_token *head)
 {
 	unsigned int	len;
 
@@ -26,7 +26,7 @@ static unsigned int	get_list_size(t_token *head)
 	return (len);
 }
 
-static char	*join_head(t_token *head)
+static inline char	*join_head(t_token *head)
 {
 	char			*res;
 	unsigned int	size;
@@ -46,13 +46,14 @@ static char	*join_head(t_token *head)
 		k = 0;
 		while (k < head->size)
 			res[j++] = head->literal[k++];
+		free(head->literal);
 		head = head->next;;
 	}
 	res[j] = 0;
 	return (res);
 }
 
-static int	get_arr_size(t_token **head)
+static inline int	get_arr_size(t_token **head)
 {
 	int		size;
 
@@ -68,8 +69,6 @@ char	**join_tokens(t_token **head)
 {
 	char	**res;
 	char	*s;
-	t_token	*cur;
-	t_token	*next;
 	int		i;
 
 	if (!head || !*head)
@@ -81,14 +80,11 @@ char	**join_tokens(t_token **head)
 		return (NULL);
 	}
 	i = 0;
-	cur = *head;
-	while (cur)
+	while (head[i])
 	{
-		next = cur->next;
-		s = join_head(cur);
-		free_tokens(&cur);
+		s = join_head(head[i]);
+		free_tokens(&head[i]);
 		res[i++] = s;
-		cur = next;
 	}
 	res[i] = NULL;
 	return (res);
