@@ -40,7 +40,7 @@ t_astnode	*parse_redir(t_token **token)
 	if (!head)
 		return (left);
 	if (left)
-		add_child(head, left);
+		add_child(last_head, left);
 	return (head);
 }
 
