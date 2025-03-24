@@ -74,4 +74,6 @@ t_data	*init(int argc, char **argv, char **envp);
  */
 int		free_data(t_data *data);
 
+void	env_unset(t_env **env, char *kk);
+
 #endif
