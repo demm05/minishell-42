@@ -44,6 +44,7 @@ t_env	*append_env(t_env **head, char *key, char *value)
 	}
 	else
 	{
+		new->prev = (*head)->prev;
 		(*head)->prev->next = new;
 		(*head)->prev = new;
 	}
@@ -81,4 +82,32 @@ void	free_env(t_env **head)
 		cur = next;
 	}
 	*head = NULL;
+}
+
+void	env_unset(t_env **env, char *kk)
+{
+	t_env	*prev;
+	t_env	*next;
+	t_env	*key;
+
+	if (!env || !*env || !kk)
+		return ;
+	key = getenv_val(*env, kk);
+	if (!key)
+		return ;
+	prev = key->prev;
+	next = key->next;
+	free(key->key);
+	free(key->value);
+	if (key == *env)
+	{
+		free(*env);
+		*env = next;
+		return ;
+	}
+	free(key);
+	if (prev)
+		prev->next = next;
+	else if (!next)
+		(*env)->prev = prev;
 }
