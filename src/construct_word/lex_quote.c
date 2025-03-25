@@ -20,7 +20,6 @@ static void	read_squote(t_lexer *l)
 	while (pos < l->size && l->input[pos] != '\'')
 		pos++;
 	append_alloc(l, WORD, pos - l->position);
-	read_char(l);
 }
 
 static void	read_dquote(t_lexer *l)
@@ -53,19 +52,16 @@ static void	read_dquote(t_lexer *l)
 	}
 	if (i > 0)
 		append_alloc(l, WORD, i);
-	read_char(l);
 }
 
 void	lex_quote(t_lexer *l)
 {
+	if (l->ch != '\'' && l->ch != '"')
+		return ;
+	append_advance(l, NULL, 1, QUOTE);
 	if (l->ch == '\'')
-	{
-		read_char(l);
 		read_squote(l);
-	}
 	else if (l->ch == '"')
-	{
-		read_char(l);
 		read_dquote(l);
-	}
+	append_advance(l, NULL, 1, QUOTE);
 }
