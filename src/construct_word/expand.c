@@ -24,9 +24,11 @@ static inline char	**expand_word(t_astnode *head, t_data *data)
 	token = word_generate_tokens(head->literal);
 	if (!token)
 		return (NULL);
-	expand_variables(token, data);
+	arr = NULL;
+	//arr = process_tokens(token, data);
+	//expand_variables(token, data);
 	//print_tokens(token);
-	arr = wildcard_it(&token);
+	//arr = wildcard_it(&token);
 	//free_tokens(&token);
 	res = join_tokens(arr);
 	free(arr);
@@ -60,7 +62,6 @@ void	expand_head(t_astnode *head, t_data *data)
 
 	if (!head || !data || !statement(head->type))
 		return ;
-	// TODO: there we have to split head->literal by whitespace and set type
 	do_stuff_with_head(head, data);
 	cur = head->children;
 	while (cur)

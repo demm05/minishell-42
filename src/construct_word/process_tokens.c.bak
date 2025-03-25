@@ -1,5 +1,5 @@
-#include "../src/construct_word/const_word_private.h"
-#include "../src/extra/extra.h"
+#include "const_word_private.h"
+#include "../extra/extra.h"
 #include <stdio.h>
 
 static inline void	expand_variable(t_token *tok, t_data *data);
@@ -32,25 +32,7 @@ t_token	**process_tokens(t_token *head, t_data *data)
 			set_head(head, res, &i);
 		head = next;
 	}
-	res[i] = NULL;
 	return (res);
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	t_data	*data;
-	t_token	*t;
-	t_token	**arr;
-	
-	data = init(argc, argv, envp);
-	t = word_generate_tokens("$A$A");
-	if (!t)
-		return (0);
-	arr = process_tokens(t, data);
-	int	i = 0;
-	while (arr[i])
-		i++;
-	printf("%d\n", i);
 }
 
 static inline void	set_head(t_token *head, t_token **res, int *index)
@@ -77,8 +59,6 @@ static inline void	set_head(t_token *head, t_token **res, int *index)
 	end = start;
 	while (end < head->size && !ft_isspace(head->literal[end]))
 		end++;
-	if (end - start == head->size)
-		return ;
 	reminder_start = end;
 	while (reminder_start < head->size && ft_isspace(head->literal[reminder_start]))
 		reminder_start++;

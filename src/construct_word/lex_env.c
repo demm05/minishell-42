@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "const_word_private.h"
-#include "../extra/extra.h"
 
 static inline bool	is_valid_ch(char c)
 {
@@ -38,33 +37,3 @@ void	lex_env(t_lexer *l)
 		len++;
 	append_alloc(l, EXPAND_VAR, len);
 }
-
-void	expand_variables(t_token *tok, t_data *data)
-{
-	t_env	*env;
-
-	while (tok)
-	{
-		if (tok->type == EXIT_STATUS || tok->type == EXPAND_VAR)
-		{
-			if (tok->type == EXPAND_VAR)
-			{
-				env = getenv_val(data->env, tok->literal);
-				free(tok->literal);
-				if (env)
-					tok->literal = ft_strdup(env->value);
-				else
-					tok->literal = NULL;
-			}
-			else
-			{
-				free(tok->literal);
-				tok->literal = ft_itoa(data->exit_status);
-			}
-			tok->type = WORD;
-			tok->size = ft_strlen(tok->literal);
-		}
-		tok = tok->next;
-	}
-}
-
