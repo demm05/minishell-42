@@ -4,12 +4,23 @@
 
 static inline void	expand_variable(t_token *tok, t_data *data);
 static inline int	get_size(t_token *head, t_data *data);
-static inline void	set_head(t_token *head, t_token **res, int *index);
+static inline t_token	*set_head(t_token *head);
+
+static inline void	add_tok_to_arr(t_token *head, t_token *new, t_token **res, int *index)
+{
+	new->next = head->next;
+	head->next = NULL;
+	res[*index] = new;
+	*index += 1;
+	if (new->next)
+		new->next->prev = new;
+}
 
 t_token	**process_tokens(t_token *head, t_data *data)
 {
 	t_token	**res;
 	t_token	*next;
+	t_token	*new;
 	int		size;
 	int		i;
 	bool	quote;
@@ -23,13 +34,23 @@ t_token	**process_tokens(t_token *head, t_data *data)
 		perror("malloc\n");
 		return (NULL);
 	}
+	if (head)
+		res[i++] = head;
 	while (head)
 	{
 		next = head->next;
 		if (head->type == QUOTE)
 			quote = !quote;
 		else if (!quote)
-			set_head(head, res, &i);
+		{
+			new = set_head(head);
+			if (new)
+			{
+				add_tok_to_arr(head, new, res, &i);
+				head = new;
+				continue ;
+			}
+		}
 		head = next;
 	}
 	res[i] = NULL;
@@ -49,11 +70,11 @@ int	main(int argc, char **argv, char **envp)
 	arr = process_tokens(t, data);
 	int	i = 0;
 	while (arr[i])
-		i++;
+		print_tokens(arr[i++]);
 	printf("%d\n", i);
 }
 
-static inline void	set_head(t_token *head, t_token **res, int *index)
+static inline t_token	*set_head(t_token *head)
 {
 	int		start;
 	int		end;
@@ -61,10 +82,11 @@ static inline void	set_head(t_token *head, t_token **res, int *index)
 	char	*first;
 	t_token	*new;
 
-	if (!head || !head->literal || !res || !index)
-		return ;
+	if (!head || !head->literal)
+		return (NULL);
 	start = 0;
 	end = 0;
+	new = NULL;
 	while (start < head->size && ft_isspace(head->literal[start]))
 		start++;
 	if (start == head->size)
@@ -72,13 +94,13 @@ static inline void	set_head(t_token *head, t_token **res, int *index)
 		free(head->literal);
 		head->literal = NULL;
 		head->size = 0;
-		return ;
+		return (NULL);
 	}
 	end = start;
 	while (end < head->size && !ft_isspace(head->literal[end]))
 		end++;
 	if (end - start == head->size)
-		return ;
+		return (NULL);
 	reminder_start = end;
 	while (reminder_start < head->size && ft_isspace(head->literal[reminder_start]))
 		reminder_start++;
@@ -87,15 +109,11 @@ static inline void	set_head(t_token *head, t_token **res, int *index)
 	{
 		new = new_token(WORD, ft_strdup(head->literal + reminder_start), head->size - reminder_start);
 		new->size = head->size - reminder_start;
-		new->next = head->next;
-		res[*index] = new;
-		*index += 1;
-		set_head(new, res, index);
 	}
 	free(head->literal);
 	head->literal = first;
 	head->size = end - start;
-	head->next = NULL;
+	return (new);
 }
 
 static inline int	get_size(t_token *head, t_data *data)
