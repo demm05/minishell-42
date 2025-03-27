@@ -59,7 +59,7 @@ static inline t_astnode	*create_nodes(char **ss)
 	t_token		t;
 	int			i;
 
-	if (!ss)
+	if (!ss || !*ss)
 		return (NULL);
 	i = 0;
 	t.type = WORD;
