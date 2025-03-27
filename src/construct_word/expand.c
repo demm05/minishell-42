@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "const_word_private.h"
+#include "minishell.h"
 #include <stdio.h>
 
 static inline char	**expand_word(t_astnode *head, t_data *data)
@@ -21,52 +22,122 @@ static inline char	**expand_word(t_astnode *head, t_data *data)
 
 	if (!head || !head->literal)
 		return (NULL);
-	token = word_generate_tokens(head->literal);
+	token = word_generate_tokens(head->literal, data);
 	if (!token)
 		return (NULL);
-	arr = NULL;
-	//arr = process_tokens(token, data);
-	//expand_variables(token, data);
-	//print_tokens(token);
+	arr = split_tokens(token);
 	//arr = wildcard_it(&token);
-	//free_tokens(&token);
 	res = join_tokens(arr);
 	free(arr);
 	return (res);
 }
 
-static inline bool	statement(t_token_type t)
+static inline void	set_type(t_astnode *head)
 {
-	return (t == WORD || t == PATH || t == EXEC);
+	char			*s;
+
+	s = head->literal;
+	if (ft_strcmp(s, "echo") == 0)
+		head->type = ECHO;
+	else if (ft_strcmp(s, "pwd") == 0)
+		head->type = PWD;
+	else if (ft_strcmp(s, "cd") == 0)
+		head->type = CD;
+	else if (ft_strcmp(s, "export") == 0)
+		head->type = EXPORT;
+	else if (ft_strcmp(s, "env") == 0)
+		head->type = ENV;
+	else if (ft_strcmp(s, "unset") == 0)
+		head->type = UNSET;
+	else if (ft_strcmp(s, "exit") == 0)
+		head->type = EXIT;
 }
 
-static inline void	do_stuff_with_head(t_astnode *head, t_data *data)
+static inline t_astnode	*create_nodes(char **ss)
 {
-	char	**s;
+	t_astnode	*res;
+	t_token		t;
+	int			i;
 
-	if (!head || !head->literal)
+	if (!ss)
+		return (NULL);
+	i = 0;
+	t.type = WORD;
+	while (ss[i])
+	{
+		t.literal = ss[i];
+		t.size = ft_strlen(ss[i]);
+		append_astnode(&res, new_astnode(&t));
+		i++;
+	}
+	return (res);
+}
+
+static inline void	do_child(t_astnode *head, t_astnode *cur, char **s)
+{
+	t_astnode	*new;
+	t_astnode	*next;
+	t_astnode	*new_last;
+
+	if (!s || !head || !cur)
 		return ;
-	if (!statement(head->type))
+	free(cur->literal);
+	cur->literal = *s;
+	new = create_nodes(s + 1);
+	free(s);
+	if (!new)
 		return ;
-	s = expand_word(head, data);
-	if (!s)
+	next = cur->next;
+	new_last = new->prev;
+	if (!head->next)
+		head->prev = new_last;
+	else
+	{
+		next->prev = new_last;
+		new_last->next = next;	
+	}
+	cur->next = new;
+	new->prev = cur;
+}
+
+static inline void	do_head(t_astnode *head, char **s)
+{
+	t_astnode	*new;
+	t_astnode	*old;
+	t_astnode	*new_last;
+
+	if (!s || !head)
 		return ;
 	free(head->literal);
 	head->literal = *s;
+	set_type(head);	
+	new = create_nodes(s + 1);
 	free(s);
+	if (!new)
+		return ;
+	old = head->children;
+	head->children = new;
+	new_last = new->prev;
+	new->prev = old->prev;
+	new->prev->next = old;
+	old->prev = new_last;
 }
 
 void	expand_head(t_astnode *head, t_data *data)
 {
 	t_astnode	*cur;
+	t_astnode	*next;
 
-	if (!head || !data || !statement(head->type))
+	if (!head || !data || !(head->type == WORD || head->type == PATH || head->type == EXEC))
 		return ;
-	do_stuff_with_head(head, data);
+	do_head(head, expand_word(head, data));
 	cur = head->children;
 	while (cur)
 	{
-		do_stuff_with_head(cur, data);
-		cur = cur->next;
+		next = cur->next;
+		if (cur->type == WORD || cur->type == PATH || cur->type == EXEC)
+			do_child(head->children, cur, expand_word(cur, data));
+		cur = next;
 	}
+	//print_ast(head, 0);
 }

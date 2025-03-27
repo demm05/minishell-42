@@ -61,6 +61,7 @@ typedef enum e_tokentype
 	WILDCARD,	// *
 	EXPAND_VAR,	// $ better
 	QUOTE,
+	SSPACE,
 	// Built in shell exec
 	CD,
 	ECHO,

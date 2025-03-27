@@ -30,7 +30,9 @@ void		create_ast(t_data *data);
 void		print_ast(t_astnode *node, int depth);
 void		free_ast(t_astnode **node);
 void		add_child(t_astnode *parent, t_astnode *child);
-t_astnode	*new_astnode(t_token *tok);;
+t_astnode	*new_astnode(t_token *tok);
 void		assemble_head(t_astnode *head, t_data *data);
+
+t_astnode	*append_astnode(t_astnode **head, t_astnode *new);
 
 #endif
