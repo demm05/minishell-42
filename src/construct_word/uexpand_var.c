@@ -97,7 +97,10 @@ void	expand_variable(t_lexer *l, char *key, bool is_status, int size)
 	read_char(l);
 	key = get_key(l->data, key);
 	if (!key)
+	{
+		append_advance(l, NULL, 0, WORD);
 		return ;
+	}
 	res = ft_calloc(count_words(key, &size) + 1, sizeof(char *));
 	if (!res)
 	{
