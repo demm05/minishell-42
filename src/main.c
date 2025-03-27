@@ -32,9 +32,6 @@ int	main(int argc, char **argv, char **envp)
 	int		i = 1;
 
 	data = init(argc, argv, envp);
-	printf("%d\n", argc - 1);
-	while (i < argc)
-		printf("%s\n", argv[i++]);
 	while (1)
 	{
 		if (isatty(fileno(stdin)))

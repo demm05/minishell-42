@@ -28,6 +28,7 @@ typedef struct s_lexer
 {
 	const char	*input;
 	t_token		*tokens;
+	t_data		*data;
 	// current position in input (points to current char)
 	int			position;
 	// current reading position in input (after current char)

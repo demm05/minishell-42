@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "./ast_private.h"
-#include "../construct_word/const_word.h"
-#include <stdlib.h>
 #include <stdio.h>
 
 t_astnode	*new_astnode(t_token *tok)
@@ -25,20 +23,28 @@ t_astnode	*new_astnode(t_token *tok)
 	return (node);
 }
 
+t_astnode	*append_astnode(t_astnode **head, t_astnode *new)
+{
+	if (!*head)
+	{
+		new->prev = new;
+		*head = new;
+	}
+	else
+	{
+		new->prev = (*head)->prev;
+		(*head)->prev->next = new;
+		(*head)->prev = new;
+	}
+	return (new);
+}
+
 void	add_child(t_astnode *parent, t_astnode *child)
 {
 	if (!parent || !child)
 		return ;
 	parent->childs++;
-	if (!parent->children)
-	{
-		parent->children = child;
-		parent->children->prev = child;
-		return ;
-	}
-	child->prev = parent->children->prev;
-	parent->children->prev->next = child;
-	parent->children->prev = child;
+	append_astnode(&parent->children, child);
 }
 
 void	print_ast(t_astnode *node, int depth)

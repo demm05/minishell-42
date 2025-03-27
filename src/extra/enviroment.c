@@ -108,6 +108,8 @@ void	env_unset(t_env **env, char *kk)
 	free(key);
 	if (prev)
 		prev->next = next;
-	else if (!next)
+	if (!next)
 		(*env)->prev = prev;
+	else
+		next->prev = prev;
 }

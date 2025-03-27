@@ -27,7 +27,7 @@ void	lex_env(t_lexer *l)
 
 	if (peek_char(l) == '?')
 	{
-		append_alloc(l, EXIT_STATUS, 2);
+		expand_variable(l, NULL, 1, 2);
 		return ;
 	}
 	read_char(l);
@@ -35,5 +35,5 @@ void	lex_env(t_lexer *l)
 	str = l->input + l->position;
 	while (len < l->size && is_valid_ch(str[len]))
 		len++;
-	append_alloc(l, EXPAND_VAR, len);
+	expand_variable(l, ft_strndup(l->input + l->position, len), 0, len);
 }
