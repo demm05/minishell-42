@@ -91,6 +91,8 @@ static inline void	do_child(t_astnode *head, t_astnode *cur, char **s)
 	new_last = new->prev;
 	if (!head->next)
 		head->prev = new_last;
+	else if (!next)
+		new_last->next = NULL;
 	else
 	{
 		next->prev = new_last;
