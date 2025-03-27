@@ -21,13 +21,14 @@ bool	is_valid_envv(const char *s)
 	return (1);
 }
 
-t_token	*word_generate_tokens(char *line)
+t_token	*word_generate_tokens(char *line, t_data *data)
 {
 	t_lexer	l;
 
 	ft_bzero(&l, sizeof(t_lexer));
 	l.input = line;
 	l.size = ft_strlen(line);
+	l.data = data;
 	read_char(&l);
 	while (l.position < l.size)
 	{

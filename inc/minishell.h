@@ -60,6 +60,8 @@ typedef enum e_tokentype
 	RPAREN,		// )
 	WILDCARD,	// *
 	EXPAND_VAR,	// $ better
+	QUOTE,
+	SSPACE,
 	// Built in shell exec
 	CD,
 	ECHO,

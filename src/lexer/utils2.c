@@ -64,6 +64,8 @@ char *decode(t_token_type t)
 		return ("WILDCARD");
 	else if (t == EXPAND_VAR)
 		return ("EXPAND_VAR");
+	else if (t == QUOTE)
+		return ("QUOTE");
 	return ("UNKNOWN");
 }
 
