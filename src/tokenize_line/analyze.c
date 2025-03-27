@@ -12,10 +12,35 @@
 
 #include "tok_private.h"
 #include <stdio.h>
+#include <readline/readline.h>
 
 static bool	is_paran(t_token **head, int *paren);
 static bool	is_basic(t_token *head);
 static bool	a_is_redir(t_token **head);
+
+int	read_heredoc(const char *delimiter)
+{
+	char	*line;
+	int		pfd[2];
+
+	if (pipe(pfd) < 0)
+		fprintf(stderr, "pipe error\n");
+	while (1)
+	{
+		line  = readline("> ");
+		if (line == NULL)
+			break ;
+		if (ft_strcmp(line, delimiter) == 0)
+		{
+			free(line);
+			break ;
+		}
+		dprintf(pfd[1], "%s\n", line);
+		free(line);
+	}
+	close(pfd[1]);
+	return (pfd[0]);
+}
 
 bool	analyze_tokens(t_token *head)
 {
@@ -34,6 +59,7 @@ bool	analyze_tokens(t_token *head)
 			head = head->next;
 			if (head->type != WORD)
 				break ;
+			read_heredoc(head->literal);
 			fprintf(stderr, "syntax error HEREDOC is not supported yet\n");
 		}
 		else if (is_basic(head) || is_paran(&head, &paren) || a_is_redir(&head))
