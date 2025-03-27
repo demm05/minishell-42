@@ -29,7 +29,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	*data;
 	int		status;
-	int		i = 1;
 
 	data = init(argc, argv, envp);
 	while (1)
