@@ -59,10 +59,11 @@ static inline t_astnode	*create_nodes(char **ss)
 	t_token		t;
 	int			i;
 
-	if (!ss)
+	if (!ss || !*ss)
 		return (NULL);
 	i = 0;
 	t.type = WORD;
+	res = NULL;
 	while (ss[i])
 	{
 		t.literal = ss[i];
@@ -91,6 +92,8 @@ static inline void	do_child(t_astnode *head, t_astnode *cur, char **s)
 	new_last = new->prev;
 	if (!head->next)
 		head->prev = new_last;
+	else if (!next)
+		new_last->next = NULL;
 	else
 	{
 		next->prev = new_last;
@@ -103,8 +106,7 @@ static inline void	do_child(t_astnode *head, t_astnode *cur, char **s)
 static inline void	do_head(t_astnode *head, char **s)
 {
 	t_astnode	*new;
-	t_astnode	*old;
-	t_astnode	*new_last;
+	t_astnode	*old_last;
 
 	if (!s || !head)
 		return ;
@@ -115,12 +117,15 @@ static inline void	do_head(t_astnode *head, char **s)
 	free(s);
 	if (!new)
 		return ;
-	old = head->children;
+	if (!head->children)
+	{
+		head->children = new;
+		return ;
+	}
+	new->prev->next = head->children;
+	old_last = head->children->prev;
 	head->children = new;
-	new_last = new->prev;
-	new->prev = old->prev;
-	new->prev->next = old;
-	old->prev = new_last;
+	head->children->prev = old_last;
 }
 
 void	expand_head(t_astnode *head, t_data *data)

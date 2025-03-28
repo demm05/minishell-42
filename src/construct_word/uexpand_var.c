@@ -93,11 +93,14 @@ void	expand_variable(t_lexer *l, char *key, bool is_status, int size)
 		append_advance(l, ft_itoa(l->data->exit_status), size, WORD);
 		return ;
 	}
-	l->position += size;
+	l->read_postion += size - 1;
 	read_char(l);
 	key = get_key(l->data, key);
 	if (!key)
+	{
+		append_advance(l, NULL, 0, WORD);
 		return ;
+	}
 	res = ft_calloc(count_words(key, &size) + 1, sizeof(char *));
 	if (!res)
 	{
