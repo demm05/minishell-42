@@ -1,12 +1,12 @@
-#include "const_word_private.h"
+#include "expansion_private.h"
 #include "../extra/extra.h"
 #include <stdio.h>
 
 static inline int	count_words(const char *s, int *size)
 {
 	const char	*anch;
-	int		word_count;
-	bool	state;
+	int			word_count;
+	bool		state;
 
 	*size = 0;
 	if (!s)
@@ -66,7 +66,8 @@ static inline void	split_it(char *s, char **res)
 	res[i] = NULL;
 }
 
-static inline void	add_tokens_to_the_list(t_lexer *l, char *key, char **s, int size)
+static inline void	add_tokens_to_the_list(t_lexer *l, char *key,
+										char **s, int size)
 {
 	int	i;
 
