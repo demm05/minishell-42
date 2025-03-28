@@ -39,7 +39,7 @@ static void	read_dquote(t_lexer *l)
 			escape = !escape;
 		else if (s[i] == '"')
 			break ;
-		else if (is_valid_envv(s + i))
+		else if (s[i] == '$' && is_valid_envv(s + i))
 		{
 			if (i > 0)
 				append_alloc(l, WORD, i);
@@ -56,12 +56,15 @@ static void	read_dquote(t_lexer *l)
 
 void	lex_quote(t_lexer *l)
 {
-	if (l->ch != '\'' && l->ch != '"')
+	char	c;
+
+	c = l->ch;
+	if (c != '\'' && c != '"')
 		return ;
 	append_advance(l, NULL, 1, QUOTE);
-	if (l->ch == '\'')
+	if (c == '\'')
 		read_squote(l);
-	else if (l->ch == '"')
+	else if (c == '"')
 		read_dquote(l);
 	append_advance(l, NULL, 1, QUOTE);
 }
