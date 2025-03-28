@@ -11,6 +11,7 @@ static inline char	**expand_word(t_astnode *head, t_data *data)
 	token = word_generate_tokens(head->literal, data);
 	if (!token)
 		return (NULL);
+	//print_tokens(token);
 	arr = split_tokens(token);
 	//wildcard_it(arr);
 	res = join_tokens(arr);
