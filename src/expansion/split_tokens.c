@@ -1,4 +1,4 @@
-#include "const_word_private.h"
+#include "expansion_private.h"
 
 static inline int	get_size(t_token *head)
 {
