@@ -15,61 +15,62 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-static int	get_fd(t_astnode *head, t_data *data);
+static int			get_fd(char *file, t_token_type type);
+static t_astnode	*do_redir(t_astnode *parent, int target, t_token_type type);
 
-bool handle_redir(t_astnode *head, t_data *data)
+bool	handle_redir(t_astnode *head, t_data *data)
 {
-    t_astnode	*cur;
-    int			 fd;
-    int			 copy_fd;
-    int			 target_fd;
+	t_astnode	*exec;
+	int			target;
+	int			copy;
 
-    if (!head || !data)
-        return (0);
-        
-    if (head->type == REDIR_IN)
-        target_fd = STDIN_FILENO;
-    else if (head->type == REDIR_OUT || head->type == REDIR_OUT_A)
-        target_fd = STDOUT_FILENO;
-    else
-    {
-		fprintf(stderr, "heredoc currently is unsuported\n");
-    	return (1);
-    }
-
-    fd = get_fd(head, data);
-    if (fd == -1)
-        return (1);
-    // Save the original file descriptor
-    copy_fd = dup(target_fd);
-    
-    // Redirect the appropriate standard file descriptor
-    dup2(fd, target_fd);
-    close(fd);
-    
-    // Find the command to execute
-    cur = head->children;
-    while (cur && !is_token_exec(cur->type))
-        cur = cur->next;
-        
-    if (!cur)
-    {
-    	dup2(copy_fd, target_fd);
-    	close(copy_fd);
-        return (1);
-    }
-        
-    // Execute the command with redirection in place
-    eval(cur, data);
-    
-    // Restore the original file descriptor
-    dup2(copy_fd, target_fd);
-    close(copy_fd);
-    
-    return (0);
+	if (!head || !data)
+		return (0);
+	if (head->childs < 1)
+		return (1);
+	if (head->type == REDIR_IN)
+		target = STDIN_FILENO;
+	else if (head->type == REDIR_OUT || head->type == REDIR_OUT_A)
+		target = STDOUT_FILENO;
+	else
+		return (1);
+	copy = dup(target);
+	exec = do_redir(head->children, target, head->type);
+	if (exec)
+		eval(exec, data);
+	dup2(copy, target);
+	close(copy);
+	return (exec == NULL);
 }
 
-static int	set_flags(t_token_type type)
+static inline t_astnode	*do_redir(t_astnode *head, int target,
+								t_token_type type)
+{
+	t_astnode	*ptr;
+	t_astnode	*res;
+	t_astnode	*path;
+	int			fd;
+
+	ptr = head;
+	while (head && head->type != PATH)
+		head = head->next;
+	path = head;
+	head = ptr;
+	while (head && head->type == PATH)
+		head = head->next;
+	res = head;
+	if (path)
+	{
+		fd = get_fd(path->literal, type);
+		if (fd == -1)
+			return (NULL);
+		dup2(fd, target);
+		close(fd);
+	}
+	return (res);
+}
+
+static inline int	set_flags(t_token_type type)
 {
 	if (type == REDIR_OUT_A)
 		return (O_WRONLY | O_CREAT | O_APPEND);
@@ -80,24 +81,14 @@ static int	set_flags(t_token_type type)
 	return (0);
 }
 
-static int	get_fd(t_astnode *parent, t_data *data)
+static inline int	get_fd(char	*file, t_token_type type)
 {
-	t_astnode	*head;
 	int			fd;
 
-	head = parent->children;
-	while (head)
-	{
-		if (is_redir(head->type))
-			handle_redir(head, data);
-		else if (!is_token_exec(head->type))
-			break ;
-		head = head->next;
-	}
-	if (!head)
+	if (!file)
 		return (-1);
-	fd = open(head->literal, set_flags(parent->type), 0644);
+	fd = open(file, set_flags(type), 0644);
 	if (fd == -1)
-		perror(head->literal);
+		perror(file);
 	return (fd);
 }
