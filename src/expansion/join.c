@@ -1,16 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   join.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/22 16:31:26 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/22 19:08:40 by dmelnyk          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "const_word_private.h"
+#include "expansion_private.h"
 #include <stdio.h>
 
 static inline unsigned int	get_list_size(t_token *head)
@@ -47,7 +35,7 @@ static inline char	*join_head(t_token *head)
 		while (k < head->size)
 			res[j++] = head->literal[k++];
 		free(head->literal);
-		head = head->next;;
+		head = head->next;
 	}
 	res[j] = 0;
 	return (res);
