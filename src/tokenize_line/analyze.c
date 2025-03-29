@@ -50,6 +50,8 @@ static bool	is_basic(t_token *head)
 {
 	if (!(head->type == AND || head->type == OR || head->type == PIPE))
 		return (0);
+	if (head->type == AND || head->type == OR || head->type == PIPE)
+		return (1);
 	if (!head->prev->next)
 		return (1);
 	if (!head->next || !head->next->next)
