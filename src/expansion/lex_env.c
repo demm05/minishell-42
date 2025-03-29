@@ -13,6 +13,8 @@ void	lex_env(t_lexer *l)
 	int			len;
 	const char	*str;
 
+	if (l->ch != '$')
+		return ;
 	if (peek_char(l) == '?')
 	{
 		expand_variable(l, NULL, 1, 2);

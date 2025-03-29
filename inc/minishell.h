@@ -19,6 +19,7 @@
 typedef struct s_lexer		t_lexer;
 typedef struct s_astnode	t_astnode;
 typedef struct s_env		t_env;
+typedef struct s_token		t_token;
 
 typedef struct s_data
 {
@@ -62,6 +63,7 @@ typedef enum e_tokentype
 	EXPAND_VAR,	// $ better
 	QUOTE,
 	SSPACE,
+	SEQUENCE,
 	// Built in shell exec
 	CD,
 	ECHO,

@@ -23,6 +23,7 @@ bool	handle_redir(t_astnode *head, t_data *data)
 	t_astnode	*exec;
 	int			target;
 	int			copy;
+	int			status;
 
 	if (!head || !data)
 		return (0);
@@ -34,13 +35,16 @@ bool	handle_redir(t_astnode *head, t_data *data)
 		target = STDOUT_FILENO;
 	else
 		return (1);
+	status = 1;
 	copy = dup(target);
 	exec = do_redir(head->children, target, head->type);
 	if (exec)
-		eval(exec, data);
+		status = eval(exec, data) != 0;
 	dup2(copy, target);
 	close(copy);
-	return (exec == NULL);
+	if (status)
+		data->exit_status = 1;
+	return (status);
 }
 
 static inline t_astnode	*do_redir(t_astnode *head, int target,
