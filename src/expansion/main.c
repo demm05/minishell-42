@@ -11,6 +11,7 @@ void	expand_head(t_astnode *head, t_data *data)
 	else if (head->type == PIPE)
 	{
 		expand_head(head->children, data);
+		expand_head(head->children->next, data);
 		return ;
 	}
 	else if (head->type != EXEC)

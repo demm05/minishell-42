@@ -26,6 +26,8 @@ void	exec_command(t_astnode *head, t_data *data)
 	char	**args;
 	char	*path;
 
+	if (!*head->literal)
+		exit(0);
 	envp = build_envp(data->env);
 	args = build_args(head);
 	path = get_path(getenv_val(data->env, "PATH"), head->literal);
