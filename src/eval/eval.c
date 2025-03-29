@@ -18,25 +18,30 @@ static inline bool	evaluate_logical_exp(t_astnode *head, t_data *data);
 
 void	exec(t_data *data)
 {
-	if (!data->head)
+	if (!data || !data->head)
 		return ;
 	eval(data->head, data);
 }
 
 bool	eval(t_astnode *head, t_data *data)
 {
+	bool	s;
+
+	s = 1;
 	if (head->type == AND || head->type == OR)
-		return (evaluate_logical_exp(head, data));
+		s = evaluate_logical_exp(head, data);
 	expand_head(head, data);
 	if (head->type == EXEC)
-		return (handle_exec(head, data));
+		s = handle_exec(head, data);
 	if (is_built_in(head->type))
-		return(is_built_in(head->type)(head, data));
-	if (is_redir(head->type))
-		return (handle_redir(head, data));
+		s = is_built_in(head->type)(head, data);
 	if (head->type == PIPE)
-		return (handle_pipe(head, data));
-	return (1);
+		s = handle_pipe(head, data);
+	if (is_redir(head->type))
+		s = handle_redir(head, data);
+	if (head->next && head->type != AND && head->type != OR)
+		s = eval(head->next, data);
+	return (s);
 }
 
 /*

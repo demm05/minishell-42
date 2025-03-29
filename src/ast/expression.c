@@ -15,6 +15,19 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+t_astnode	*parse_sequence(t_token **token)
+{
+	t_astnode	*head;
+
+	head = parse_logical_exp(token);
+	if (head && *token && (*token)->type == SEQUENCE)
+	{
+		*token = (*token)->next;
+		head->next = parse_sequence(token);
+	}
+	return (head);
+}
+
 t_astnode	*parse_logical_exp(t_token **token)
 {
 	static t_token_type	exp[] = {AND, OR};
@@ -57,7 +70,7 @@ t_astnode	*parse_paren(t_token **token)
 	if (*token && (*token)->type == LPAREN)
 	{
 		*token = (*token)->next;
-		head = parse_logical_exp(token);
+		head = parse_sequence(token);
 		if (*token && (*token)->type == RPAREN)
 		{
 			*token = (*token)->next;

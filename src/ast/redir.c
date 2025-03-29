@@ -19,7 +19,7 @@ static t_astnode	*new_redirection(t_token **token, t_astnode *head);
 t_astnode	*parse_redir(t_token **token)
 {
 	static t_token_type	exp[] = {REDIR_OUT, REDIR_OUT_A, REDIR_IN, HERE_DOC};
-	static t_token_type	end[] = {AND, OR, PIPE, RPAREN};
+	static t_token_type	end[] = {AND, OR, PIPE, RPAREN, SEQUENCE};
 	t_astnode			*left;	
 	t_astnode			*head;
 	t_astnode			*last_head;
@@ -29,7 +29,7 @@ t_astnode	*parse_redir(t_token **token)
 	last_head = NULL;
 	while (*token)
 	{
-		while (*token && !match(*token, exp, 4) && !match(*token, end, 4))
+		while (*token && !match(*token, exp, 4) && !match(*token, end, 5))
 			*token = (*token)->next;
 		if (!match(*token, exp, 4))
 			break ;

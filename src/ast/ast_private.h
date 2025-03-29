@@ -20,5 +20,6 @@ t_astnode	*parse_redir(t_token **token);
 t_astnode	*parse_logical_exp(t_token **token);
 t_astnode	*parse_pipe(t_token **token);
 t_astnode	*parse_paren(t_token **token);
+t_astnode	*parse_sequence(t_token **token);
 
 #endif
