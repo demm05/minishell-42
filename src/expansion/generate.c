@@ -1,5 +1,17 @@
 #include "expansion_private.h"
 
+static inline int	private_env_tes(const char *s, t_lexer *l)
+{
+	if (!s || *s != '$')
+		return (0);
+	if (s[1] == '"' || s[1] == '\'')
+	{
+		read_char(l);
+		return (1);
+	}
+	return (is_valid_envv(s));
+}
+
 t_token	*word_generate_tokens(char *line, t_data *data)
 {
 	t_lexer	l;
@@ -15,7 +27,7 @@ t_token	*word_generate_tokens(char *line, t_data *data)
 			lex_quote(&l);
 		else if (l.ch == '*')
 			lex_wildcard(&l);
-		else if (is_valid_envv(l.input + l.position))
+		else if (private_env_tes(l.input + l.position, &l))
 			lex_env(&l);
 		else
 			lex_word(&l);
@@ -53,7 +65,7 @@ void	lex_word(t_lexer *l)
 		else if (s[i] == '\\')
 			escape = !escape;
 		else if (s[i] == '\'' || s[i] == '"' || s[i] == '*' || \
-			is_valid_envv(s + i))
+			private_env_tes(s + i, l))
 			break ;
 		i++;
 	}
