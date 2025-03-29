@@ -16,6 +16,7 @@
 #include <unistd.h>
 #include "extra/extra.h"
 #include "ast/ast.h"
+#include "heredoc/heredoc.h"
 
 void	prepare_for_the_next_loop(t_data *data)
 {
@@ -23,12 +24,15 @@ void	prepare_for_the_next_loop(t_data *data)
 	data->line = NULL;
 	if (data->head)
 		free_ast(&data->head);
+	tmp_del(data->tmp);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	*data;
 	int		status;
+	char	*file;
+	int		fd;
 
 	data = init(argc, argv, envp);
 	while (1)
@@ -43,8 +47,9 @@ int	main(int argc, char **argv, char **envp)
 		exec(data);
 		prepare_for_the_next_loop(data);
 	}
-	if (data->env)
-		free_env(&data->env);
+	free_env(&data->env);
+	free(data->tmp->files);
+	free(data->tmp);
 	status = data->exit_status;
 	rl_clear_history();
 	free(data);

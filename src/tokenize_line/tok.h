@@ -16,6 +16,6 @@
 #include "../lexer/lexer.h"
 
 t_token	*generate_tokens(char *line);
-bool	analyze_tokens(t_token *head);
+bool	analyze_tokens(t_data *data, t_token *head);
 
 #endif
