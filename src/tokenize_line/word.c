@@ -16,7 +16,7 @@
 
 static bool	condition(char c)
 {
-	if (ft_isspace(c))
+	if (ft_isspace(c) || c == ';')
 		return (1);
 	if (c == '|' || c == '&')
 		return (1);

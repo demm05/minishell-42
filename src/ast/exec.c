@@ -15,7 +15,7 @@
 
 t_astnode	*parse_exec(t_token *token)
 {
-	static t_token_type	end[] = {AND, OR, PIPE};
+	static t_token_type	end[] = {AND, OR, PIPE, SEQUENCE};
 	static t_token_type	redir[] = {REDIR_IN, REDIR_OUT, REDIR_OUT_A, HERE_DOC};
 	t_astnode			*head;
 
@@ -32,7 +32,7 @@ t_astnode	*parse_exec(t_token *token)
 			head = new_astnode(token);
 			head->type = EXEC;
 		}
-		else if (!token || match(token, end, 3))
+		else if (!token || match(token, end, 4))
 			break ;
 		else if (token && (token->type == WORD))
 			add_child(head, new_astnode(token));

@@ -59,7 +59,7 @@ t_env	*add_env(t_env **head, char *key, char *value)
 		return (NULL);
 	new = getenv_val(*head, key);
 	if (!new)
-		return (append_env(head, key, value));
+		return (append_env(head, ft_strdup(key), value));
 	free(new->value);
 	new->value = value;
 	return (new);

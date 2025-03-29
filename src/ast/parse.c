@@ -28,7 +28,7 @@ void	create_ast(t_data *data)
 		return ;
 	}
 	ptr = head;
-	data->head = parse_logical_exp(&ptr);
+	data->head = parse_sequence(&ptr);
 	//print_ast(data->head, 0);
 	free_tokens(&head);
 }

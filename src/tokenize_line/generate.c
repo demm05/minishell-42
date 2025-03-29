@@ -14,7 +14,6 @@
 #include <stdlib.h>
 
 bool	is_fixed_type(t_lexer *l);
-void	add_word(t_lexer *l);
 
 t_token	*generate_tokens(char *line)
 {
@@ -28,7 +27,8 @@ t_token	*generate_tokens(char *line)
 	{
 		if (l.tokens && l.tokens->prev->type == ILLEGAL)
 			return (l.tokens);
-		eat_whitespaces(&l);
+		if (!(l.ch == '\n' && l.tokens && l.tokens->prev->type != SEQUENCE))
+			eat_whitespaces(&l);
 		if (is_fixed_type(&l))
 			continue ;
 		else if (l.ch)
@@ -62,6 +62,8 @@ bool	is_fixed_type(t_lexer *l)
 		append_advance(l, NULL, 1, LPAREN);
 	else if (l->ch == ')')
 		append_advance(l, NULL, 1, RPAREN);
+	else if (l->ch == ';' || l->ch == '\n')
+		append_advance(l, NULL, 1, SEQUENCE);
 	else
 		return (0);
 	return (1);
