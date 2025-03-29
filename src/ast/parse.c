@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ast_private.h"
+#include <stdio.h>
 
 void	create_ast(t_data *data)
 {
@@ -23,12 +24,12 @@ void	create_ast(t_data *data)
 	//print_tokens(head);
 	if (analyze_tokens(head))
 	{
-		free_tokens(&head);
+		free_tokens(&head, 1);
 		data->exit_status = 2;
 		return ;
 	}
 	ptr = head;
 	data->head = parse_sequence(&ptr);
 	//print_ast(data->head, 0);
-	free_tokens(&head);
+	free_tokens(&head, 0);
 }

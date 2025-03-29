@@ -71,7 +71,7 @@ char	**join_tokens(t_token **head)
 	while (head[i])
 	{
 		s = join_head(head[i]);
-		free_tokens(&head[i]);
+		free_tokens(&head[i], 0);
 		res[i++] = s;
 	}
 	res[i] = NULL;
