@@ -11,43 +11,37 @@
 /* ************************************************************************** */
 
 #include "./eval_private.h"
-#include "../construct_word/const_word.h"
+#include "../expansion/expansion.h"
 #include <stdlib.h>
+
+static inline bool	evaluate_logical_exp(t_astnode *head, t_data *data);
 
 void	exec(t_data *data)
 {
-	if (!data->head)
+	if (!data || !data->head)
 		return ;
 	eval(data->head, data);
 }
 
 bool	eval(t_astnode *head, t_data *data)
 {
+	bool	s;
+
+	s = 1;
+	if (head->type == AND || head->type == OR)
+		s = evaluate_logical_exp(head, data);
 	expand_head(head, data);
-	if (head->type == AND)
-	{
-		if (eval(head->children, data))
-			return (1);
-		if (eval(head->children->next, data))
-			return (1);
-	}
-	if (head->type == OR)
-	{
-		if (!eval(head->children, data))
-			return (0);
-		if (!eval(head->children->next, data))
-			return (0);
-		return (1);
-	}
 	if (head->type == EXEC)
-		return (handle_exec(head, data));
+		s = handle_exec(head, data);
 	if (is_built_in(head->type))
-		return(is_built_in(head->type)(head, data));
-	if (is_redir(head->type))
-		return (handle_redir(head, data));
+		s = is_built_in(head->type)(head, data);
 	if (head->type == PIPE)
-		return (handle_pipe(head, data));
-	return (1);
+		s = handle_pipe(head, data);
+	if (is_redir(head->type))
+		s = handle_redir(head, data);
+	if (head->next && head->type != AND && head->type != OR)
+		s = eval(head->next, data);
+	return (s);
 }
 
 /*
@@ -80,4 +74,19 @@ t_builtin_func_ptr is_built_in(t_token_type type)
 	if (type == ENV)
 		return (handle_env);
 	return (NULL);
+}
+
+static inline bool	evaluate_logical_exp(t_astnode *head, t_data *data)
+{
+	bool	status;
+
+	expand_head(head->children, data);
+	status = eval(head->children, data);
+	if (status && head->type == AND)
+		return (1);
+	else if (!status && head->type == OR)
+		return (0);
+	expand_head(head->children->next, data);
+	status = eval(head->children->next, data);
+	return (status);
 }

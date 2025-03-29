@@ -1,18 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   expand.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/22 12:04:07 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/22 19:08:05 by dmelnyk          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "const_word_private.h"
-#include "minishell.h"
-#include <stdio.h>
+#include "expansion_private.h"
 
 static inline char	**expand_word(t_astnode *head, t_data *data)
 {
@@ -25,12 +11,14 @@ static inline char	**expand_word(t_astnode *head, t_data *data)
 	token = word_generate_tokens(head->literal, data);
 	if (!token)
 		return (NULL);
+	//print_tokens(token);
 	arr = split_tokens(token);
-	//arr = wildcard_it(&token);
+	//wildcard_it(arr);
 	res = join_tokens(arr);
 	free(arr);
 	return (res);
 }
+
 
 static inline void	set_type(t_astnode *head)
 {
@@ -74,13 +62,15 @@ static inline t_astnode	*create_nodes(char **ss)
 	return (res);
 }
 
-static inline void	do_child(t_astnode *head, t_astnode *cur, char **s)
+void	do_child(t_astnode *head, t_astnode *cur, t_data *data)
 {
 	t_astnode	*new;
 	t_astnode	*next;
 	t_astnode	*new_last;
+	char		**s;
 
-	if (!s || !head || !cur)
+	s = expand_word(cur, data);
+	if (!s)
 		return ;
 	free(cur->literal);
 	cur->literal = *s;
@@ -92,23 +82,21 @@ static inline void	do_child(t_astnode *head, t_astnode *cur, char **s)
 	new_last = new->prev;
 	if (!head->next)
 		head->prev = new_last;
-	else if (!next)
-		new_last->next = NULL;
-	else
-	{
+	else if (next)
 		next->prev = new_last;
-		new_last->next = next;	
-	}
+	new_last->next = next;	
 	cur->next = new;
 	new->prev = cur;
 }
 
-static inline void	do_head(t_astnode *head, char **s)
+void	do_head(t_astnode *head, t_data *data)
 {
 	t_astnode	*new;
 	t_astnode	*old_last;
+	char		**s;
 
-	if (!s || !head)
+	s = expand_word(head, data);
+	if (!s)
 		return ;
 	free(head->literal);
 	head->literal = *s;
@@ -128,21 +116,3 @@ static inline void	do_head(t_astnode *head, char **s)
 	head->children->prev = old_last;
 }
 
-void	expand_head(t_astnode *head, t_data *data)
-{
-	t_astnode	*cur;
-	t_astnode	*next;
-
-	if (!head || !data || !(head->type == WORD || head->type == PATH || head->type == EXEC))
-		return ;
-	do_head(head, expand_word(head, data));
-	cur = head->children;
-	while (cur)
-	{
-		next = cur->next;
-		if (cur->type == WORD || cur->type == PATH || cur->type == EXEC)
-			do_child(head->children, cur, expand_word(cur, data));
-		cur = next;
-	}
-	//print_ast(head, 0);
-}
