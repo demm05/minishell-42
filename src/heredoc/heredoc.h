@@ -12,10 +12,18 @@
 
 #ifndef HEREDOC_H
 # define HEREDOC_H
-#include "../../libft/libft/include/libft.h"
-#include "../tokenize_line/tok.h"
 
-char	*read_heredoc(t_token *head);
-char	*generate_filename(void);
+#include "libft.h"
+#include "../../inc/minishell.h"
+
+typedef struct s_tmp
+{
+	unsigned int	*files;
+	int				file_count;
+	int				arr_size;
+	char			*tmpdir;
+}	t_tmp;
+
+char	*heredoc(t_data *data, char *del);
 
 #endif

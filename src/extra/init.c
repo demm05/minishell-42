@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "extra_private.h"
+#include "../heredoc/heredoc.h"
+#include "stdio.h"
 
 int	free_data(t_data *data)
 {
@@ -28,5 +30,7 @@ t_data	*init(int argc, char **argv, char **envp)
 		return (NULL);
 	data->env = init_env(argv, envp);
 	data->prompt = "Prompt > ";
+	data->tmp = ft_calloc(1, sizeof(t_tmp));
+	data->tmp->tmpdir = P_tmpdir;
 	return (data);
 }

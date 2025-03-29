@@ -11,104 +11,84 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
 #include <stdio.h>
 #include <readline/readline.h>
-#include "./heredoc.h"
+#include <unistd.h>
+#include "./heredoc_private.h"
 
-char *generate_filename(void)
+static inline void	enter_heredoc(char *del, int fd);
+static inline bool	remove_quotes(char *s);
+static inline char	*expand_line(char *line);
+
+char	*heredoc(t_data *data, char *del)
 {
-	char	buf[16];
-	int		n;
-	int		i;
-	char	*res;
-
-	n = 0;
-	while (n < 10)
-	{
-		i = 0;
-		while ("heredoc_tmp"[i])
-		{
-			buf[i] = "heredoc_tmp"[i];
-			i++;
-		}
-		buf[i++] = '0' + n;
-		buf[i] = '\0';
-		if (access(buf, F_OK) == -1)
-		{
-			res = malloc(i + 1);
-			if (!res)
-				return (0);
-			n = 0;
-			while (n <= i)
-			{
-				res[n] = buf[n];
-				n++;
-			}
-			return (res);
-		}
-		n++;
-	}
-	return (0);
-}
-
-#include <string.h>
-#include <stdbool.h>
-
-bool	is_quoted(const char *delimiter)
-{
-    if (ft_strlen(delimiter) >= 2 &&
-			((delimiter[0] == '\'' && delimiter[len - 1] == '\'') ||
-			(delimiter[0] == '"' && delimiter[len - 1] == '"')))
-		return true;
-	return false;
-}
-
-//TODO:
-char	*expand_env_vars(line);
-
-char	*read_heredoc(t_token *head)
-{
-	char	*line;
-	int		fd;
 	char	*filename;
-	bool	expand_vars;
-	char	*delimiter;
+	int		fd;
 
-	filename = generate_filename();
-	if (!filename)
-		return (NULL);
-	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0600);
-	if (fd < 0)
+	filename = NULL;
+	fd = tmp_new(data->tmp, &filename);
+	if (fd == -1)
 	{
-		perror("open");
+		perror("tmpfile");
+		free(filename);
 		return (NULL);
 	}
-	expand_vars = true;
-	if (is_quoted(head->literal))
-	{
-		expand_vars = false;
-		delimiter = remove_quotes(head->literal);
-	}
-	else
-		delimiter = haed->literal;
+	enter_heredoc(del, fd);
+	close(fd);
+	return (filename);
+}
+
+static inline void	enter_heredoc(char *del, int fd)
+{
+	bool	expand;	
+	bool	escape;
+	char	*line;
+
+	expand = remove_quotes(del);
+	escape = 0;
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
+		{
+			fprintf(stderr, "warning: here-document delimeted by end-of-file (wanted `%s')", del);
 			break ;
-		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
+		}
+		if (!ft_strcmp(del, line))
 		{
 			free(line);
 			break ;
 		}
-		if (expand_vars)
-			line = expand_env_vars(line);
+		if (expand)
+			line = expand_line(line);
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(line);
 	}
-	close(fd);
-	return (filename);
+}
+
+static inline char	*expand_line(char *line)
+{
+	return (line);
+}
+
+static inline bool	remove_quotes(char *s)
+{
+	bool	is_quote;
+	int		read_index;
+	int		write_index;
+
+	is_quote = 0;
+	read_index = 0;
+	write_index = 0;
+	while (s[read_index])
+	{
+		if (s[read_index] != '\'' && s[read_index] != '"')
+			s[write_index++] = s[read_index];
+		else
+			is_quote = 1;
+		read_index++;
+	}
+	s[write_index] = 0;
+	return (is_quote);
 }

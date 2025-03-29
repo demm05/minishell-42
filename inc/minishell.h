@@ -16,10 +16,9 @@
 #include <stdbool.h>
 #include "libft.h"
 
-typedef struct s_lexer		t_lexer;
 typedef struct s_astnode	t_astnode;
 typedef struct s_env		t_env;
-typedef struct s_token		t_token;
+typedef struct s_tmp		t_tmp;
 
 typedef struct s_data
 {
@@ -27,6 +26,7 @@ typedef struct s_data
 	char					*line;
 	t_astnode				*head;
 	t_env					*env;
+	t_tmp					*tmp;
 	int						exit_status;
 	int						signal;
 }	t_data;
