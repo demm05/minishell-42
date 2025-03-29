@@ -21,6 +21,8 @@ bool	handle_exec(t_astnode *head, t_data *data)
 	int		pid;
 	int		status;
 
+	if (!*head->literal)
+		return (0);
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	pid = fork();

@@ -41,7 +41,7 @@ typedef struct s_lexer
 
 char	*decode(t_token_type t);
 void	print_tokens(t_token *token);
-void	free_tokens(t_token **head);
+void	free_tokens(t_token **head, bool free_lit);
 bool	match(t_token *token, t_token_type expected[], int size);
 bool	is_redir(t_token_type t);
 bool	is_token_exec(t_token_type t);

@@ -13,7 +13,9 @@
 #include "./eval_private.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
+#include <errno.h>
 
 static bool	validate_env_vars(t_env **pwd, t_env **old_pwd, t_data *data);
 static char	*resolve_cd_path(t_astnode *head, t_env *old_pwd, t_data *data);
@@ -125,7 +127,7 @@ static bool	perform_chdir(char *path, t_data *data)
 {
 	if (chdir(path) != 0)
 	{
-		perror("cd");
+		fprintf(stderr, "cd: %s: %s\n", path, strerror(errno));
 		data->exit_status = 1;
 		return (0);
 	}
