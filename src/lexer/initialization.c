@@ -136,7 +136,7 @@ t_token	*append_advance(t_lexer *l, char *literal, unsigned int advance, t_token
 	return (append_token(l, new));
 }
 
-void	free_tokens(t_token **head)
+void	free_tokens(t_token **head, bool free_lit)
 {
 	t_token	*next;
 
@@ -145,6 +145,8 @@ void	free_tokens(t_token **head)
 	while (*head)
 	{
 		next = (*head)->next;
+		if (free_lit)
+			free((*head)->literal);
 		free(*head);
 		*head = next;
 	}
