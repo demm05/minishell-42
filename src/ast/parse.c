@@ -22,7 +22,7 @@ void	create_ast(t_data *data)
 		return ;
 	head = generate_tokens(data->line);
 	//print_tokens(head);
-	if (analyze_tokens(head))
+	if (analyze_tokens(data, head))
 	{
 		free_tokens(&head, 1);
 		data->exit_status = 2;
