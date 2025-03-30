@@ -51,7 +51,7 @@ static inline void	enter_heredoc(char *del, int fd)
 		line = readline("> ");
 		if (!line)
 		{
-			fprintf(stderr, "warning: here-document delimeted by end-of-file (wanted `%s')", del);
+			fprintf(stderr, "warning: here-document delimeted by end-of-file (wanted `%s')\n", del);
 			break ;
 		}
 		if (!ft_strcmp(del, line))

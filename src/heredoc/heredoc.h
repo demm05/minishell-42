@@ -25,5 +25,7 @@ typedef struct s_tmp
 }	t_tmp;
 
 char	*heredoc(t_data *data, char *del);
+t_tmp	*tmp_alloc(void);
+void	tmp_del(t_tmp *t);
 
 #endif
