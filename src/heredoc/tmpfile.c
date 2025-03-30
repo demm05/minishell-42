@@ -1,4 +1,5 @@
 #include "./heredoc_private.h"
+#include "../extra/extra.h"
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -67,4 +68,36 @@ void	tmp_del(t_tmp *t)
 		free(file);
 		i++;
 	}
+	t->file_count = 0;
+}
+
+t_tmp	*tmp_alloc(void)
+{
+	t_tmp	*t;
+
+	t = ft_calloc(1, sizeof(t_tmp));
+	if (!t)
+	{
+		perror("malloc");
+		return (NULL);
+	}
+	t->tmpdir = NULL;
+	if (access(P_tmpdir, W_OK) == -1)
+		t->tmpdir = ft_strdup(P_tmpdir);
+	else
+	{
+		t->tmpdir = get_curent_dir();
+		if (access(t->tmpdir, W_OK) != 0)
+		{
+			free(t->tmpdir);
+			t->tmpdir = NULL;
+		}
+	}
+	if (!t->tmpdir)
+	{
+		fprintf(stderr, "heredoc: failed to set location for tmpdir");
+		free(t);
+		return (NULL);
+	}
+	return (t);
 }

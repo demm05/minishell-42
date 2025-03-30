@@ -64,7 +64,7 @@ char	*get_curent_dir(void);
  * @param envp The environment variables.
  * @return A pointer to the initialized t_data structure, or NULL on error.
  */
-t_data	*init(int argc, char **argv, char **envp);
+t_data	*init(char **argv, char **envp);
 
 /**
  * @brief Frees a t_data structure and its contents.
