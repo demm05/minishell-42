@@ -18,7 +18,7 @@
 
 static inline void	enter_heredoc(char *del, int fd);
 static inline bool	remove_quotes(char *s);
-static inline char	*expand_line(char *line);
+static inline void	process_line(int fd, char *s);
 
 char	*heredoc(t_data *data, char *del)
 {
@@ -41,11 +41,10 @@ char	*heredoc(t_data *data, char *del)
 static inline void	enter_heredoc(char *del, int fd)
 {
 	bool	expand;	
-	bool	escape;
 	char	*line;
 
-	expand = remove_quotes(del);
-	escape = 0;
+	expand = !remove_quotes(del);
+	printf("%d\n", expand);
 	while (1)
 	{
 		line = readline("> ");
@@ -60,16 +59,47 @@ static inline void	enter_heredoc(char *del, int fd)
 			break ;
 		}
 		if (expand)
-			line = expand_line(line);
-		write(fd, line, ft_strlen(line));
+			process_line(fd, line);
+		else
+			write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(line);
 	}
 }
 
-static inline char	*expand_line(char *line)
+static inline int	expand_var(int fd, char *s)
 {
-	return (line);
+	t_env	*key;
+	int		size;
+
+	size = 1;
+	return (size);
+}
+
+static inline void	process_line(int fd, char *s)
+{
+	int		read_index;
+	int		len;
+
+	len = ft_strlen(s);
+	read_index = 0;
+	while (read_index < len)
+	{
+		if (s[read_index] == '\\' && read_index + 1 < len)
+		{
+			if (s[read_index + 1] == '$' || s[read_index + 1] == '\\')
+			{
+				write(fd, s + 1 + read_index, 1);
+				read_index += 2;
+			}
+			else
+				write(fd, s + read_index++, 1);
+		}
+		//else if (s[read_index] == '$')
+		//	read_index += expand_var(fd, s + read_index);
+		else
+			write(fd, s + read_index++, 1);
+	}
 }
 
 static inline bool	remove_quotes(char *s)

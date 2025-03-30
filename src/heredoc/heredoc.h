@@ -13,7 +13,6 @@
 #ifndef HEREDOC_H
 # define HEREDOC_H
 
-#include "libft.h"
 #include "../../inc/minishell.h"
 
 typedef struct s_tmp
