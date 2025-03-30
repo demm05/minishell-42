@@ -11,15 +11,35 @@
 /* ************************************************************************** */
 
 #include "tok_private.h"
+#include "../heredoc/heredoc.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 static bool	is_paran(t_token **head, int *paren);
 static bool	is_basic(t_token *head);
 static bool	a_is_redir(t_token **head);
 
-bool	analyze_tokens(t_token *head)
+static inline bool	aheredoc(t_data *data, t_token **head)
 {
-	int	paren;
+	char	*filename;
+
+	(*head)->type = REDIR_IN;
+	*head = (*head)->next;
+	if ((*head)->type != WORD)
+		return (1);
+	filename = heredoc(data, (*head)->literal);
+	if (!filename)
+		fprintf(stderr, "heredoc: unexpected error");
+	free((*head)->literal);
+	(*head)->literal = filename;
+	return (0);
+}
+
+bool	analyze_tokens(t_data *data, t_token *head)
+{
+	int		paren;
 
 	paren = 0;
 	while (head)
@@ -29,13 +49,8 @@ bool	analyze_tokens(t_token *head)
 			fprintf(stderr, "syntax error: unexpected end of file\n");
 			return (1);
 		}
-		else if (head->type == HERE_DOC)
-		{
-			head = head->next;
-			if (head->type != WORD)
-				break ;
-			fprintf(stderr, "syntax error HEREDOC is not supported yet\n");
-		}
+		else if (head->type == HERE_DOC && aheredoc(data, &head))
+			break ;
 		else if (is_basic(head) || is_paran(&head, &paren) || a_is_redir(&head))
 			break ;
 		head = head->next;
