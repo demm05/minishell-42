@@ -22,6 +22,7 @@ typedef struct s_astnode
 	t_token_type		type;
 	char				*literal;
 	struct s_astnode	*children;
+	struct s_astnode	*parent;
 	struct s_astnode	*next;
 	struct s_astnode	*prev;
 }	t_astnode;
