@@ -14,20 +14,23 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <errno.h>
+#include <string.h>
 
-static int			get_fd(char *file, t_token_type type);
-static t_astnode	*do_redir(t_astnode *parent, int target, t_token_type type);
+static inline int	get_fd(t_astnode *head);
+static inline bool	do_redir(t_astnode *head, t_data *data, int target, int fd);
+
 
 bool	handle_redir(t_astnode *head, t_data *data)
 {
-	t_astnode	*exec;
-	int			target;
-	int			copy;
-	int			status;
+	int	target;
+	int	fd;
+	int	copy;
+	int	status;
 
 	if (!head || !data)
 		return (0);
-	if (head->childs < 1)
+	if (head->childs == 0)
 		return (1);
 	if (head->type == REDIR_IN)
 		target = STDIN_FILENO;
@@ -35,43 +38,31 @@ bool	handle_redir(t_astnode *head, t_data *data)
 		target = STDOUT_FILENO;
 	else
 		return (1);
-	status = 1;
+	fd = get_fd(head);
+	if (fd == -1)
+	{
+		data->exit_status = 1;
+		return (1);
+	}
 	copy = dup(target);
-	exec = do_redir(head->children, target, head->type);
-	if (exec)
-		status = eval(exec, data) != 0;
+	status = do_redir(head->children, data, target, fd);
 	dup2(copy, target);
 	close(copy);
-	if (status)
-		data->exit_status = 1;
 	return (status);
 }
 
-static inline t_astnode	*do_redir(t_astnode *head, int target,
-								t_token_type type)
+static inline bool	do_redir(t_astnode *head, t_data *data, int target, int fd)
 {
-	t_astnode	*ptr;
-	t_astnode	*res;
-	t_astnode	*path;
-	int			fd;
+	t_astnode	*to_eval;
 
-	ptr = head;
-	while (head && head->type != PATH)
-		head = head->next;
-	path = head;
-	head = ptr;
 	while (head && head->type == PATH)
 		head = head->next;
-	res = head;
-	if (path)
-	{
-		fd = get_fd(path->literal, type);
-		if (fd == -1)
-			return (NULL);
-		dup2(fd, target);
-		close(fd);
-	}
-	return (res);
+	to_eval = head;
+	dup2(fd, target);
+	close(fd);
+	if (to_eval)
+		return (eval(to_eval, data));
+	return (0);
 }
 
 static inline int	set_flags(t_token_type type)
@@ -85,14 +76,18 @@ static inline int	set_flags(t_token_type type)
 	return (0);
 }
 
-static inline int	get_fd(char	*file, t_token_type type)
+static inline int	get_fd(t_astnode *head)
 {
 	int			fd;
+	t_astnode	*cur;
 
-	if (!file)
+	cur = head->children;
+	while (cur && cur->type != PATH)
+		cur = cur->next;
+	if (!cur)
 		return (-1);
-	fd = open(file, set_flags(type), 0644);
+	fd = open(cur->literal, set_flags(head->type), 0644);
 	if (fd == -1)
-		perror(file);
+		fprintf(stderr, "%s: %s\n", cur->literal, strerror(errno));
 	return (fd);
 }
