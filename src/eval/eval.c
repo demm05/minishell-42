@@ -13,6 +13,7 @@
 #include "./eval_private.h"
 #include "../expansion/expansion.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 static inline bool	evaluate_logical_exp(t_astnode *head, t_data *data);
 
@@ -21,6 +22,19 @@ void	exec(t_data *data)
 	if (!data || !data->head)
 		return ;
 	eval(data->head, data);
+}
+
+static inline bool	can_i_do_next_node(t_astnode *head)
+{
+	if (!head  | !head->next)
+		return (0);
+	if (!head->parent && head->type != AND && head->type != OR)
+		return (1);
+	if (!head->parent)
+		return (0);
+	if (head->parent->type != PIPE && !is_redir(head->parent->type))
+		return (1);
+	return (0);
 }
 
 bool	eval(t_astnode *head, t_data *data)
@@ -33,13 +47,13 @@ bool	eval(t_astnode *head, t_data *data)
 	expand_head(head, data);
 	if (head->type == EXEC)
 		s = handle_exec(head, data);
-	if (is_built_in(head->type))
+	else if (is_built_in(head->type))
 		s = is_built_in(head->type)(head, data);
-	if (head->type == PIPE)
+	else if (head->type == PIPE)
 		s = handle_pipe(head, data);
-	if (is_redir(head->type))
+	else if (is_redir(head->type))
 		s = handle_redir(head, data);
-	if (head->next && head->type != AND && head->type != OR)
+	if (can_i_do_next_node(head))
 		s = eval(head->next, data);
 	return (s);
 }
