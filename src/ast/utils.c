@@ -44,6 +44,7 @@ void	add_child(t_astnode *parent, t_astnode *child)
 	if (!parent || !child)
 		return ;
 	parent->childs++;
+	child->parent = parent;
 	append_astnode(&parent->children, child);
 }
 
