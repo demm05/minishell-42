@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "./eval_private.h"
+#include "../heredoc/heredoc.h"
 #include <stdlib.h>
 
 bool	handle_exit(t_astnode *head, t_data *data)
@@ -22,7 +23,13 @@ bool	handle_exit(t_astnode *head, t_data *data)
 		free_ast(&data->head);
 	if (data->env)
 		free_env(&data->env);
+	if (data->tmp)
+	{
+		tmp_del(data->tmp);
+		free(data->tmp->files);
+		free(data->tmp->tmpdir);
+		free(data->tmp);
+	}
 	free(data->line);
-	//fprintf(stderr, "exit\n");
 	exit(status);
 }
