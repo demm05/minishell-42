@@ -38,7 +38,7 @@ int	tmp_new(t_tmp *t, char **tmpfileloc)
 	fc = t->file_count;
 	if (fc > t->arr_size)
 	{
-		t->files = realloc(t->files, sizeof(int * ) * fc * 2);
+		t->files = realloc(t->files, sizeof(int *) * fc * 2);
 		t->arr_size = fc * 2;
 	}
 	t->files[fc - 1] = fc;
@@ -77,11 +77,7 @@ t_tmp	*tmp_alloc(void)
 
 	t = ft_calloc(1, sizeof(t_tmp));
 	if (!t)
-	{
-		perror("malloc");
 		return (NULL);
-	}
-	t->tmpdir = NULL;
 	if (access(P_tmpdir, W_OK) == 0)
 		t->tmpdir = ft_strdup(P_tmpdir);
 	else

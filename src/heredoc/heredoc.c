@@ -15,10 +15,12 @@
 #include <readline/readline.h>
 #include <unistd.h>
 #include "./heredoc_private.h"
+#include "../expansion/expansion.h"
+#include "../extra/extra.h"
 
-static inline void	enter_heredoc(char *del, int fd);
+static inline void	enter_heredoc(t_env *env, char *del, int fd);
 static inline bool	remove_quotes(char *s);
-static inline void	process_line(int fd, char *s);
+static inline void	process_line(t_env *env, int fd, char *s);
 
 char	*heredoc(t_data *data, char *del)
 {
@@ -33,18 +35,17 @@ char	*heredoc(t_data *data, char *del)
 		free(filename);
 		return (NULL);
 	}
-	enter_heredoc(del, fd);
+	enter_heredoc(data->env, del, fd);
 	close(fd);
 	return (filename);
 }
 
-static inline void	enter_heredoc(char *del, int fd)
+static inline void	enter_heredoc(t_env *env, char *del, int fd)
 {
 	bool	expand;	
 	char	*line;
 
 	expand = !remove_quotes(del);
-	printf("%d\n", expand);
 	while (1)
 	{
 		line = readline("> ");
@@ -59,7 +60,7 @@ static inline void	enter_heredoc(char *del, int fd)
 			break ;
 		}
 		if (expand)
-			process_line(fd, line);
+			process_line(env, fd, line);
 		else
 			write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
@@ -67,25 +68,32 @@ static inline void	enter_heredoc(char *del, int fd)
 	}
 }
 
-static inline int	expand_var(int fd, char *s)
+static inline int	expand_var(t_env *env, int fd, const char *s)
 {
-	t_env	*key;
+	t_env	*e;
+	char	*k;
 	int		size;
 
 	size = 1;
+	k = getenv_key(s);
+	if (!k)
+		return (write(fd, s, 1));
+	size += ft_strlen(k);
+	e = getenv_val(env, k);
+	if (e)
+		write(fd, e->value, ft_strlen(e->value));
+	free(k);
 	return (size);
 }
 
-static inline void	process_line(int fd, char *s)
+static inline void	process_line(t_env *env, int fd, char *s)
 {
 	int		read_index;
-	int		len;
 
-	len = ft_strlen(s);
 	read_index = 0;
-	while (read_index < len)
+	while (s[read_index])
 	{
-		if (s[read_index] == '\\' && read_index + 1 < len)
+		if (s[read_index] == '\\')
 		{
 			if (s[read_index + 1] == '$' || s[read_index + 1] == '\\')
 			{
@@ -95,8 +103,8 @@ static inline void	process_line(int fd, char *s)
 			else
 				write(fd, s + read_index++, 1);
 		}
-		//else if (s[read_index] == '$')
-		//	read_index += expand_var(fd, s + read_index);
+		else if (s[read_index] == '$')
+			read_index += expand_var(env, fd, s + read_index);
 		else
 			write(fd, s + read_index++, 1);
 	}
