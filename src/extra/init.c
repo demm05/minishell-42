@@ -12,14 +12,9 @@
 
 #include "extra_private.h"
 #include "../heredoc/heredoc.h"
-#include "stdio.h"
-
-int	free_data(t_data *data)
-{
-	free(data->line);
-	data->line = NULL;
-	return (0);
-}
+#include "../ast/ast.h"
+#include <readline/readline.h>
+#include <stdio.h>
 
 t_data	*init(char **argv, char **envp)
 {
@@ -35,4 +30,26 @@ t_data	*init(char **argv, char **envp)
 	data->tmp = tmp_alloc();
 	data->prompt = "Prompt > ";
 	return (data);
+}
+
+int	free_everything(t_data *data)
+{
+	int		status;
+
+	status = data->exit_status;
+	if (data->head)
+		free_ast(&data->head);
+	if (data->env)
+		free_env(&data->env);
+	if (data->tmp)
+	{
+		tmp_del(data->tmp);
+		free(data->tmp->files);
+		free(data->tmp->tmpdir);
+		free(data->tmp);
+	}
+	rl_clear_history();
+	free(data->line);
+	free(data);
+	return (status);
 }
