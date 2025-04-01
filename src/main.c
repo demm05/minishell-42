@@ -17,6 +17,7 @@
 #include "extra/extra.h"
 #include "ast/ast.h"
 #include "heredoc/heredoc.h"
+#include "signal.h"
 
 void	prepare_for_the_next_loop(t_data *data)
 {
@@ -34,9 +35,10 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	data = init(argv, envp);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		mini_read(data);
+		interactive_read(data);
 		if (!data->line)
 			break ;
 		create_ast(data);

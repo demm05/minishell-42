@@ -14,13 +14,14 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <unistd.h>
+#include <signal.h>
 #include "./heredoc_private.h"
 #include "../expansion/expansion.h"
 #include "../extra/extra.h"
 
-static inline void	enter_heredoc(t_env *env, char *del, int fd);
+static inline void	enter_heredoc(t_data *data, char *del, int fd);
 static inline bool	remove_quotes(char *s);
-static inline void	process_line(t_env *env, int fd, char *s);
+static inline void	process_line(t_data *data, int fd, char *s);
 
 char	*heredoc(t_data *data, char *del)
 {
@@ -35,12 +36,16 @@ char	*heredoc(t_data *data, char *del)
 		free(filename);
 		return (NULL);
 	}
-	enter_heredoc(data->env, del, fd);
+	enter_heredoc(data, del, fd);
 	close(fd);
-	return (filename);
+	if (get_signal() != SIGINT)
+		return (filename);
+	free(filename);
+	set_signal(0);
+	return (NULL);
 }
 
-static inline void	enter_heredoc(t_env *env, char *del, int fd)
+static inline void	enter_heredoc(t_data *data, char *del, int fd)
 {
 	bool	expand;	
 	char	*line;
@@ -48,19 +53,18 @@ static inline void	enter_heredoc(t_env *env, char *del, int fd)
 	expand = !remove_quotes(del);
 	while (1)
 	{
-		line = readline("> ");
-		if (!line)
-		{
+		line = mini_readline("> ", 0);
+		if (!line && get_signal() != SIGINT)
 			fprintf(stderr, "warning: here-document delimeted by end-of-file (wanted `%s')\n", del);
+		if (!line)
 			break ;
-		}
 		if (!ft_strcmp(del, line))
 		{
 			free(line);
 			break ;
 		}
 		if (expand)
-			process_line(env, fd, line);
+			process_line(data, fd, line);
 		else
 			write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
@@ -68,7 +72,7 @@ static inline void	enter_heredoc(t_env *env, char *del, int fd)
 	}
 }
 
-static inline int	expand_var(t_env *env, int fd, const char *s)
+static inline int	expand_var(t_data *data, int fd, const char *s)
 {
 	t_env	*e;
 	char	*k;
@@ -79,14 +83,19 @@ static inline int	expand_var(t_env *env, int fd, const char *s)
 	if (!k)
 		return (write(fd, s, 1));
 	size += ft_strlen(k);
-	e = getenv_val(env, k);
-	if (e)
-		write(fd, e->value, ft_strlen(e->value));
+	if (*k == '?')
+		ft_putnbr_fd(data->exit_status, fd);
+	else
+	{
+		e = getenv_val(data->env, k);
+		if (e)
+			write(fd, e->value, ft_strlen(e->value));
+	}
 	free(k);
 	return (size);
 }
 
-static inline void	process_line(t_env *env, int fd, char *s)
+static inline void	process_line(t_data *data, int fd, char *s)
 {
 	int		read_index;
 
@@ -104,7 +113,7 @@ static inline void	process_line(t_env *env, int fd, char *s)
 				write(fd, s + read_index++, 1);
 		}
 		else if (s[read_index] == '$')
-			read_index += expand_var(env, fd, s + read_index);
+			read_index += expand_var(data, fd, s + read_index);
 		else
 			write(fd, s + read_index++, 1);
 	}

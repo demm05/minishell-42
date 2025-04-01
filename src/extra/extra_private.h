@@ -15,21 +15,15 @@
 
 # include "./extra.h"
 
-typedef struct s_quote_state
+typedef struct	s_read_state
 {
-	bool	escape;
+	char	*line;
+	char	*cont;
+	int		in_parentheses;
 	bool	in_squote;
 	bool	in_dquote;
-	int		in_parentheses;
-}	t_quote_state;
-
-/**
- * @brief Reads a full line, handling multi-line continuation.
- *
- * @param data  A pointer to the t_data structure.
- * @param state A pointer to the quote state.
- */
-void	read_full_line(t_data *data, t_quote_state *state);
+	bool	escape;
+}	t_read_state;
 
 /**
  * @brief Initializes the environment variables.

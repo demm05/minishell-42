@@ -11,8 +11,33 @@
 /* ************************************************************************** */
 
 #include <signal.h>
+#include <sys/wait.h>
+#include <stdio.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+
+static int	g_signal = 0;
+
+void	set_signal(int sig)
+{
+	g_signal = sig;
+}
+
+int	get_signal(void)
+{
+	return (g_signal);
+}
 
 void	reset_signals(void)
 {
 	signal(SIGINT, SIG_DFL);
+}
+
+int	get_childs_status(int status)
+{
+	if (WCOREDUMP(status))
+		return (131);
+	else if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		return (130);
+	return (WEXITSTATUS(status));
 }
