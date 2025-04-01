@@ -89,7 +89,6 @@ bool	handle_export(t_astnode *head, t_data *data)
 			result = 1;
 		cur = cur->next;
 	}
-	if (result)
-		data->exit_status = 1;
+	data->exit_status = result;
 	return (result);
 }

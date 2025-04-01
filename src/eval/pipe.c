@@ -17,6 +17,41 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+int	fork_it(t_astnode *head, t_data *data, bool id, int pipefd[2])
+{
+	int	pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("pipe");
+		close(pipefd[0]);
+		close(pipefd[1]);
+		return (-1);
+	}
+	if (pid != 0)
+		return (pid);
+	close(pipefd[id]);
+	dup2(pipefd[!id], !id);
+	close(pipefd[!id]);
+	if (head->type == EXEC)
+		exec_command(head, data);
+	else
+		eval(head, data);
+	exit(data->exit_status);
+}
+
+int	get_final_status(int status[2])
+{
+	status[0] = get_childs_status(status[0]);
+	status[1] = get_childs_status(status[1]);
+	if (status[0] == 131 || status[1] == 131)
+		return (131);
+	else if (status[0] == 130 || status[1] == 130)
+		return (130);
+	return (status[1]);
+}
+
 bool	handle_pipe(t_astnode *head, t_data *data)
 {
 	int	pipefd[2];
@@ -25,56 +60,21 @@ bool	handle_pipe(t_astnode *head, t_data *data)
 
 	if (!head || !head->children || !head->children->next)
 		return (1);
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe");
 		return (1);
 	}
-
-	pid[0] = fork();
+	pid[0] = fork_it(head->children, data, 0, pipefd);
 	if (pid[0] == -1)
-	{
-		perror("fork");
-		close(pipefd[0]);
-		close(pipefd[1]);
 		return (1);
-	}
-	if (pid[0] == 0)
-	{
-		close(pipefd[0]);
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
-		if (head->children->type == EXEC)
-			exec_command(head->children, data);
-		else
-			eval(head->children, data);
-		exit(data->exit_status);
-	}
-	pid[1] = fork();
+	pid[1] = fork_it(head->children->next, data, 1, pipefd);
 	if (pid[1] == -1)
-	{
-		perror("fork");
-		close(pipefd[0]);
-		close(pipefd[1]);
 		return (1);
-	}
-	if (pid[1] == 0)
-	{
-		close(pipefd[1]);
-		dup2(pipefd[0], STDIN_FILENO);
-		close(pipefd[0]);
-		if (head->children->next->type == EXEC)
-			exec_command(head->children->next, data);
-		else
-			eval(head->children->next, data);
-		exit(data->exit_status);
-	}
 	close(pipefd[0]);
 	close(pipefd[1]);
 	waitpid(pid[0], &status[0], 0);
 	waitpid(pid[1], &status[1], 0);
-	data->exit_status = WEXITSTATUS(status[1]);
-	return (0);
+	data->exit_status = get_final_status(status);
+	return (data->exit_status);
 }

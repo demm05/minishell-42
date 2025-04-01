@@ -75,5 +75,10 @@ t_data	*init(char **argv, char **envp);
 int		free_data(t_data *data);
 
 void	env_unset(t_env **env, char *kk);
+void	set_signal(int sig);
+int		get_signal(void);
+void	interactive_read(t_data *data);
+char	*mini_readline(char *prompt, bool complete_state);
+int		get_childs_status(int status);
 
 #endif

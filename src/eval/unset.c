@@ -22,5 +22,6 @@ bool	handle_unset(t_astnode *head, t_data *data)
 		env_unset(&data->env, head->literal);
 		head = head->next;
 	}
+	data->exit_status = 0;
 	return (0);
 }

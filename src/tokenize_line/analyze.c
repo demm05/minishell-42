@@ -30,8 +30,6 @@ static inline bool	aheredoc(t_data *data, t_token **head)
 	if ((*head)->type != WORD)
 		return (1);
 	filename = heredoc(data, (*head)->literal);
-	if (!filename)
-		fprintf(stderr, "heredoc: unexpected error");
 	free((*head)->literal);
 	(*head)->literal = filename;
 	return (0);
