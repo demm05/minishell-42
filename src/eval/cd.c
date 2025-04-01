@@ -46,6 +46,7 @@ bool	handle_cd(t_astnode *head, t_data *data)
 		data->exit_status = 1;
 		return (1);
 	}
+	data->exit_status = 0;
 	return (0);
 }
 

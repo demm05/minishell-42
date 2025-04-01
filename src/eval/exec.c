@@ -12,9 +12,9 @@
 
 #include "./eval_private.h"
 #include "minishell.h"
-#include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/ioctl.h>
 
 bool	handle_exec(t_astnode *head, t_data *data)
 {
@@ -23,21 +23,14 @@ bool	handle_exec(t_astnode *head, t_data *data)
 
 	if (!*head->literal)
 		return (0);
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
+	status = 0;
 	pid = fork();
 	if (pid == -1)
 		return (1);
 	if (pid == 0)
-	{
-		reset_signals();
 		exec_command(head, data);
-		exit(127);
-	}
 	else
 		waitpid(pid, &status, 0);
-	data->exit_status = status >> 8;
-	if (status)
-		return (1);
-	return (0);
+	data->exit_status = get_childs_status(status);
+	return (data->exit_status);
 }

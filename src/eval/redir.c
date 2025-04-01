@@ -17,7 +17,7 @@
 #include <errno.h>
 #include <string.h>
 
-static inline int	get_fd(t_astnode *head);
+static inline int	get_fd(t_astnode *head, t_data *data);
 static inline bool	do_redir(t_astnode *head, t_data *data, int target, int fd);
 
 
@@ -38,12 +38,11 @@ bool	handle_redir(t_astnode *head, t_data *data)
 		target = STDOUT_FILENO;
 	else
 		return (1);
-	fd = get_fd(head);
+	fd = get_fd(head, data);
+	if (fd == -2)
+		return (0);
 	if (fd == -1)
-	{
-		data->exit_status = 1;
 		return (1);
-	}
 	copy = dup(target);
 	status = do_redir(head->children, data, target, fd);
 	dup2(copy, target);
@@ -76,7 +75,7 @@ static inline int	set_flags(t_token_type type)
 	return (0);
 }
 
-static inline int	get_fd(t_astnode *head)
+static inline int	get_fd(t_astnode *head, t_data *data)
 {
 	int			fd;
 	t_astnode	*cur;
@@ -86,8 +85,13 @@ static inline int	get_fd(t_astnode *head)
 		cur = cur->next;
 	if (!cur)
 		return (-1);
+	if (!cur->literal)
+		return (-2);
 	fd = open(cur->literal, set_flags(head->type), 0644);
 	if (fd == -1)
+	{
 		fprintf(stderr, "%s: %s\n", cur->literal, strerror(errno));
+		data->exit_status = 1;
+	}
 	return (fd);
 }
