@@ -5,74 +5,49 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static inline char	*join(char *s1, char *s2);
 static inline bool	is_there_missing_char(t_read_state *state);
 static inline void	print_eol_error(t_read_state *state);
 
-static inline void	sig_receiver(int sig)
+static void signal_handler(int signo)
 {
-	set_signal(sig);
-	write(1, "\n", 1);
-	rl_on_new_line();
+	rl_done = 1;
+	rl_erase_empty_line = 1;
 	rl_replace_line("", 0);
-	rl_redisplay();
+	ioctl(0, TIOCSTI, "\n");
+	rl_on_new_line();
+	set_signal(signo);
 }
 
 char	*mini_readline(char *prompt, bool complete_state)
 {
 	t_read_state	st;
+	char			*temp;
 
-	set_signal(0);
-	if (!isatty(fileno(stdin)))
-		return (get_next_line(fileno(stdin)));
-	signal(SIGINT, sig_receiver);
+	// TODO: remoeve when we will sumbit this is for big tester
+	//if (!isatty(fileno(stdin)))
+	//	return (get_next_line(fileno(stdin)));
+	signal(SIGINT, signal_handler);
 	ft_bzero(&st, sizeof(t_read_state));
 	while (1)
 	{
 		st.cont = readline(prompt);
-		if (get_signal() == SIGINT)
+		rl_erase_empty_line = 0;
+		if (get_signal() == SIGINT || !st.cont || !complete_state)
 			break ;
-		if (!complete_state)
-			st.line = st.cont;
-		if (!st.cont|| !complete_state)
-			break ;
-		st.line = join(st.line, st.cont);
+		temp = join_strings(3, st.line, "\n", st.cont);
+		free(st.line);
+		st.line = temp;
 		if (!is_there_missing_char(&st))
 			break ;
 		prompt = "> ";
 	}
+	signal(SIGINT, SIG_IGN);
 	if (get_signal() == SIGINT)
 		free(st.cont);
-	signal(SIGINT, SIG_IGN);
 	print_eol_error(&st);
+	if (!complete_state && get_signal() != SIGINT)
+		return (st.cont);
 	return (st.line);
-}
-
-static inline char	*join(char *s1, char *s2)
-{
-	char	*res;
-	int		len_s1;
-	int		len_s2;
-
-	len_s1 = ft_strlen(s1);
-	len_s2 = ft_strlen(s2);
-	res = malloc(sizeof(char) * len_s2 + len_s1 + 2);
-	if (!res)
-		return (NULL);
-	if (s1)
-	{
-		ft_memcpy(res, s1, len_s1);
-		res[len_s1] = '\n';
-		ft_memcpy(res + len_s1 + 1, s2, len_s2);
-		res[len_s1 + len_s2 + 1] = 0;
-	}
-	else
-	{
-		ft_memcpy(res, s2, len_s2);
-		res[len_s2] = 0;
-	}
-	free(s1);
-	return (res);
 }
 
 static inline bool	is_there_missing_char(t_read_state *state)
@@ -101,6 +76,7 @@ static inline bool	is_there_missing_char(t_read_state *state)
 				state->in_parentheses--;
 	}
 	free(state->cont);
+	state->cont = NULL;
 	return (state->in_squote || state->in_dquote || state->in_parentheses > 0);
 }
 

@@ -18,6 +18,7 @@ bool	handle_env(t_astnode *head, t_data *data)
 {
 	t_env	*env;
 
+	(void)head;
 	env = data->env;
 	while (env)
 	{
