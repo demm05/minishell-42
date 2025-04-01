@@ -80,5 +80,6 @@ int		get_signal(void);
 void	interactive_read(t_data *data);
 char	*mini_readline(char *prompt, bool complete_state);
 int		get_childs_status(int status);
+char	*join_strings(int num_of_strs, ...);
 
 #endif

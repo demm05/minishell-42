@@ -28,7 +28,6 @@ typedef struct s_data
 	t_env					*env;
 	t_tmp					*tmp;
 	int						exit_status;
-	int						signal;
 }	t_data;
 
 void	exec(t_data *data);
