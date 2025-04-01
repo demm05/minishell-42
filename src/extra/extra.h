@@ -76,4 +76,6 @@ int		free_data(t_data *data);
 
 void	env_unset(t_env **env, char *kk);
 
+int		free_everything(t_data *data);
+
 #endif
