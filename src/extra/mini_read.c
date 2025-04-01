@@ -1,57 +1,110 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   mini_read.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/10 16:17:53 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/12 15:43:58 by dmelnyk          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "libft.h"
-#include "./extra_private.h"
-#include <stdio.h>
-#include <readline/history.h>
-#include <unistd.h>
+#include "extra_private.h"
 #include <signal.h>
+#include <readline/readline.h>
+#include <sys/ioctl.h>
 #include <stdlib.h>
+#include <unistd.h>
 
-static bool	is_empty(t_data *data);
-static void	pritn_eol_error(t_quote_state *state);
-static void	handle_sigint(int original_fd, t_quote_state *state,
-						bool *newln, t_data *data);
+static inline char	*join(char *s1, char *s2);
+static inline bool	is_there_missing_char(t_read_state *state);
+static inline void	print_eol_error(t_read_state *state);
 
-void	mini_read(t_data *data)
+static inline void	sig_receiver(int sig)
 {
-	t_quote_state	state;
-	int				original_fd;
-	bool			newln_sigint;
-
-	newln_sigint = 0;
-	original_fd = dup(STDIN_FILENO);
-	while (1)
-	{
-		ft_bzero(&state, sizeof(t_quote_state));
-		read_full_line(data, &state);
-		if (data->signal == SIGINT)
-		{
-			handle_sigint(original_fd, &state, &newln_sigint, data);
-			continue ;
-		}
-		else if (!data->line)
-			return ;
-		pritn_eol_error(&state);
-		if (is_empty(data))
-			continue ;
-		break ;
-	}
-	reset_signals();
-	add_history(data->line);
+	set_signal(sig);
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
-static void	pritn_eol_error(t_quote_state *state)
+char	*mini_readline(char *prompt, bool complete_state)
+{
+	t_read_state	st;
+
+	set_signal(0);
+	if (!isatty(fileno(stdin)))
+		return (get_next_line(fileno(stdin)));
+	signal(SIGINT, sig_receiver);
+	ft_bzero(&st, sizeof(t_read_state));
+	while (1)
+	{
+		st.cont = readline(prompt);
+		if (get_signal() == SIGINT)
+			break ;
+		if (!complete_state)
+			st.line = st.cont;
+		if (!st.cont|| !complete_state)
+			break ;
+		st.line = join(st.line, st.cont);
+		if (!is_there_missing_char(&st))
+			break ;
+		prompt = "> ";
+	}
+	if (get_signal() == SIGINT)
+		free(st.cont);
+	signal(SIGINT, SIG_IGN);
+	print_eol_error(&st);
+	return (st.line);
+}
+
+static inline char	*join(char *s1, char *s2)
+{
+	char	*res;
+	int		len_s1;
+	int		len_s2;
+
+	len_s1 = ft_strlen(s1);
+	len_s2 = ft_strlen(s2);
+	res = malloc(sizeof(char) * len_s2 + len_s1 + 2);
+	if (!res)
+		return (NULL);
+	if (s1)
+	{
+		ft_memcpy(res, s1, len_s1);
+		res[len_s1] = '\n';
+		ft_memcpy(res + len_s1 + 1, s2, len_s2);
+		res[len_s1 + len_s2 + 1] = 0;
+	}
+	else
+	{
+		ft_memcpy(res, s2, len_s2);
+		res[len_s2] = 0;
+	}
+	free(s1);
+	return (res);
+}
+
+static inline bool	is_there_missing_char(t_read_state *state)
+{
+	int				i;
+	char			*line;
+
+	line = state->cont;
+	if (!line)
+		return (0);
+	i = -1;
+	while (line[++i])
+	{
+		if (state->escape)
+			state->escape = false;
+		else if (line[i] == '\\' && state->in_dquote)
+			state->escape = true;
+		else if (line[i] == '\'' && !state->in_dquote)
+			state->in_squote = !state->in_squote;
+		else if (line[i] == '"' && !state->in_squote)
+			state->in_dquote = !state->in_dquote;
+		else if (line[i] == '(' && !state->in_dquote && !state->in_squote)
+			state->in_parentheses++;
+		else if (line[i] == ')' && !state->in_dquote && !state->in_squote)
+			if (state->in_parentheses > 0)
+				state->in_parentheses--;
+	}
+	free(state->cont);
+	return (state->in_squote || state->in_dquote || state->in_parentheses > 0);
+}
+
+static inline void	print_eol_error(t_read_state *state)
 {
 	if (state->in_dquote)
 		fprintf(stderr, "unexpected EOF while looking for matching '\"'\n");
@@ -59,39 +112,4 @@ static void	pritn_eol_error(t_quote_state *state)
 		fprintf(stderr, "unexpected EOF while looking for matching '''\n");
 	else if (state->in_parentheses)
 		fprintf(stderr, "unexpected EOF while looking for matching ')'\n");
-}
-
-static void	handle_sigint(int original_fd, t_quote_state *state,
-						bool *newln, t_data *data)
-{
-	free(data->line);
-	data->line = NULL;
-	dup2(original_fd, STDIN_FILENO);
-	if (!*newln)
-	{
-		write(STDIN_FILENO, "\n", 1);
-		*newln = 1;
-	}
-	if (state->in_parentheses || state->in_dquote || state->in_squote)
-		write(STDIN_FILENO, "\n", 1);
-	data->signal = 0;
-	data->exit_status = 130;
-}
-
-static bool	is_empty(t_data *data)
-{
-	char	*s;
-
-	if (!data)
-		return (1);
-	s = data->line;
-	if (!s)
-		return (1);
-	while (*s && ft_isspace(*s))
-		s++;
-	if (*s)
-		return (0);
-	free(data->line);
-	data->line = NULL;
-	return (1);
 }

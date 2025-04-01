@@ -24,5 +24,6 @@ bool	handle_env(t_astnode *head, t_data *data)
 		printf("%s=%s\n", env->key, env->value);
 		env = env->next;
 	}
+	data->exit_status = 0;
 	return (0);
 }

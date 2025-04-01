@@ -55,5 +55,6 @@ bool	handle_echo(t_astnode *head, t_data *data)
 	}
 	if (newline)
 		write(STDOUT_FILENO, "\n", 1);
+	data->exit_status = 0;
 	return (0);
 }

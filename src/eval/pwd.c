@@ -23,5 +23,6 @@ bool	handle_pwd(t_astnode *head, t_data *data)
 		return (1);
 	puts(buf);
 	free(buf);
+	data->exit_status = 0;
 	return (0);
 }

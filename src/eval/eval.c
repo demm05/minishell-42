@@ -14,6 +14,7 @@
 #include "../expansion/expansion.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 
 static inline bool	evaluate_logical_exp(t_astnode *head, t_data *data);
 
@@ -22,6 +23,10 @@ void	exec(t_data *data)
 	if (!data || !data->head)
 		return ;
 	eval(data->head, data);
+	if (data->exit_status == 131)
+		fprintf(stderr, "Quit (core dumped)\n");
+	else if (data->exit_status == 130)
+		write(1, "\n", 1);
 }
 
 static inline bool	can_i_do_next_node(t_astnode *head)
