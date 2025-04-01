@@ -82,4 +82,6 @@ char	*mini_readline(char *prompt, bool complete_state);
 int		get_childs_status(int status);
 char	*join_strings(int num_of_strs, ...);
 
+int		free_everything(t_data *data);
+
 #endif

@@ -12,24 +12,84 @@
 
 #include "./eval_private.h"
 #include "../heredoc/heredoc.h"
+#include "../extra/extra.h"
 #include <stdlib.h>
+#include <stdio.h>
+
+static int	is_numeric(const char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str || !str[i])
+		return (0);
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	if (str[i] == '\0')
+		return (0);
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+static long	ft_atol(const char *str)
+{
+	long		result;
+	int			sign;
+
+	result = 0;
+	sign = 1;
+	while (*str && ft_isspace(*str))
+		str++;
+	if (*str == '-' || *str == '+')
+	{
+		if (*str == '-')
+			sign = -1;
+		str++;
+	}
+	while (*str && ft_isdigit((unsigned char)*str))
+	{
+		result = result * 10 + (*str - '0');
+		str++;
+	}
+	return (sign * result);
+}
+
+static int	get_status(t_astnode *head, t_data *data)
+{
+	char	*arg;
+
+	if (head && head->literal)
+	{
+		arg = head->literal;
+		if (!is_numeric(arg))
+		{
+			fprintf(stderr, "exit: %s: numeric argument required\n", arg);
+			return (2);
+		}
+		else
+		{
+			if (head->next)
+			{
+				fprintf(stderr, "exit: too many arguments\n");
+				return (1);
+			}
+			else
+				return ((int)ft_atol(arg) % 256);
+		}
+	}
+	return (data->exit_status);
+}
 
 bool	handle_exit(t_astnode *head, t_data *data)
 {
-	int	status;
+	int		status;
 
-	status = data->exit_status;
-	if (data->head)
-		free_ast(&data->head);
-	if (data->env)
-		free_env(&data->env);
-	if (data->tmp)
-	{
-		tmp_del(data->tmp);
-		free(data->tmp->files);
-		free(data->tmp->tmpdir);
-		free(data->tmp);
-	}
-	free(data->line);
+	status = get_status(head->children, data);
+	free_everything(data);
 	exit(status);
 }
