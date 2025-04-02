@@ -31,7 +31,6 @@ void	prepare_for_the_next_loop(t_data *data)
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	*data;
-	int		status;
 
 	(void)argc;
 	data = init(argv, envp);
@@ -45,12 +44,5 @@ int	main(int argc, char **argv, char **envp)
 		exec(data);
 		prepare_for_the_next_loop(data);
 	}
-	free_env(&data->env);
-	free(data->tmp->files);
-	free(data->tmp->tmpdir);
-	free(data->tmp);
-	status = data->exit_status;
-	rl_clear_history();
-	free(data);
-	return (status);
+	return (free_everything(data));
 }
