@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:37:12 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/22 18:13:00 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/04/02 17:48:30 by riyano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	interactive_read(t_data *data);
 char	*mini_readline(char *prompt, bool complete_state);
 int		get_childs_status(int status);
 char	*join_strings(int num_of_strs, ...);
-
 int		free_everything(t_data *data);
+char	*get_path(t_env *env, char *literal, t_data *data);
 
 #endif
