@@ -1,5 +1,9 @@
 #include "expansion_private.h"
 
+void	lex_wildcard(t_lexer *l);
+void	lex_word(t_lexer *l);
+bool	is_valid_envv(const char *s);
+
 t_token	*word_generate_tokens(char *line, t_data *data)
 {
 	t_lexer	l;
@@ -15,11 +19,61 @@ t_token	*word_generate_tokens(char *line, t_data *data)
 			lex_quote(&l);
 		else if (l.ch == '*')
 			lex_wildcard(&l);
-	//	else if (private_env_tes(l.input + l.position, &l))
-	//		//lex_env(&l);
+		else if (is_valid_envv(l.input + l.position))
+			lex_env(&l);
 		else
 			lex_word(&l);
 	}
 	return (l.tokens);
 }
 
+void	lex_wildcard(t_lexer *l)
+{
+	const char	*s;
+	int			i;
+
+	if (l->ch != '*')
+		return ;
+	i = 0;
+	s = l->input + l->position;
+	while (s[i] == '*')
+		i++;
+	append_alloc(l, WILDCARD, i);
+}
+
+bool	is_valid_envv(const char *s)
+{
+	if (!s || s[0] != '$')
+		return (0);
+	if (!ft_isalpha(s[1]) && s[1] != '_' && s[1] != '?')
+		return (0);
+	return (1);
+}
+
+void	lex_word(t_lexer *l)
+{
+	const char	*s;
+	int			i;
+	bool		escape;
+
+	i = 0;
+	escape = 0;
+	s = l->input + l->position;
+	while (s[i])
+	{
+		if (escape)
+		{
+			escape = 0;
+			append_advance(l, ft_strndup(s, i - 2), i, WORD);
+			s = l->input + l->position;
+			i = 0;
+		}
+		else if (s[i] == '\\')
+			escape = !escape;
+		else if (s[i] == '\'' || s[i] == '"' || s[i] == '*' || is_valid_envv(s + i))
+			break ;
+		i++;
+	}
+	if (i)
+		append_alloc(l, WORD, i);
+}
