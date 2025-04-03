@@ -11,7 +11,9 @@ void	expand_head(t_astnode *head, t_data *data)
 
 	if (!head || !data)
 		return ;
-	if (is_redir(head->type) || head->type == PIPE)
+	if (is_redir(head->type))
+		do_path(head->children, data);
+	if (head->type == PIPE)
 	{
 		expand_head(head->children, data);
 		expand_head(head->children->next, data);
@@ -29,8 +31,6 @@ void	expand_head(t_astnode *head, t_data *data)
 		}
 		head->childs = ast_get_size(head->children);
 	}
-	else if (head->type == PATH)
-		do_path(head, data);
 }
 
 void	do_exec(t_astnode *head, t_data *data)
