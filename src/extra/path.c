@@ -38,17 +38,6 @@ static char	*check_explicit_path(char *literal, t_data *data)
 	return (ft_strdup(literal));
 }
 
-static char	**get_dirs(t_env *env)
-{
-	char	**dirs;
-
-	if (!env || !env->value || !env->value[0])
-		dirs = ft_split("usr/bin:/bin", ":");
-	else
-		dirs = ft_split(env->value, ":");
-	return (dirs);
-}
-
 char	*get_path(t_env *env, char *literal, t_data *data)
 {
 	char		*path;
@@ -59,7 +48,9 @@ char	*get_path(t_env *env, char *literal, t_data *data)
 
 	if (ft_strchr(literal, '/'))
 		return (check_explicit_path(literal, data));
-	dirs = get_dirs(env);
+	if (!env || !env->value || !env->value[0])
+		return (NULL);
+	dirs = ft_split(env->value, ":");
 	path = NULL;
 	i = 0;
 	while (dirs[i] && !path)
