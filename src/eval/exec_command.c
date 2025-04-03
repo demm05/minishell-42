@@ -15,12 +15,14 @@
 #include <sys/stat.h>
 
 static char	**build_args(t_astnode *head);
+static void	handle_error(char *literal, t_env *path_env, t_data *data);
 
 void	exec_command(t_astnode *head, t_data *data)
 {
 	char	**envp;
 	char	**args;
 	char	*path;
+	t_env	*path_env;
 
 	if (!*head->literal)
 		exit(0);
@@ -28,16 +30,10 @@ void	exec_command(t_astnode *head, t_data *data)
 	signal(SIGQUIT, SIG_DFL);
 	envp = env_create_arr(data->env);
 	args = build_args(head);
-	path = get_path(env_get_bykey(data->env, "PATH"), head->literal, data);
+	path_env = env_get_bykey(data->env, "PATH");
+	path = get_path(path_env, head->literal, data);
 	if (!path)
-	{
-		if (!ft_strchr(head->literal, '/'))
-		{
-			fprintf(stderr, "%s: command not found\n", head->literal);
-			data->exit_status = 127;
-		}
-		exit(data->exit_status);
-	}
+		handle_error(head->literal, path_env, data);
 	args[0] = head->literal;
 	execve(path, args, envp);
 	free_everything(data);
@@ -71,4 +67,17 @@ static char	**build_args(t_astnode *head)
 	}
 	args[i] = NULL;
 	return (args);
+}
+
+static void	handle_error(char *literal, t_env *path_env, t_data *data)
+{
+	if (!ft_strchr(literal, '/'))
+	{
+		if (!path_env || !path_env->value || !path_env->value[0])
+			fprintf(stderr, "%s: No such file or directory\n", literal);
+		else
+			fprintf(stderr, "%s: command not found\n", literal);
+		data->exit_status = 127;
+	}
+	exit(data->exit_status);
 }
