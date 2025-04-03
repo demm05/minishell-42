@@ -22,8 +22,8 @@ char	*mini_readline(char *prompt, bool complete_state)
 	char			*temp;
 
 	// TODO: remoeve when we will sumbit this is for big tester
-	//if (!isatty(fileno(stdin)))
-	//	return (get_next_line(fileno(stdin)));
+	if (!isatty(fileno(stdin)))
+		return (get_next_line(fileno(stdin)));
 	signal(SIGINT, signal_handler);
 	ft_bzero(&st, sizeof(t_read_state));
 	while (1)

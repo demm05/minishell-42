@@ -74,7 +74,7 @@ static inline int	expand_var(t_data *data, int fd, const char *s)
 	int		size;
 
 	size = 1;
-	k = getenv_key(s);
+	k = env_get_key(s);
 	if (!k)
 		return (write(fd, s, 1));
 	size += ft_strlen(k);
