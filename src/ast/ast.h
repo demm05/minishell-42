@@ -28,6 +28,7 @@ typedef struct s_astnode
 	struct s_astnode	*prev;
 }	t_astnode;
 
+int			ast_get_size(t_astnode *head);
 void		create_ast(t_data *data);
 void		print_ast(t_astnode *node, int depth);
 void		free_ast(t_astnode **node);

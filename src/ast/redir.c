@@ -42,6 +42,32 @@ t_astnode	*parse_redir(t_token **token)
 	return (head);
 }
 
+t_astnode	*parse_redir_only(t_token **token, t_astnode *left)
+{
+	static t_token_type	exp[] = {REDIR_OUT, REDIR_OUT_A, REDIR_IN, HERE_DOC};
+	static t_token_type	end[] = {AND, OR, PIPE, RPAREN, SEQUENCE};
+	t_astnode			*head;
+	t_astnode			*last_head;
+
+	head = NULL;
+	last_head = NULL;
+	while (*token)
+	{
+		while (*token && !match(*token, exp, 4) && !match(*token, end, 5))
+			*token = (*token)->next;
+		if (!match(*token, exp, 4))
+			break ;
+		last_head = new_redirection(token, last_head);
+		if (!head)
+			head = last_head;
+	}
+	if (!head)
+		return (NULL);
+	if (left)
+		add_child(last_head, left);
+	return (head);
+}
+
 static t_astnode	*new_redirection(t_token **token, t_astnode *head)
 {
 	t_astnode	*new;

@@ -63,6 +63,7 @@ t_astnode	*parse_pipe(t_token **token)
 t_astnode	*parse_paren(t_token **token)
 {
 	t_astnode	*head;
+	t_astnode	*result;
 
 	if (*token && (*token)->type == LPAREN)
 	{
@@ -71,6 +72,9 @@ t_astnode	*parse_paren(t_token **token)
 		if (*token && (*token)->type == RPAREN)
 		{
 			*token = (*token)->next;
+			result = parse_redir_only(token, head);
+			if (result)
+				return (result);
 			return (head);
 		}
 		else

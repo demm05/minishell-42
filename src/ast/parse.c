@@ -29,6 +29,11 @@ void	create_ast(t_data *data)
 	}
 	ptr = head;
 	data->head = parse_sequence(&ptr);
+	if (ptr)
+	{
+		fprintf(stderr, "failed to create complete ast\n");
+		free_tokens(&ptr->next, 1);
+	}
 	//print_ast(data->head, 0);
 	free_tokens(&head, 0);
 }

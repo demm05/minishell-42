@@ -22,7 +22,12 @@ static void	read_dquote(t_lexer *l)
 	while (s[i])
 	{
 		if (escape)
+		{
 			escape = 0;
+			append_advance(l, ft_strndup(s, i - 1), i, WORD);
+			s = l->input + l->position;
+			i = 0;
+		}
 		else if (s[i] == '\\')
 			escape = !escape;
 		else if (s[i] == '"')
@@ -31,7 +36,7 @@ static void	read_dquote(t_lexer *l)
 		{
 			if (i > 0)
 				append_alloc(l, WORD, i);
-			lex_env(l);
+			lex_env(l, 0);
 			i = 0;
 			s = l->input + l->position;
 			continue ;

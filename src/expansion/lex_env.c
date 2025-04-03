@@ -1,5 +1,8 @@
 #include "expansion_private.h"
-#include <stdlib.h>
+#include <stdio.h>
+
+void	split_env_add_token(t_lexer *l, char *key, char *value);
+static void	add_tokens_to_the_list(t_lexer *l, char *key, char **s, int size);
 
 bool	is_valid_envv(const char *s)
 {
@@ -10,40 +13,59 @@ bool	is_valid_envv(const char *s)
 	return (1);
 }
 
-static inline bool	is_valid_ch(char c)
-{
-	return (((c >= 'a' && c <= 'z') || \
-			(c >= 'A' && c <= 'Z')) || \
-			c == '_' || \
-			(c >= '0' && c <= '9'));
-}
-
-char	*getenv_key(const char *s)
-{
-	const char	*anch;
-
-	if (!is_valid_envv(s))
-		return (NULL);
-	s++;
-	if (*s == '?')
-		return (ft_strdup("?"));
-	anch = s;
-	while (*s && is_valid_ch(*s))
-		s++;
-	return (ft_strndup(anch, s - anch));
-}
-
-void	lex_env(t_lexer *l)
+void	lex_env(t_lexer *l, bool to_split)
 {
 	char		*key;
+	char		*value;
 
 	if (!is_valid_envv(l->input + l->position))
 		return ;
 	if (peek_char(l) == '?')
 	{
-		expand_variable(l, NULL, 1, 2);
+		append_advance(l, ft_itoa(l->data->exit_status), 2, EXIT_STATUS);
 		return ;
 	}
-	key = getenv_key(l->input + l->position);
-	expand_variable(l, key, 0, ft_strlen(key) + 1);
+	key = env_get_key(l->input + l->position);
+	value = env_get_value(l->data->env, key);
+	if (!value)
+		append_advance(l, NULL, ft_strlen(key) + 1, WORD);
+	else if (!to_split)
+		append_advance(l, ft_strdup(value), ft_strlen(key) + 1, WORD);
+	else
+		split_env_add_token(l, key, value);
+	free(key);
+}
+
+void	split_env_add_token(t_lexer *l, char *key, char *value)
+{
+	char	**sp;
+	int		size;
+
+	if (!value || !key)
+		return ;
+	size = ft_strlen(key);
+	l->read_postion += size;
+	read_char(l);
+	sp = ft_split(value, " \n\t\r\f");
+	if (!sp)
+		return ;
+	add_tokens_to_the_list(l, value, sp, ft_strlen(value));
+}
+
+static void	add_tokens_to_the_list(t_lexer *l, char *value, char **s, int size)
+{
+	int	i;
+
+	if (l->tokens && ft_isspace(*value))
+		append_advance(l, NULL, 0, SSPACE);
+	i = 0;
+	while (s[i])
+	{
+		append_advance(l, s[i], 0, WORD);
+		if (s[++i])
+			append_advance(l, NULL, 0, SSPACE);
+	}
+	if (size > 0 && !(l->tokens && l->tokens->prev->type == SSPACE) &&  ft_isspace(value[size - 1]))
+		append_advance(l, NULL, 0, SSPACE);
+	free(s);
 }

@@ -1,5 +1,4 @@
 #include "expansion_private.h"
-#include <stdio.h>
 
 static inline unsigned int	get_list_size(t_token *head)
 {
