@@ -45,6 +45,7 @@ void	exec_command(t_astnode *head, t_data *data)
 	}
 	args[0] = head->literal;
 	execve(path, args, envp);
+	free_everything(data);
 	exit(127);
 }
 

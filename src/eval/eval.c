@@ -47,6 +47,8 @@ bool	eval(t_astnode *head, t_data *data)
 	bool	s;
 
 	s = 1;
+	if (!head)
+		return (0);
 	if (head->type == AND || head->type == OR)
 		s = evaluate_logical_exp(head, data);
 	expand_head(head, data);

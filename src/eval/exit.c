@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "./eval_private.h"
-#include "../heredoc/heredoc.h"
 #include "../extra/extra.h"
+#include "libft.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -34,29 +34,6 @@ static int	is_numeric(const char *str)
 		i++;
 	}
 	return (1);
-}
-
-static long	ft_atol(const char *str)
-{
-	long		result;
-	int			sign;
-
-	result = 0;
-	sign = 1;
-	while (*str && ft_isspace(*str))
-		str++;
-	if (*str == '-' || *str == '+')
-	{
-		if (*str == '-')
-			sign = -1;
-		str++;
-	}
-	while (*str && ft_isdigit((unsigned char)*str))
-	{
-		result = result * 10 + (*str - '0');
-		str++;
-	}
-	return (sign * result);
 }
 
 static int	get_status(t_astnode *head, t_data *data)
