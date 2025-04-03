@@ -1,7 +1,7 @@
 #ifndef HEREDOC_PRIVATE_H
 # define HEREDOC_PRIVATE_H
 
-# include "heredoc.h"
+# include "minishell.h"
 
 int		tmp_new(t_tmp *t, char **tmpfileloc);
 

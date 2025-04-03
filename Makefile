@@ -32,7 +32,7 @@ DEBUG_OBJS			:=	$(patsubst debug/%.c,$(ODIR)/debug/%.o, $(DEBUG_SRCS))
 
 export LD_LIBRARY_PATH=$(CRITERION_PATH)/lib:$LD_LIBRARY_PATH
 
-all: $(LIBFT) $(NAME)
+all: compiledb $(LIBFT) $(NAME)
 
 $(OBJS): $(ODIR)/%.o: $(SDIR)/%.c | $(DIRS)
 	$(Q)$(CC) $(CFLAGS) -c -o $@ $<
@@ -56,7 +56,9 @@ $(LIBFT):
 t test: $(LIBFT) $(TDIR)/bin $(TEST_BINS)
 	@for test in $(TEST_BINS) ; do \
 		./$$test || exit 1 ; \
-	done
+
+compiledb:
+	@compiledb make -n all > /dev/null 2>&1
 
 c clean:
 	$(Q)rm -rf $(ODIR)

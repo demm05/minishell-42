@@ -13,7 +13,41 @@
 #ifndef LEXER_H
 # define LEXER_H
 
-#include "../../inc/minishell.h"
+# include <stdbool.h>
+
+typedef struct s_data	t_data;
+
+typedef enum e_tokentype
+{
+	EOL,		// End of line
+	ILLEGAL,	// When invalid input
+	EXIT_STATUS,// $?
+	AND,		// &&
+	OR,			// ||
+	REDIR_OUT,	// >
+	REDIR_IN,	// <
+	REDIR_OUT_A,// >>
+	HERE_DOC,	// <<	
+	PIPE,		// |
+	EXEC,		// Executable like ls wc grep 
+	WORD,		// It could be an argument or file
+	PATH,		// Can be relative or absolute eg ./ or /
+	LPAREN,		// (
+	RPAREN,		// )
+	WILDCARD,	// *
+	EXPAND_VAR,	// $ better
+	QUOTE,
+	SSPACE,
+	SEQUENCE,
+	// Built in shell exec
+	CD,
+	ECHO,
+	PWD,
+	EXPORT,		
+	UNSET,
+	ENV,
+	EXIT,
+}	t_token_type;
 
 typedef struct s_token
 {

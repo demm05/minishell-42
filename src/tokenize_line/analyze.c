@@ -11,10 +11,6 @@
 /* ************************************************************************** */
 
 #include "tok_private.h"
-#include "../heredoc/heredoc.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 #include <fcntl.h>
 
 static bool	is_paran(t_token **head, int *paren);

@@ -2,8 +2,6 @@
 #include <signal.h>
 #include <readline/readline.h>
 #include <sys/ioctl.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 static inline bool	is_there_missing_char(t_read_state *state);
 static inline void	print_eol_error(t_read_state *state);

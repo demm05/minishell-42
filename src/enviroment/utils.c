@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   enviroment.c                                       :+:      :+:    :+:   */
+/*   utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,22 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "./extra.h"
-#include <stdlib.h>
+#include "./enviroment_private.h"
 
-t_env	*getenv_val(t_env *head, char *key)
-{
-	while (head)
-	{
-		if (!ft_strcmp(head->key, key))
-			return (head);
-		head = head->next;
-	}
-	return (NULL);
-}
-
-t_env	*append_env(t_env **head, char *key, char *value)
+t_env	*env_append(t_env **head, char *key, char *value)
 {
 	t_env	*new;
 
@@ -51,21 +38,21 @@ t_env	*append_env(t_env **head, char *key, char *value)
 	return (new);
 }
 
-t_env	*add_env(t_env **head, char *key, char *value)
+t_env	*env_add(t_env **head, char *key, char *value)
 {
 	t_env	*new;
 
 	if (!head)
 		return (NULL);
-	new = getenv_val(*head, key);
+	new = env_get_bykey(*head, key);
 	if (!new)
-		return (append_env(head, ft_strdup(key), value));
+		return (env_append(head, ft_strdup(key), value));
 	free(new->value);
 	new->value = value;
 	return (new);
 }
 
-void	free_env(t_env **head)
+void	env_free(t_env **head)
 {
 	t_env	*cur;
 	t_env	*next;
@@ -92,7 +79,7 @@ void	env_unset(t_env **env, char *kk)
 
 	if (!env || !*env || !kk)
 		return ;
-	key = getenv_val(*env, kk);
+	key = env_get_bykey(*env, kk);
 	if (!key)
 		return ;
 	prev = key->prev;
@@ -112,4 +99,17 @@ void	env_unset(t_env **env, char *kk)
 		(*env)->prev = prev;
 	else
 		next->prev = prev;
+}
+
+int	env_getsize(t_env *env)
+{
+	int	size;
+
+	size = 0;
+	while (env)
+	{
+		size++;
+		env = env->next;
+	}
+	return (size);
 }

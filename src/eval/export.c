@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "./eval_private.h"
-#include <stdio.h>
 
 static void	print_allenv(t_data *data)
 {
@@ -59,7 +58,7 @@ static bool	process_export_arg(char *arg, t_data *data)
 			fprintf(stderr, "export: `%s': not a valid identifier\n", arg);
 			return (true);
 		}
-		if (!add_env(&data->env, arg, ft_strdup(equal_sign + 1)))
+		if (!env_add(&data->env, arg, ft_strdup(equal_sign + 1)))
 			fprintf(stderr, "export: failed to add/update variable: %s\n", arg);
 		*equal_sign = '=';
 	}

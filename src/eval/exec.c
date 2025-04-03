@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "./eval_private.h"
-#include "minishell.h"
-#include <unistd.h>
 #include <sys/wait.h>
 #include <sys/ioctl.h>
 

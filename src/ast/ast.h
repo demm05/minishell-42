@@ -13,8 +13,9 @@
 #ifndef AST_H
 # define AST_H
 
-# include "../../inc/minishell.h"
-# include "../tokenize_line/tok.h"
+# include "../lexer/lexer.h"
+
+typedef struct s_data		t_data;
 
 typedef struct s_astnode
 {

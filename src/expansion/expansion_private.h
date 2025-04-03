@@ -1,8 +1,7 @@
 #ifndef EXPANSION_PRIVATE_H 
 # define EXPANSION_PRIVATE_H 
 
-# include "../ast/ast.h"
-# include "./expansion.h"
+# include "minishell.h"
 
 bool	is_valid_envv(const char *s);
 

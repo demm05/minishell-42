@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "./lexer.h"
-#include "minishell.h"
+#include "libft.h"
 #include <stdio.h>
 
 char *decode(t_token_type t)

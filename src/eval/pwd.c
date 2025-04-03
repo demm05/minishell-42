@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "./eval_private.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 bool	handle_pwd(t_astnode *head, t_data *data)
 {

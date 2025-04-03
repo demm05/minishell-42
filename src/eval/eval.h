@@ -13,8 +13,11 @@
 #ifndef EVAL_H
 # define EVAL_H
 
-# include "../../inc/minishell.h"
+# include <stdbool.h>
 
-bool	eval(t_astnode *head, t_data *data);
+typedef struct s_astnode	t_astnode;
+typedef struct s_data		t_data;
+
+void	exec(t_data *data);
 
 #endif

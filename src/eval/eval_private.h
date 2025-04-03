@@ -13,11 +13,7 @@
 #ifndef EVAL_PRIVATE_H
 # define EVAL_PRIVATE_H
 
-# include <stdbool.h>
-# include "libft.h"
-# include "./eval.h"
-# include "../ast/ast.h"
-# include "../extra/extra.h"
+# include "minishell.h"
 
 typedef bool			(*t_builtin_func_ptr)(t_astnode *head, t_data *data);
 
@@ -36,5 +32,6 @@ void	expand_tree(t_astnode *parent, t_data *data);
 void	exec_command(t_astnode *head, t_data *data);
 t_builtin_func_ptr	is_built_in(t_token_type type);
 bool	is_redir(t_token_type type);
+bool	eval(t_astnode *head, t_data *data);
 
 #endif

@@ -10,14 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
 #include <readline/readline.h>
-#include <unistd.h>
 #include <signal.h>
-#include "./heredoc_private.h"
-#include "../expansion/expansion.h"
-#include "../extra/extra.h"
+#include "heredoc_private.h"
 
 static inline void	enter_heredoc(t_data *data, char *del, int fd);
 static inline bool	remove_quotes(char *s);
@@ -87,7 +82,7 @@ static inline int	expand_var(t_data *data, int fd, const char *s)
 		ft_putnbr_fd(data->exit_status, fd);
 	else
 	{
-		e = getenv_val(data->env, k);
+		e = env_get_bykey(data->env, k);
 		if (e)
 			write(fd, e->value, ft_strlen(e->value));
 	}

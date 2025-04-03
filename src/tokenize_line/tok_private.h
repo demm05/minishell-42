@@ -13,7 +13,7 @@
 #ifndef TOK_PRIVATE_H 
 # define TOK_PRIVATE_H 
 
-#include "./tok.h"
+# include "minishell.h"
 
 void	add_word(t_lexer *l);
 

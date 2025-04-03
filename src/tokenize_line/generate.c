@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "tok_private.h"
-#include <stdlib.h>
 
 bool	is_fixed_type(t_lexer *l);
 

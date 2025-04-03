@@ -2,7 +2,6 @@
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <signal.h>
-#include <stdlib.h>
 
 static inline bool	is_empty(char *line);
 

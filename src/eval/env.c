@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "./eval_private.h"
-#include "../extra/extra.h"
-#include <stdio.h>
 
 bool	handle_env(t_astnode *head, t_data *data)
 {

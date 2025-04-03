@@ -13,7 +13,7 @@
 #ifndef HEREDOC_H
 # define HEREDOC_H
 
-# include "../../inc/minishell.h"
+typedef struct s_data	t_data;
 
 typedef struct s_tmp
 {

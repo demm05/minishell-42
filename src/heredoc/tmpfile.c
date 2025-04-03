@@ -1,10 +1,6 @@
-#include "./heredoc_private.h"
-#include "../extra/extra.h"
-#include <stdlib.h>
+#include "heredoc_private.h"
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <unistd.h>
-#include <stdio.h>
 
 static inline char	*hash_key(char *tmpdir, unsigned int key)
 {

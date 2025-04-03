@@ -11,10 +11,7 @@
 /* ************************************************************************** */
 
 #include "./eval_private.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <errno.h>
 
 static bool	validate_env_vars(t_env **pwd, t_env **old_pwd, t_data *data);
@@ -62,12 +59,12 @@ bool	handle_cd(t_astnode *head, t_data *data)
  */
 static bool	validate_env_vars(t_env **pwd, t_env **old_pwd, t_data *data)
 {
-	*pwd = getenv_val(data->env, "PWD");
-	*old_pwd = getenv_val(data->env, "OLDPWD");
+	*pwd = env_get_bykey(data->env, "PWD");
+	*old_pwd = env_get_bykey(data->env, "OLDPWD");
 	if (!*pwd)
-		*pwd = add_env(&data->env, ft_strdup("PWD"), get_curent_dir());
+		*pwd = env_add(&data->env, ft_strdup("PWD"), get_curent_dir());
 	if (!*old_pwd)
-		*old_pwd = add_env(&data->env,
+		*old_pwd = env_add(&data->env,
 				ft_strdup("OLDPWD"), get_curent_dir());
 	if (!*pwd || !*old_pwd)
 	{
@@ -98,7 +95,7 @@ static char	*resolve_cd_path(t_astnode *head, t_env *old_pwd, t_data *data)
 
 	if (head->childs == 0)
 	{
-		temp = getenv_val(data->env, "HOME");
+		temp = env_get_bykey(data->env, "HOME");
 		if (!temp)
 		{
 			printf("cd: HOME not set\n");

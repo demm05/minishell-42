@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "./ast_private.h"
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
 
 t_astnode	*parse_sequence(t_token **token)
 {

@@ -1,7 +1,5 @@
 #include "extra_private.h"
-#include <stdlib.h>
 #include <stdarg.h>
-#include <stdio.h>
 
 static inline void	join_it(char *dest, va_list arg, int num_of_strs)
 {

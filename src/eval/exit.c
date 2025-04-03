@@ -11,10 +11,6 @@
 /* ************************************************************************** */
 
 #include "./eval_private.h"
-#include "../extra/extra.h"
-#include "libft.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 static int	is_numeric(const char *str)
 {

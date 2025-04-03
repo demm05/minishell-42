@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "./ast_private.h"
-#include <stdlib.h>
 
 t_astnode	*parse_exec(t_token *token)
 {

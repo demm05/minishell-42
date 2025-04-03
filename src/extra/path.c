@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "./extra_private.h"
-#include <stdio.h>
-#include <unistd.h>
 #include <sys/stat.h>
 
 static char	*check_explicit_path(char *literal, t_data *data)

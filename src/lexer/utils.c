@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "lexer.h"
-#include "../extra/extra.h"
+#include "libft.h"
 
 void	read_char(t_lexer *l)
 {

@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "./ast_private.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 static t_astnode	*new_redirection(t_token **token, t_astnode *head);
 

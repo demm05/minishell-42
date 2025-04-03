@@ -1,24 +1,9 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   enviroment_init.c                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/06 13:44:25 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/14 14:37:58 by dmelnyk          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "./extra_private.h"
-#include "libft.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include "./enviroment_private.h"
 
 static void	increment_shlvl(t_env *shlvl);
 static void	fill_env_with_default(char **argv, t_env **head);
 
-t_env	*init_env(char **argv, char **envp)
+t_env	*env_init(char **argv, char **envp)
 {
 	t_env	*head;
 	char	*c;
@@ -33,13 +18,13 @@ t_env	*init_env(char **argv, char **envp)
 	{
 		c = ft_strchr(envp[i], '=');
 		if (!c)
-			append_env(&head, ft_strdup(envp[i]), ft_strdup(""));
+			env_append(&head, ft_strdup(envp[i]), ft_strdup(""));
 		else
 		{
 			*c = 0;
 			key = ft_strdup(envp[i]);
 			*c = '=';
-			append_env(&head, key, ft_strdup(++c));
+			env_append(&head, key, ft_strdup(++c));
 		}
 	}
 	fill_env_with_default(argv, &head);
@@ -93,17 +78,17 @@ static void	fill_env_with_default(char **argv, t_env **head)
 	t_env	*pwd;
 	char	*s;
 
-	pwd = getenv_val(*head, "PWD");
+	pwd = env_get_bykey(*head, "PWD");
 	if (!pwd)
-		pwd = append_env(head, ft_strdup("PWD"), get_curent_dir());
-	if (!getenv_val(*head, "SHLVL"))
-		append_env(head, ft_strdup("SHLVL"), ft_strdup("1"));
+		pwd = env_append(head, ft_strdup("PWD"), get_curent_dir());
+	if (!env_get_bykey(*head, "SHLVL"))
+		env_append(head, ft_strdup("SHLVL"), ft_strdup("1"));
 	else
-		increment_shlvl(getenv_val(*head, "SHLVL"));
-	if (!getenv_val(*head, "_"))
+		increment_shlvl(env_get_bykey(*head, "SHLVL"));
+	if (!env_get_bykey(*head, "_"))
 	{
 		s = ft_strjoin(pwd->value, "/");
-		append_env(head, ft_strdup("_"), ft_strjoin(s, argv[0]));
+		env_append(head, ft_strdup("_"), ft_strjoin(s, argv[0]));
 		free(s);
 	}
 }

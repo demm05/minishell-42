@@ -14,6 +14,7 @@
 # define AST_PRIVATE_H
 
 # include "./ast.h"
+# include "../../inc/minishell.h"
 
 t_astnode	*parse_exec(t_token *token);
 t_astnode	*parse_redir(t_token **token);

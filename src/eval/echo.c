@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "./eval_private.h"
-#include <stdbool.h>
 
 static t_astnode	*skip_n_flags(t_astnode *cur, bool *newline)
 {

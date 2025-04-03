@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "./lexer.h"
+#include "libft.h"
 #include <stdlib.h>
 
 t_token	*new_token(t_token_type type, char *s, unsigned int s_size)

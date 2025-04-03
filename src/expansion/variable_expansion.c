@@ -37,7 +37,7 @@ static inline char	*get_key(t_data *data, char *key)
 
 	if (!data || !key)
 		return (NULL);
-	env = getenv_val(data->env, key);
+	env = env_get_bykey(data->env, key);
 	free(key);
 	if (!env || !env->value || !*env->value)
 		return (NULL);

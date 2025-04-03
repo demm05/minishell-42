@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "./ast_private.h"
-#include <stdio.h>
 
 t_astnode	*new_astnode(t_token *tok)
 {

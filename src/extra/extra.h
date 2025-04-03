@@ -13,42 +13,11 @@
 #ifndef EXTRA_H 
 # define EXTRA_H 
 
-# include "../../inc/minishell.h"
 # include <stdbool.h>
 
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-	struct s_env	*prev;
-}	t_env;
-
-/**
- * @brief Gets an environment variable by key.
- *
- * @param head A pointer to the head of the environment variables list.
- * @param key  The key to search for.
- * @return A pointer to the t_env struct, or NULL if not found.
- */
-t_env	*getenv_val(t_env *head, char *key);
-
-/**
- * @brief Adds an environment variable to the list.
- *
- * @param head  A pointer to the head of the env list (double pointer).
- * @param key   The malloced key of the variable.
- * @param value The malloced value of the variable.
- * @return A pointer to the new t_env node, or NULL on failure.
- */
-t_env	*add_env(t_env **head, char *key, char *value);
-
-/**
- * @brief Frees the environment variables list.
- *
- * @param head A double pointer to the head of the list.
- */
-void	free_env(t_env **head);
+typedef struct s_astnode	t_astnode;
+typedef struct s_data		t_data;
+typedef struct s_env		t_env;
 
 /**
  * @brief Gets the current working directory.
@@ -74,7 +43,6 @@ t_data	*init(char **argv, char **envp);
  */
 int		free_data(t_data *data);
 
-void	env_unset(t_env **env, char *kk);
 void	set_signal(int sig);
 int		get_signal(void);
 void	interactive_read(t_data *data);

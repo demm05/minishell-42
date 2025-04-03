@@ -13,12 +13,19 @@
 #ifndef minishell_h
 # define minishell_h
 
-#include <stdbool.h>
-#include "libft.h"
-
-typedef struct s_astnode	t_astnode;
-typedef struct s_env		t_env;
-typedef struct s_tmp		t_tmp;
+# include <stdbool.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdio.h>
+# include "libft.h"
+# include "../src/ast/ast.h"
+# include "../src/enviroment/enviroment.h"
+# include "../src/eval/eval.h"
+# include "../src/expansion/expansion.h"
+# include "../src/extra/extra.h"
+# include "../src/lexer/lexer.h"
+# include "../src/tokenize_line/tok.h"
+# include "../src/heredoc/heredoc.h"
 
 typedef struct s_data
 {
@@ -29,48 +36,5 @@ typedef struct s_data
 	t_tmp					*tmp;
 	int						exit_status;
 }	t_data;
-
-void	exec(t_data *data);
-
-/**
- * @brief Main input reading loop.
- * Handles multi-line input, signals, and history.
- *
- * @param data A pointer to the t_data structure.
- */
-void	mini_read(t_data *data);
-void	reset_signals(void);
-
-typedef enum e_tokentype
-{
-	EOL,		// End of line
-	ILLEGAL,	// When invalid input
-	EXIT_STATUS,// $?
-	AND,		// &&
-	OR,			// ||
-	REDIR_OUT,	// >
-	REDIR_IN,	// <
-	REDIR_OUT_A,// >>
-	HERE_DOC,	// <<	
-	PIPE,		// |
-	EXEC,		// Executable like ls wc grep 
-	WORD,		// It could be an argument or file
-	PATH,		// Can be relative or absolute eg ./ or /
-	LPAREN,		// (
-	RPAREN,		// )
-	WILDCARD,	// *
-	EXPAND_VAR,	// $ better
-	QUOTE,
-	SSPACE,
-	SEQUENCE,
-	// Built in shell exec
-	CD,
-	ECHO,
-	PWD,
-	EXPORT,		
-	UNSET,
-	ENV,
-	EXIT,
-}	t_token_type;
 
 #endif

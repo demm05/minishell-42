@@ -11,10 +11,6 @@
 /* ************************************************************************** */
 
 #include "./eval_private.h"
-#include "../expansion/expansion.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
 
 static inline bool	evaluate_logical_exp(t_astnode *head, t_data *data);
 

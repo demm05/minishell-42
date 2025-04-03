@@ -11,10 +11,7 @@
 /* ************************************************************************** */
 
 #include "extra_private.h"
-#include "../heredoc/heredoc.h"
-#include "../ast/ast.h"
 #include <readline/readline.h>
-#include <stdio.h>
 
 t_data	*init(char **argv, char **envp)
 {
@@ -26,7 +23,7 @@ t_data	*init(char **argv, char **envp)
 		perror("malloc");
 		return (NULL);
 	}
-	data->env = init_env(argv, envp);
+	data->env = env_init(argv, envp);
 	data->tmp = tmp_alloc();
 	data->prompt = "Prompt > ";
 	return (data);
@@ -40,7 +37,7 @@ int	free_everything(t_data *data)
 	if (data->head)
 		free_ast(&data->head);
 	if (data->env)
-		free_env(&data->env);
+		env_free(&data->env);
 	if (data->tmp)
 	{
 		tmp_del(data->tmp);

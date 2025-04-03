@@ -12,9 +12,7 @@
 
 #include <signal.h>
 #include <sys/wait.h>
-#include <stdio.h>
 #include <sys/ioctl.h>
-#include <unistd.h>
 
 static int	g_signal = 0;
 

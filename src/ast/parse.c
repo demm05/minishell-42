@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "ast_private.h"
-#include <stdio.h>
 
 void	create_ast(t_data *data)
 {
