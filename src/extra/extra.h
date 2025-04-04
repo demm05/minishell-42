@@ -51,6 +51,5 @@ int		get_childs_status(int status);
 char	*join_strings(int num_of_strs, ...);
 int		free_everything(t_data *data);
 char	*get_path(t_env *env, char *literal, t_data *data);
-void	split_line(t_data *data);
 
 #endif

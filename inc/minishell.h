@@ -31,7 +31,6 @@ typedef struct s_data
 {
 	char					*prompt;
 	char					*line;
-	char					*next_line;
 	t_astnode				*head;
 	t_env					*env;
 	t_tmp					*tmp;

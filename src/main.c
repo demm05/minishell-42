@@ -18,13 +18,7 @@
 void	prepare_for_the_next_loop(t_data *data)
 {
 	free(data->line);
-	if (data->next_line)
-	{
-		data->line = data->next_line;
-		data->next_line = NULL;
-	}
-	else
-		data->line = NULL;
+	data->line = NULL;
 	if (data->head)
 		free_ast(&data->head);
 	tmp_del(data->tmp);
@@ -39,11 +33,9 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		if (!data->line)
-			interactive_read(data);
+		interactive_read(data);
 		if (!data->line)
 			break ;
-		split_line(data);
 		create_ast(data);
 		exec(data);
 		prepare_for_the_next_loop(data);

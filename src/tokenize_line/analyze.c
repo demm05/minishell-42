@@ -50,8 +50,8 @@ bool	analyze_tokens(t_data *data, t_token *head)
 		head = head->next;
 	}
 	if (head)
-		fprintf(stderr, "syntax error near unexpected token `%s'\n",
-			head->literal);
+		fprintf(stderr, "syntax error near unexpected token %s\n",
+			decode(head->type));
 	return (head != NULL);
 }
 
@@ -59,9 +59,9 @@ static bool	is_basic(t_token *head)
 {
 	if (!(head->type == AND || head->type == OR || head->type == PIPE))
 		return (0);
-	if (!head->prev->next || !head->next)
+	if (!head->prev->next)
 		return (1);
-	if (head->next->type == SEQUENCE || !head->next->next)
+	if (!head->next || !head->next->next)
 		return (1);
 	return (0);
 }
