@@ -27,11 +27,13 @@ void	exec(t_data *data)
 
 static inline bool	can_i_do_next_node(t_astnode *head)
 {
-	if (!head  | !head->next)
+	if (!head | !head->next)
 		return (0);
 	if (!head->parent && head->type != AND && head->type != OR)
 		return (1);
 	if (!head->parent)
+		return (0);
+	if (head->parent->type == AND || head->parent->type == OR)
 		return (0);
 	if (head->parent->type != PIPE && !is_redir(head->parent->type))
 		return (1);

@@ -26,6 +26,7 @@ t_data	*init(char **argv, char **envp)
 	data->env = env_init(argv, envp);
 	data->tmp = tmp_alloc();
 	data->prompt = "Prompt > ";
+	data->next_line = NULL;
 	return (data);
 }
 
