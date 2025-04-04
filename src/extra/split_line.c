@@ -4,18 +4,24 @@ char	*ft_findnwln(char *s)
 {
 	bool	squote;
 	bool	dquote;
+	bool	parenth;
 
 	if (!s)
 		return (NULL);
 	squote = 0;
 	dquote = 0;
+	parenth = 0;
 	while (*s)
 	{
-		if (*s == '"' && dquote && !squote)
+		if (*s == '(' && !dquote && !squote)
+			parenth = 1;
+		else if (*s == ')' && !dquote && !squote)
+			parenth = 0;
+		else if (*s == '"' && dquote && !squote)
 			dquote = !dquote;
 		else if (*s == '\'' && squote && !dquote)
 			squote = !squote;
-		else if (*s == '\n' && !squote && !dquote)
+		else if (*s == '\n' && !squote && !dquote && !parenth)
 			return (s);
 		s++;
 	}
