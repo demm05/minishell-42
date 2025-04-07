@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expansion_private.h                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/07 18:23:54 by dmelnyk           #+#    #+#             */
+/*   Updated: 2025/04/07 18:23:57 by dmelnyk          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef EXPANSION_PRIVATE_H 
 # define EXPANSION_PRIVATE_H 
 
@@ -11,6 +23,5 @@ t_token			**split_tokens(t_token *head);
 char			**join_tokens(t_token **head);
 void			lex_env(t_lexer *l, bool to_split);
 bool			is_valid_envv(const char *s);
-void			lex_quote(t_lexer *l);
 
 #endif
