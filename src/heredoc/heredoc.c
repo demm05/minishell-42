@@ -140,5 +140,5 @@ static inline bool	remove_quotes(char *s)
 		read_index++;
 	}
 	s[write_index] = 0;
-	return (is_squote);
+	return (is_quote);
 }
