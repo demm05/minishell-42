@@ -116,21 +116,29 @@ static inline void	process_line(t_data *data, int fd, char *s)
 
 static inline bool	remove_quotes(char *s)
 {
+	bool	is_squote;
+	bool	is_dquote;
 	bool	is_quote;
 	int		read_index;
 	int		write_index;
 
 	is_quote = 0;
+	is_squote = 0;
+	is_dquote = 0;
 	read_index = 0;
 	write_index = 0;
 	while (s[read_index])
 	{
-		if (s[read_index] != '\'' && s[read_index] != '"')
-			s[write_index++] = s[read_index];
+		if (s[read_index] == '"' && !is_squote)
+			is_dquote = !is_dquote;
+		else if (s[read_index] == '\'' && !is_dquote)
+			is_squote = !is_squote;
 		else
+			s[write_index++] = s[read_index];
+		if (!is_quote && (is_squote || is_dquote))
 			is_quote = 1;
 		read_index++;
 	}
 	s[write_index] = 0;
-	return (is_quote);
+	return (is_squote);
 }
