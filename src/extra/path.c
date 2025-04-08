@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./extra_private.h"
+#include "extra_private.h"
 #include <sys/stat.h>
 
 static char	*check_explicit_path(char *literal, t_data *data)
