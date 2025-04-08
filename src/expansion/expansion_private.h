@@ -22,6 +22,7 @@ t_token			*word_generate_tokens(char *line, t_data *data);
 t_token			**split_tokens(t_token *head);
 char			**join_tokens(t_token **head);
 void			lex_env(t_lexer *l, bool to_split);
+void			lex_quote(t_lexer *l);
 bool			is_valid_envv(const char *s);
 
 #endif

@@ -24,3 +24,25 @@ int	ast_get_size(t_astnode *head)
 	}
 	return (i);
 }
+
+void	ast_delete_first_child(t_astnode *parent)
+{
+	t_astnode	*last;
+	t_astnode	*next;
+
+	if (!parent || !parent->children)
+		return ;
+	if (!parent->children->next)
+	{
+		free(parent->children->literal);
+		free(parent->children);
+		parent->children = NULL;
+		return ;
+	}
+	last = parent->children->prev;
+	next = parent->children->next;
+	free(parent->children->literal);
+	free(parent->children);
+	next->prev = last;
+	parent->children = next;
+}
