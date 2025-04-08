@@ -84,4 +84,14 @@ int		env_getsize(t_env *env);
 //@brief Return a copy of valid env key from a string
 char	*env_get_key(const char *s);
 
+void	env_arr_free(char **arr);
+
+/**
+ * Increments the shell level in environment variables
+ * Handles edge cases like invalid SHLVL values
+ *
+ * @param shlvl Pointer to the SHLVL environment variable
+ */
+void	increment_shlvl(t_env **head);
+
 #endif

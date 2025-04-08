@@ -19,7 +19,8 @@ bool	handle_unset(t_astnode *head, t_data *data)
 	head = head->children;
 	while (head)
 	{
-		env_unset(&data->env, head->literal);
+		if (head->literal && ft_strcmp(head->literal, "_") != 0)
+			env_unset(&data->env, head->literal);
 		head = head->next;
 	}
 	data->exit_status = 0;

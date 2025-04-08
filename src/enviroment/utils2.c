@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./enviroment_private.h"
+#include "enviroment_private.h"
 
 t_env	*env_get_bykey(t_env *head, char *key)
 {

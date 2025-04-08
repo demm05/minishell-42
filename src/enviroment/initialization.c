@@ -10,9 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./enviroment_private.h"
+#include "enviroment_private.h"
 
-static void	increment_shlvl(t_env *shlvl);
 static void	fill_env_with_default(char **argv, t_env **head);
 
 t_env	*env_init(char **argv, char **envp)
@@ -43,17 +42,18 @@ t_env	*env_init(char **argv, char **envp)
 	return (head);
 }
 
-/**
- * Increments the shell level in environment variables
- * Handles edge cases like invalid SHLVL values
- *
- * @param shlvl Pointer to the SHLVL environment variable
- */
-static void	increment_shlvl(t_env *shlvl)
+void	increment_shlvl(t_env **head)
 {
 	char	*s;
 	int		lvl;
+	t_env	*shlvl;
 
+	shlvl = env_get_bykey(*head, "SHLVL");
+	if (!shlvl)
+	{
+		env_append(head, ft_strdup("SHLVL"), ft_strdup("0"));
+		return ;
+	}
 	lvl = 0;
 	s = shlvl->value;
 	if (*s == '+')
@@ -88,15 +88,13 @@ static void	increment_shlvl(t_env *shlvl)
 static void	fill_env_with_default(char **argv, t_env **head)
 {
 	t_env	*pwd;
-	char	*s;
+	char 	*s;
 
 	pwd = env_get_bykey(*head, "PWD");
 	if (!pwd)
 		pwd = env_append(head, ft_strdup("PWD"), get_curent_dir());
 	if (!env_get_bykey(*head, "SHLVL"))
 		env_append(head, ft_strdup("SHLVL"), ft_strdup("1"));
-	else
-		increment_shlvl(env_get_bykey(*head, "SHLVL"));
 	if (!env_get_bykey(*head, "_"))
 	{
 		s = ft_strjoin(pwd->value, "/");

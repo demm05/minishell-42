@@ -29,10 +29,13 @@ void	exec_command(t_astnode *head, t_data *data)
 		exit(0);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	envp = env_create_arr(data->env);
 	args = build_args(head);
 	path_env = env_get_bykey(data->env, "PATH");
 	path = get_path(path_env, head->literal, data);
+	increment_shlvl(&data->env);
+	env_add(&data->env, "PWD", get_curent_dir());
+	env_add(&data->env, "_", path);
+	envp = env_create_arr(data->env);
 	if (!path)
 	{
 		free_ptp(args);
@@ -41,7 +44,6 @@ void	exec_command(t_astnode *head, t_data *data)
 	}
 	args[0] = head->literal;
 	execve(path, args, envp);
-	free_everything(data);
 	exit(127);
 }
 
