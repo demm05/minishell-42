@@ -114,6 +114,7 @@ t_token **wildcard_it(t_token **arr)
 	}
 	res[j] = 0;
 	dir_free_list(targets);
+	free(arr);
 	return (res);
 }
 
