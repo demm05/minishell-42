@@ -37,5 +37,6 @@ t_astnode	*new_astnode(t_token *tok);
 void		assemble_head(t_astnode *head, t_data *data);
 
 t_astnode	*append_astnode(t_astnode **head, t_astnode *new);
+void		ast_delete_first_child(t_astnode *parent);
 
 #endif

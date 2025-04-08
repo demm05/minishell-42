@@ -14,6 +14,8 @@
 
 t_token_type	get_exec_type(char *s)
 {
+	if (!s)
+		return (EXEC);
 	if (ft_strcmp(s, "echo") == 0)
 		return (ECHO);
 	else if (ft_strcmp(s, "pwd") == 0)

@@ -12,15 +12,13 @@
 
 #include "expansion_private.h"
 
-void	do_path(t_astnode *head, t_data *data);
-void	do_exec(t_astnode *head, t_data *data);
-void	do_child(t_astnode *head, t_astnode *cur, t_data *data);
+void				do_path(t_astnode *head, t_data *data);
+void				do_exec(t_astnode *head, t_data *data);
+void				do_child(t_astnode *head, t_astnode *cur, t_data *data);
+static inline void	_handle_exec(t_astnode *head, t_data *data);
 
 void	expand_head(t_astnode *head, t_data *data)
 {
-	t_astnode	*cur;
-	t_astnode	*next;
-
 	if (!head || !data)
 		return ;
 	if (is_redir(head->type))
@@ -31,18 +29,39 @@ void	expand_head(t_astnode *head, t_data *data)
 		expand_head(head->children->next, data);
 	}
 	else if (head->type == EXEC)
+		_handle_exec(head, data);
+}
+
+static inline void	_handle_exec(t_astnode *head, t_data *data)
+{
+	t_astnode	*cur;
+	t_astnode	*next;
+
+	cur = head->children;
+	do_exec(head, data);
+	while (cur)
 	{
-		cur = head->children;
-		do_exec(head, data);
-		while (cur)
-		{
-			next = cur->next;
-			if (cur->type == WORD || cur->type == PATH)
-				do_child(head->children, cur, data);
-			cur = next;
-		}
-		head->childs = ast_get_size(head->children);
+		next = cur->next;
+		if (cur->type == WORD)
+			do_child(head->children, cur, data);
+		cur = next;
 	}
+	if (head->children && (!head->literal || !*head->literal))
+	{
+		while (head->children)
+		{
+			if (head->children->literal && *head->children->literal)
+			{
+				free(head->literal);
+				head->literal = head->children->literal;
+				head->children->literal = NULL;
+				ast_delete_first_child(head);
+				break ;
+			}
+			ast_delete_first_child(head);
+		}
+	}
+	head->childs = ast_get_size(head->children);
 }
 
 void	do_exec(t_astnode *head, t_data *data)
