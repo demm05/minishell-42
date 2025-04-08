@@ -32,7 +32,7 @@ DEBUG_OBJS			:=	$(patsubst debug/%.c,$(ODIR)/debug/%.o, $(DEBUG_SRCS))
 
 export LD_LIBRARY_PATH=$(CRITERION_PATH)/lib:$LD_LIBRARY_PATH
 
-all: compiledb $(LIBFT) $(NAME)
+all: $(LIBFT) $(NAME)
 
 $(OBJS): $(ODIR)/%.o: $(SDIR)/%.c | $(DIRS)
 	$(Q)$(CC) $(CFLAGS) -c -o $@ $<
@@ -59,6 +59,9 @@ t test: $(LIBFT) $(TDIR)/bin $(TEST_BINS)
 
 compiledb:
 	@compiledb make -n all > /dev/null 2>&1
+
+v valgrind: all
+	valgrind --suppressions=inc/rl.supp --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes ./$(NAME)
 
 c clean:
 	$(Q)rm -rf $(ODIR)
@@ -98,10 +101,4 @@ else ifeq ($(V),1)
 else
     Q = @
     ECHO = @:
-endif
-
-ifeq ($(F), 1)
-
-else
-	CFLAGS += -fsanitize=address
 endif
