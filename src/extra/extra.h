@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:37:12 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/04/02 17:48:30 by riyano           ###   ########.fr       */
+/*   Updated: 2025/04/08 17:18:01 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,7 @@ int		get_childs_status(int status);
 char	*join_strings(int num_of_strs, ...);
 int		free_everything(t_data *data);
 char	*get_path(t_env *env, char *literal, t_data *data);
+char	**dir_get_content_list(char *pwd);
+void	dir_free_list(char **l);
 
 #endif

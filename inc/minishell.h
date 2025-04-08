@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   by: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   created: 2025/03/12 11:18:36 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/03/22 11:47:41 by dmelnyk          ###   ########.fr       */
+/*   Created: 2025/03/12 11:18:36 by dmelnyk           #+#    #+#             */
+/*   Updated: 2025/04/07 18:25:11 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef minishell_h
 # define minishell_h
+
+# define DEBUG 0
 
 # include <stdbool.h>
 # include <stdlib.h>

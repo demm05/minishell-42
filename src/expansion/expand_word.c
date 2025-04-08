@@ -6,7 +6,7 @@
 /*   By: dmelnyk <dmelnyk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:23:43 by dmelnyk           #+#    #+#             */
-/*   Updated: 2025/04/07 18:23:44 by dmelnyk          ###   ########.fr       */
+/*   Updated: 2025/04/08 17:18:06 by dmelnyk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ char	**expand_word(t_astnode *head, t_data *data, bool split_it)
 		perror("malloc\n");
 		return (NULL);
 	}
+	arr = wildcard_it(arr);
 	res = join_tokens(arr);
 	free(arr);
 	return (res);
