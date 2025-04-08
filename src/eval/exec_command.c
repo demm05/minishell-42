@@ -16,6 +16,7 @@
 
 static char	**build_args(t_astnode *head);
 static void	handle_error(char *literal, t_env *path_env, t_data *data);
+static void	free_ptp(char **args);
 
 void	exec_command(t_astnode *head, t_data *data)
 {
@@ -33,7 +34,11 @@ void	exec_command(t_astnode *head, t_data *data)
 	path_env = env_get_bykey(data->env, "PATH");
 	path = get_path(path_env, head->literal, data);
 	if (!path)
+	{
+		free_ptp(args);
+		free_ptp(envp);
 		handle_error(head->literal, path_env, data);
+	}
 	args[0] = head->literal;
 	execve(path, args, envp);
 	free_everything(data);
@@ -58,6 +63,7 @@ static char	**build_args(t_astnode *head)
 	args = malloc((head->childs + 2) * sizeof(char *));
 	if (!args)
 		return (NULL);
+	ft_bzero(args, (head->childs + 2) * sizeof(char *));
 	i = 1;
 	child = head->children;
 	while (child && i - 1 < head->childs)
@@ -71,6 +77,8 @@ static char	**build_args(t_astnode *head)
 
 static void	handle_error(char *literal, t_env *path_env, t_data *data)
 {
+	int	status;
+
 	if (!ft_strchr(literal, '/'))
 	{
 		if (!path_env || !path_env->value || !path_env->value[0])
@@ -79,5 +87,16 @@ static void	handle_error(char *literal, t_env *path_env, t_data *data)
 			fprintf(stderr, "%s: command not found\n", literal);
 		data->exit_status = 127;
 	}
-	exit(data->exit_status);
+	status = free_everything(data);
+	exit(status);
+}
+
+static void	free_ptp(char **args)
+{
+	int	i;
+
+	i = 0;
+	while (args[i])
+		free(args[i++]);
+	free(args);
 }
