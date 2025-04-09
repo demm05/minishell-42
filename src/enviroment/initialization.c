@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "enviroment_private.h"
-#include "src/enviroment/enviroment.h"
 
 static void	fill_env_with_default(char **argv, t_env **head);
 
