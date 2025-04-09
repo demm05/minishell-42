@@ -16,6 +16,7 @@
 # define DEBUG 0
 
 # include <stdbool.h>
+# include <limits.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
@@ -31,7 +32,7 @@
 
 typedef struct s_data
 {
-	char					*prompt;
+	char					prompt[PATH_MAX];
 	char					*line;
 	t_astnode				*head;
 	t_env					*env;

@@ -22,6 +22,7 @@ void	prepare_for_the_next_loop(t_data *data)
 	if (data->head)
 		free_ast(&data->head);
 	tmp_del(data->tmp);
+	update_prompt(data);
 }
 
 int	main(int argc, char **argv, char **envp)
