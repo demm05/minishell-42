@@ -17,21 +17,21 @@
 
 typedef bool			(*t_builtin_func_ptr)(t_astnode *head, t_data *data);
 
-bool	handle_cd(t_astnode *head, t_data *data);
-bool	handle_echo(t_astnode *head, t_data *data);
-bool	handle_pwd(t_astnode *head, t_data *data);
-bool	handle_env(t_astnode *head, t_data *data);
-bool	handle_unset(t_astnode *head, t_data *data);
-bool	handle_exit(t_astnode *head, t_data *data);
-bool	handle_export(t_astnode *head, t_data *data);
-bool	handle_exec(t_astnode *head, t_data *data);
-bool	handle_pipe(t_astnode *head, t_data *data);
-bool	handle_redir(t_astnode *head, t_data *data);
+bool				handle_cd(t_astnode *head, t_data *data);
+bool				handle_echo(t_astnode *head, t_data *data);
+bool				handle_pwd(t_astnode *head, t_data *data);
+bool				handle_env(t_astnode *head, t_data *data);
+bool				handle_unset(t_astnode *head, t_data *data);
+bool				handle_exit(t_astnode *head, t_data *data);
+bool				handle_export(t_astnode *head, t_data *data);
+bool				handle_exec(t_astnode *head, t_data *data);
+bool				handle_pipe(t_astnode *head, t_data *data);
+bool				handle_redir(t_astnode *head, t_data *data);
 
-void	expand_tree(t_astnode *parent, t_data *data);
-void	exec_command(t_astnode *head, t_data *data);
+void				expand_tree(t_astnode *parent, t_data *data);
+void				exec_command(t_astnode *head, t_data *data);
+bool				is_redir(t_token_type type);
+bool				eval(t_astnode *head, t_data *data);
 t_builtin_func_ptr	is_built_in(t_token_type type);
-bool	is_redir(t_token_type type);
-bool	eval(t_astnode *head, t_data *data);
 
 #endif

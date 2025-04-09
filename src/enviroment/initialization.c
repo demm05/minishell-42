@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "enviroment_private.h"
+#include "src/enviroment/enviroment.h"
 
 static void	fill_env_with_default(char **argv, t_env **head);
 
@@ -42,18 +43,13 @@ t_env	*env_init(char **argv, char **envp)
 	return (head);
 }
 
-void	increment_shlvl(t_env **head)
+void	increment_shlvl(t_env *shlvl)
 {
 	char	*s;
 	int		lvl;
-	t_env	*shlvl;
 
-	shlvl = env_get_bykey(*head, "SHLVL");
 	if (!shlvl)
-	{
-		env_append(head, ft_strdup("SHLVL"), ft_strdup("0"));
 		return ;
-	}
 	lvl = 0;
 	s = shlvl->value;
 	if (*s == '+')
@@ -88,7 +84,7 @@ void	increment_shlvl(t_env **head)
 static void	fill_env_with_default(char **argv, t_env **head)
 {
 	t_env	*pwd;
-	char 	*s;
+	char	*s;
 
 	pwd = env_get_bykey(*head, "PWD");
 	if (!pwd)
@@ -96,7 +92,7 @@ static void	fill_env_with_default(char **argv, t_env **head)
 	if (!env_get_bykey(*head, "SHLVL"))
 		env_append(head, ft_strdup("SHLVL"), ft_strdup("1"));
 	else
-		increment_shlvl(head);
+		increment_shlvl(env_get_bykey(*head, "SHLVL"));
 	if (!env_get_bykey(*head, "_"))
 	{
 		s = ft_strjoin(pwd->value, "/");

@@ -71,6 +71,18 @@ void	env_free(t_env **head)
 	*head = NULL;
 }
 
+static inline void	_helper_env_unset(t_env *key, t_env *prev,
+									t_env *next, t_env **env)
+{
+	free(key);
+	if (prev)
+		prev->next = next;
+	if (!next)
+		(*env)->prev = prev;
+	else
+		next->prev = prev;
+}
+
 void	env_unset(t_env **env, char *kk)
 {
 	t_env	*prev;
@@ -92,24 +104,5 @@ void	env_unset(t_env **env, char *kk)
 		*env = next;
 		return ;
 	}
-	free(key);
-	if (prev)
-		prev->next = next;
-	if (!next)
-		(*env)->prev = prev;
-	else
-		next->prev = prev;
-}
-
-int	env_getsize(t_env *env)
-{
-	int	size;
-
-	size = 0;
-	while (env)
-	{
-		size++;
-		env = env->next;
-	}
-	return (size);
+	_helper_env_unset(key, prev, next, env);
 }

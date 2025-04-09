@@ -15,9 +15,8 @@
 #include <errno.h>
 #include <string.h>
 
-static inline int	get_fd(t_astnode *head, t_data *data);
 static inline bool	do_redir(t_astnode *head, t_data *data, int target, int fd);
-
+static inline int	get_fd(t_astnode *head, t_data *data);
 
 bool	handle_redir(t_astnode *head, t_data *data)
 {

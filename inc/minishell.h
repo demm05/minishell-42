@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef minishell_h
-# define minishell_h
+#ifndef MINISHELL_H 
+# define MINISHELL_H 
 
 # include <stdbool.h>
 # include <stdlib.h>
