@@ -19,20 +19,18 @@ static inline bool	is_empty(char *line);
 
 void	interactive_read(t_data *data)
 {
-	bool	updated;
-
-	updated = 0;
-	update_prompt(data);
 	while (1)
 	{
 		data->line = mini_readline(data->prompt, 1);
 		if (get_signal() == SIGINT)
 		{
 			set_signal(0);
-			data->exit_status = 130;
-			if (!updated)
+			if (data->exit_status != 130)
+			{
+				data->exit_status = 130;
 				update_prompt(data);
-			updated = 1;
+			}
+			data->exit_status = 130;
 			continue ;
 		}
 		else if (!data->line)

@@ -34,13 +34,15 @@ static inline void	put_directory(t_data *data, int *i)
 	wd = get_curent_dir();
 	if (!wd)
 		return ;
-	put_to_str(data->prompt, GREEN, i);
+	if (PROMPT_COLORS)
+		put_to_str(data->prompt, GREEN, i);
 	rr = ft_strrchr(wd, '/');
-	if (rr)
+	if (rr && rr[1])
 		put_to_str(data->prompt, rr + 1, i);
 	else
 		put_to_str(data->prompt, wd, i);
-	put_to_str(data->prompt, RESET, i);
+	if (PROMPT_COLORS)
+		put_to_str(data->prompt, RESET, i);
 	free(wd);
 }
 
@@ -51,14 +53,16 @@ void	update_prompt(t_data *data)
 
 	i = 0;
 	put_directory(data, &i);
-	if (data->exit_status)
+	if (data->exit_status && PROMPT_STATUS)
 	{
 		status = ft_itoa(data->exit_status);
-		put_to_str(data->prompt, RED, &i);
+		if (PROMPT_COLORS)
+			put_to_str(data->prompt, RED, &i);
 		put_to_str(data->prompt, " [", &i);
 		put_to_str(data->prompt, status, &i);
 		data->prompt[i++] = ']';
-		put_to_str(data->prompt, RESET, &i);
+		if (PROMPT_COLORS)
+			put_to_str(data->prompt, RESET, &i);
 		free(status);
 	}
 	put_to_str(data->prompt, " > ", &i);

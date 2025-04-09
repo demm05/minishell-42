@@ -19,7 +19,7 @@
 # define GREEN "\033[1;32m"
 # define RESET "\033[0m"
 
-typedef struct	s_read_state
+typedef struct s_read_state
 {
 	char	*line;
 	char	*cont;

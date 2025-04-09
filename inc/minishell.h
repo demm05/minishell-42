@@ -13,6 +13,9 @@
 #ifndef MINISHELL_H 
 # define MINISHELL_H 
 
+# define PROMPT_COLORS 1 
+# define PROMPT_STATUS 1 
+
 # include <stdbool.h>
 # include <limits.h>
 # include <stdlib.h>
