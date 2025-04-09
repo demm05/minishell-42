@@ -95,6 +95,8 @@ static void	fill_env_with_default(char **argv, t_env **head)
 		pwd = env_append(head, ft_strdup("PWD"), get_curent_dir());
 	if (!env_get_bykey(*head, "SHLVL"))
 		env_append(head, ft_strdup("SHLVL"), ft_strdup("1"));
+	else
+		increment_shlvl(head);
 	if (!env_get_bykey(*head, "_"))
 	{
 		s = ft_strjoin(pwd->value, "/");

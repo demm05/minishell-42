@@ -13,8 +13,6 @@
 #ifndef minishell_h
 # define minishell_h
 
-# define DEBUG 0
-
 # include <stdbool.h>
 # include <stdlib.h>
 # include <unistd.h>

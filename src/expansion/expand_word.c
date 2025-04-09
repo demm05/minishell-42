@@ -26,8 +26,6 @@ char	**expand_word(t_astnode *head, t_data *data, bool split_it)
 	token = word_generate_tokens(head->literal, data);
 	if (!token)
 		return (NULL);
-	if (DEBUG)
-		print_tokens(token);
 	arr = get_array(token, split_it);
 	if (!arr)
 	{

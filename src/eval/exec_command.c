@@ -32,7 +32,6 @@ void	exec_command(t_astnode *head, t_data *data)
 	args = build_args(head);
 	path_env = env_get_bykey(data->env, "PATH");
 	path = get_path(path_env, head->literal, data);
-	increment_shlvl(&data->env);
 	env_add(&data->env, "PWD", get_curent_dir());
 	env_add(&data->env, "_", path);
 	envp = env_create_arr(data->env);

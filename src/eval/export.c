@@ -19,7 +19,9 @@ static void	print_allenv(t_data *data)
 	cur = data->env;
 	while (cur)
 	{
-		if (cur->value)
+		if (ft_strcmp(cur->key, "_") == 0)
+			;
+		else if (cur->value)
 			printf("declare -x %s=\"%s\"\n", cur->key, cur->value);
 		else
 			printf("declare -x %s\n", cur->key);

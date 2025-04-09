@@ -41,6 +41,8 @@ void	lex_env(t_lexer *l, bool to_split)
 	value = env_get_value(l->data->env, key);
 	if (!value)
 		append_advance(l, NULL, ft_strlen(key) + 1, WORD);
+	else if (!*value)
+		append_advance(l, ft_strdup(""), ft_strlen(key) + 1, WORD);
 	else if (!to_split)
 		append_advance(l, ft_strdup(value), ft_strlen(key) + 1, WORD);
 	else
