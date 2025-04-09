@@ -57,16 +57,16 @@ static bool	process_export_arg(char *arg, t_data *data)
 		if (!is_valid_identifier(arg))
 		{
 			*equal_sign = '=';
-			fprintf(stderr, "export: `%s': not a valid identifier\n", arg);
+			ft_fprintf(STDERR_FILENO, "export: `%s': not a valid identifier\n", arg);
 			return (true);
 		}
 		if (!env_add(&data->env, arg, ft_strdup(equal_sign + 1)))
-			fprintf(stderr, "export: failed to add/update variable: %s\n", arg);
+			ft_fprintf(STDERR_FILENO, "export: failed to add/update variable: %s\n", arg);
 		*equal_sign = '=';
 	}
 	else if (!is_valid_identifier(arg))
 	{
-		fprintf(stderr, "export: `%s': not a valid identifier\n", arg);
+		ft_fprintf(STDERR_FILENO, "export: `%s': not a valid identifier\n", arg);
 		return (true);
 	}
 	return (false);

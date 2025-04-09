@@ -20,7 +20,7 @@ void	exec(t_data *data)
 		return ;
 	eval(data->head, data);
 	if (data->exit_status == 131)
-		fprintf(stderr, "Quit (core dumped)\n");
+		ft_fprintf(STDERR_FILENO, "Quit (core dumped)\n");
 	else if (data->exit_status == 130)
 		write(1, "\n", 1);
 }

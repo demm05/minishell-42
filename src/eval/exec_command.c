@@ -83,9 +83,9 @@ static void	handle_error(char *literal, t_env *path_env, t_data *data)
 	if (!ft_strchr(literal, '/'))
 	{
 		if (!path_env || !path_env->value || !path_env->value[0])
-			fprintf(stderr, "%s: No such file or directory\n", literal);
+			ft_fprintf(STDERR_FILENO, "%s: No such file or directory\n", literal);
 		else
-			fprintf(stderr, "%s: command not found\n", literal);
+			ft_fprintf(STDERR_FILENO, "%s: command not found\n", literal);
 		data->exit_status = 127;
 	}
 	status = free_everything(data);

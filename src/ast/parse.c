@@ -30,7 +30,7 @@ void	create_ast(t_data *data)
 	data->head = parse_sequence(&ptr);
 	if (ptr && ptr->type != EOL)
 	{
-		fprintf(stderr, "failed to create complete ast\n");
+		ft_fprintf(STDERR_FILENO, "failed to create complete ast\n");
 		free_tokens(&ptr->next, 1);
 	}
 	free_tokens(&head, 0);

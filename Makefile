@@ -5,18 +5,14 @@ LDIR				=	libft
 TDIR				=	tests
 NAME				=	minishell
 
-#VPATH				=	$(SDIR):$(SDIR)/parser:$(SDIR)/exec
-
 CC					?=	gcc
 CFLAGS				?=	-g -Wall -Wextra -I$(HDIR)
 MAKE_LIB			=	@make --no-print-directory -C
 DIRS				=	$(sort $(dir $(OBJS)))
-CFLAGS				+=	-Iast/ast.h -Ieva/eval.h -Iextra/extra.h -Ilexer/lexer.h
 
-LIBFT_DIR			=	$(LDIR)/libft
 LIBFT_FILE			=	libft.a
-LIBFT				=	$(LIBFT_DIR)/$(LIBFT_FILE)
-CFLAGS				+=	-I$(LIBFT_DIR)/include
+LIBFT				=	$(LDIR)/$(LIBFT_FILE)
+CFLAGS				+=	-I$(LDIR)/include
 
 SRCS				:=	$(shell find $(SDIR) -name "*.c")
 OBJS				:=	$(patsubst $(SDIR)/%.c,$(ODIR)/%.o, $(SRCS))
@@ -33,7 +29,7 @@ $(DIRS):
 	$(Q)mkdir -p $@
 
 $(LIBFT):
-	$(Q)$(MAKE_LIB) $(LIBFT_DIR)
+	$(Q)$(MAKE_LIB) $(LDIR)
 
 compiledb:
 	@compiledb make -n all > /dev/null 2>&1
@@ -44,7 +40,7 @@ v valgrind: all
 c clean:
 	$(Q)rm -rf $(ODIR)
 	$(Q)rm -rf $(TDIR)/bin
-	$(Q)$(MAKE_LIB) $(LIBFT_DIR) clean
+	$(Q)$(MAKE_LIB) $(LDIR) clean
 	$(ECHO) "Clean is done!"
 
 i init:
@@ -52,7 +48,7 @@ i init:
 
 f fclean: clean
 	$(Q)rm -rf $(NAME)
-	$(Q)$(MAKE_LIB) $(LIBFT_DIR) fclean
+	$(Q)$(MAKE_LIB) $(LDIR) fclean
 
 n norm:
 	@-norminette $(SDIR)

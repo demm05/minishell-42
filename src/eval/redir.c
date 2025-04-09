@@ -87,7 +87,7 @@ static int	get_fd(t_astnode *head, t_data *data)
 	fd = open(cur->literal, set_flags(head->type), 0644);
 	if (fd == -1)
 	{
-		fprintf(stderr, "%s: %s\n", cur->literal, strerror(errno));
+		ft_fprintf(STDERR_FILENO, "%s: %s\n", cur->literal, strerror(errno));
 		data->exit_status = 1;
 	}
 	return (fd);

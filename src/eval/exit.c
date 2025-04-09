@@ -41,14 +41,14 @@ static int	get_status(t_astnode *head, t_data *data)
 		arg = head->literal;
 		if (!is_numeric(arg))
 		{
-			fprintf(stderr, "exit: %s: numeric argument required\n", arg);
+			ft_fprintf(STDERR_FILENO, "exit: %s: numeric argument required\n", arg);
 			return (2);
 		}
 		else
 		{
 			if (head->next)
 			{
-				fprintf(stderr, "exit: too many arguments\n");
+				ft_fprintf(STDERR_FILENO, "exit: too many arguments\n");
 				return (1);
 			}
 			else

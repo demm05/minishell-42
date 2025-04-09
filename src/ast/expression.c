@@ -81,7 +81,8 @@ t_astnode	*parse_paren(t_token **token)
 		}
 		else
 		{
-			fprintf(stderr, "Unexpected error\n");
+			ft_fprintf(STDERR_FILENO, "Unexpected error\n");
+			free_ast(&head);
 			exit(127);
 		}
 	}

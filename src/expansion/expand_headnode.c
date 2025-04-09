@@ -68,7 +68,7 @@ void	do_path(t_astnode *head, t_data *data)
 		return ;
 	if (s[1])
 	{
-		fprintf(stderr, "%s: ambiguous redirect\n", head->literal);
+		ft_fprintf(STDERR_FILENO, "%s: ambiguous redirect\n", head->literal);
 		i = 0;
 		while (s[i])
 			free(s[i++]);

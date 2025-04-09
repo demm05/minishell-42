@@ -29,7 +29,7 @@ bool	handle_cd(t_astnode *head, t_data *data)
 		return (1);
 	if (head->childs > 1)
 	{
-		fprintf(stderr, "cd: too many arguments\n");
+		ft_fprintf(STDERR_FILENO, "cd: too many arguments\n");
 		data->exit_status = 1;
 		return (1);
 	}
@@ -68,7 +68,7 @@ static bool	validate_env_vars(t_env **pwd, t_env **old_pwd, t_data *data)
 				ft_strdup("OLDPWD"), get_curent_dir());
 	if (!*pwd || !*old_pwd)
 	{
-		fprintf(stderr, "cd: failed to set up environment variables\n");
+		ft_fprintf(STDERR_FILENO, "cd: failed to set up environment variables\n");
 		data->exit_status = 1;
 		return (false);
 	}
@@ -128,7 +128,7 @@ static bool	perform_chdir(char *path, t_data *data)
 {
 	if (chdir(path) != 0)
 	{
-		fprintf(stderr, "cd: %s: %s\n", path, strerror(errno));
+		ft_fprintf(STDERR_FILENO, "cd: %s: %s\n", path, strerror(errno));
 		data->exit_status = 1;
 		return (0);
 	}

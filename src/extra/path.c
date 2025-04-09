@@ -19,19 +19,19 @@ static char	*check_explicit_path(char *literal, t_data *data)
 
 	if (access(literal, F_OK) != 0)
 	{
-		fprintf(stderr, "%s: No such file or directory\n", literal);
+		ft_fprintf(STDERR_FILENO, "%s: No such file or directory\n", literal);
 		data->exit_status = 127;
 		return (NULL);
 	}
 	if (stat(literal, &st) == 0 && S_ISDIR(st.st_mode))
 	{
-		fprintf(stderr, "%s: Is a directory\n", literal);
+		ft_fprintf(STDERR_FILENO, "%s: Is a directory\n", literal);
 		data->exit_status = 126;
 		return (NULL);
 	}
 	if (access(literal, X_OK) != 0)
 	{
-		fprintf(stderr, "%s: Permission denied\n", literal);
+		ft_fprintf(STDERR_FILENO, "%s: Permission denied\n", literal);
 		data->exit_status = 126;
 		return (NULL);
 	}

@@ -77,7 +77,7 @@ static t_astnode	*new_redirection(t_token **token, t_astnode *head)
 	*token = (*token)->next;
 	if (!*token)
 	{
-		fprintf(stderr, "THERE SHOULDN'T be syntax erro\n");
+		ft_fprintf(STDERR_FILENO, "THERE SHOULDN'T be syntax erro\n");
 		exit(127);
 	}
 	path = new_astnode(*token);

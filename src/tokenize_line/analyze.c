@@ -40,7 +40,7 @@ bool	analyze_tokens(t_data *data, t_token *head)
 	{
 		if (head->type == ILLEGAL)
 		{
-			fprintf(stderr, "syntax error: unexpected end of file\n");
+			ft_fprintf(STDERR_FILENO, "syntax error: unexpected end of file\n");
 			return (1);
 		}
 		else if (head->type == HERE_DOC && aheredoc(data, &head))
@@ -50,7 +50,7 @@ bool	analyze_tokens(t_data *data, t_token *head)
 		head = head->next;
 	}
 	if (head)
-		fprintf(stderr, "syntax error near unexpected token %s\n",
+		ft_fprintf(STDERR_FILENO, "syntax error near unexpected token %s\n",
 			decode(head->type));
 	return (head != NULL);
 }

@@ -99,7 +99,7 @@ t_tmp	*tmp_alloc(void)
 	}
 	if (!t->tmpdir)
 	{
-		fprintf(stderr, "heredoc: failed to set location for tmpdir");
+		ft_fprintf(STDERR_FILENO, "heredoc: failed to set location for tmpdir");
 		free(t);
 		return (NULL);
 	}
