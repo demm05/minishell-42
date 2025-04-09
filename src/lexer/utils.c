@@ -57,8 +57,3 @@ bool	match(t_token *token, t_token_type expected[], int size)
 	}
 	return (0);
 }
-
-bool	is_redir(t_token_type t)
-{
-	return (t == REDIR_OUT || t == REDIR_OUT_A || t == REDIR_IN || t == HERE_DOC);
-}

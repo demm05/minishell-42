@@ -15,7 +15,7 @@
 
 # include "minishell.h"
 
-typedef struct	s_read_state
+typedef struct s_read_state
 {
 	char	*line;
 	char	*cont;

@@ -24,7 +24,7 @@ void	interactive_read(t_data *data)
 		data->line = mini_readline(data->prompt, 1);
 		if (get_signal() == SIGINT)
 		{
-    		set_signal(0);
+			set_signal(0);
 			data->exit_status = 130;
 			continue ;
 		}

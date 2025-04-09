@@ -12,9 +12,9 @@
 
 #include "expansion_private.h"
 
-void				lex_wildcard(t_lexer *l);
-void				lex_word(t_lexer *l);
-static inline int	private_env_tes(const char *s, t_lexer *l);
+void		lex_wildcard(t_lexer *l);
+void		lex_word(t_lexer *l);
+static int	private_env_tes(const char *s, t_lexer *l);
 
 t_token	*word_generate_tokens(char *line, t_data *data)
 {
@@ -82,7 +82,7 @@ void	lex_word(t_lexer *l)
 		append_alloc(l, WORD, i);
 }
 
-static inline int	private_env_tes(const char *s, t_lexer *l)
+static int	private_env_tes(const char *s, t_lexer *l)
 {
 	if (!s || *s != '$')
 		return (0);

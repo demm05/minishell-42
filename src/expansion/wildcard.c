@@ -42,30 +42,7 @@ bool	match_pattern(t_token *pattern, char *target)
 	return (false);
 }
 
-int	get_size(t_token **arr, char **targets)
-{
-	int	i;
-	int	j;
-	int	size;
-
-	i = 0;
-	size = 0;
-	while (arr[i])
-	{
-		if (is_there_wildcard(arr[i]))
-		{
-			j = 0;
-			while (targets[j])
-				if (match_pattern(arr[i], targets[j++]))
-					size++;
-		}
-		size++;
-		i++;
-	}
-	return (size);
-}
-
-int	expand_wildcard(t_token *pattern, t_token **res, char **targets)
+static int	expand_wildcard(t_token *pattern, t_token **res, char **targets)
 {
 	int	i;
 	int	j;
@@ -74,10 +51,12 @@ int	expand_wildcard(t_token *pattern, t_token **res, char **targets)
 	j = 0;
 	while (targets[j])
 	{
-		if (pattern->literal && pattern->literal[0] != '.' && targets[j][0] == '.')
+		if (pattern->literal && pattern->literal[0] != '.' && \
+			targets[j][0] == '.')
 			;
 		else if (match_pattern(pattern, targets[j]))
-			res[i++] = new_token(WORD, ft_strdup(targets[j]), ft_strlen(targets[j]));
+			res[i++] = new_token(WORD, ft_strdup(targets[j]),
+					ft_strlen(targets[j]));
 		j++;
 	}
 	if (!i)
@@ -87,22 +66,11 @@ int	expand_wildcard(t_token *pattern, t_token **res, char **targets)
 	return (i);
 }
 
-t_token **wildcard_it(t_token **arr)
+static void	process_tokens(t_token **arr, t_token **res, char **targets)
 {
-	char	**targets;
-	t_token	**res;
-	int		i;
-	int		j;
+	int	i;
+	int	j;
 
-	if (!arr)
-		return (NULL);
-	targets = dir_get_content_list(".");
-	res = malloc(sizeof(t_token *) * (get_size(arr, targets) + 1));
-	if (!res)
-	{
-		dir_free_list(targets);
-		return (NULL);
-	}
 	i = -1;
 	j = 0;
 	while (arr[++i])
@@ -113,18 +81,20 @@ t_token **wildcard_it(t_token **arr)
 			res[j++] = arr[i];
 	}
 	res[j] = 0;
+}
+
+t_token	**wildcard_it(t_token **arr)
+{
+	char	**targets;
+	t_token	**res;
+
+	if (!arr)
+		return (NULL);
+	init_wildcards(arr, &targets, &res);
+	if (!res)
+		return (NULL);
+	process_tokens(arr, res, targets);
 	dir_free_list(targets);
 	free(arr);
 	return (res);
-}
-
-bool	is_there_wildcard(t_token *head)
-{
-	while (head)
-	{
-		if (head->type == WILDCARD)
-			return (true);
-		head = head->next;
-	}
-	return (false);
 }

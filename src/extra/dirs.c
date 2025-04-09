@@ -31,10 +31,11 @@ static inline int	dir_get_content_size(char *pwd)
 		return (0);
 	}
 	count = 0;
-	while ((entry = readdir(dir)) != NULL)
+	while (1)
 	{
-		//if (ft_strcmp(entry->d_name, "..") == 0 || ft_strcmp(entry->d_name, ".") == 0)
-		//	continue ;
+		entry = readdir(dir);
+		if (entry == NULL)
+			break ;
 		count++;
 	}
 	closedir(dir);
@@ -56,10 +57,11 @@ char	**dir_get_content_list(char *pwd)
 		return (NULL);
 	dir = opendir(pwd);
 	i = 0;
-	while ((entry = readdir(dir)) != NULL)
+	while (1)
 	{
-		//if (ft_strcmp(entry->d_name, "..") == 0 || ft_strcmp(entry->d_name, ".") == 0)
-		//	continue ;
+		entry = readdir(dir);
+		if (entry == NULL)
+			break ;
 		res[i++] = ft_strdup(entry->d_name);
 	}
 	res[i] = NULL;

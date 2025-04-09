@@ -15,8 +15,8 @@
 #include <errno.h>
 #include <string.h>
 
-static inline bool	do_redir(t_astnode *head, t_data *data, int target, int fd);
-static inline int	get_fd(t_astnode *head, t_data *data);
+static bool	do_redir(t_astnode *head, t_data *data, int target, int fd);
+static int	get_fd(t_astnode *head, t_data *data);
 
 bool	handle_redir(t_astnode *head, t_data *data)
 {
@@ -47,7 +47,7 @@ bool	handle_redir(t_astnode *head, t_data *data)
 	return (status);
 }
 
-static inline bool	do_redir(t_astnode *head, t_data *data, int target, int fd)
+static bool	do_redir(t_astnode *head, t_data *data, int target, int fd)
 {
 	t_astnode	*to_eval;
 
@@ -61,7 +61,7 @@ static inline bool	do_redir(t_astnode *head, t_data *data, int target, int fd)
 	return (0);
 }
 
-static inline int	set_flags(t_token_type type)
+static int	set_flags(t_token_type type)
 {
 	if (type == REDIR_OUT_A)
 		return (O_WRONLY | O_CREAT | O_APPEND);
@@ -72,7 +72,7 @@ static inline int	set_flags(t_token_type type)
 	return (0);
 }
 
-static inline int	get_fd(t_astnode *head, t_data *data)
+static int	get_fd(t_astnode *head, t_data *data)
 {
 	int			fd;
 	t_astnode	*cur;

@@ -118,7 +118,8 @@ t_token	*append_alloc(t_lexer *l, t_token_type type, int size);
  * @param type The type of the token to create
  * @return int 0 on success, 1 on error
  */
-t_token	*append_advance(t_lexer *l, char *literal, unsigned int advance, t_token_type type);
+t_token	*append_advance(t_lexer *l, char *literal,
+			unsigned int advance, t_token_type type);
 
 /**@brief Reads the next character from the input.
  * Updates internal pointers and the current character (`ch`).

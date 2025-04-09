@@ -13,7 +13,7 @@
 #include "expansion_private.h"
 #include <stdio.h>
 
-void	split_env_add_token(t_lexer *l, char *key, char *value);
+void		split_env_add_token(t_lexer *l, char *key, char *value);
 static void	add_tokens_to_the_list(t_lexer *l, char *key, char **s, int size);
 
 bool	is_valid_envv(const char *s)
@@ -79,7 +79,8 @@ static void	add_tokens_to_the_list(t_lexer *l, char *value, char **s, int size)
 		if (s[++i])
 			append_advance(l, NULL, 0, SSPACE);
 	}
-	if (size > 0 && !(l->tokens && l->tokens->prev->type == SSPACE) &&  ft_isspace(value[size - 1]))
+	if (size > 0 && !(l->tokens && l->tokens->prev->type == SSPACE) && \
+		ft_isspace(value[size - 1]))
 		append_advance(l, NULL, 0, SSPACE);
 	free(s);
 }

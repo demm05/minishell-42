@@ -50,7 +50,8 @@ static inline void	enter_heredoc(t_data *data, char *del, int fd)
 	{
 		line = mini_readline("> ", 0);
 		if (!line && get_signal() != SIGINT)
-			fprintf(stderr, "warning: here-document delimeted by end-of-file (wanted `%s')\n", del);
+			fprintf(stderr, "warning: here-document delimeted by "
+				"end-of-file (wanted `%s')\n", del);
 		if (!line)
 			break ;
 		if (!ft_strcmp(del, line))
