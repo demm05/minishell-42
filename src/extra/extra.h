@@ -53,5 +53,6 @@ int		free_everything(t_data *data);
 char	*get_path(t_env *env, char *literal, t_data *data);
 char	**dir_get_content_list(char *pwd);
 void	dir_free_list(char **l);
+void	update_prompt(t_data *data);
 
 #endif

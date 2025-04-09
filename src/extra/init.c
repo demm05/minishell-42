@@ -25,7 +25,7 @@ t_data	*init(char **argv, char **envp)
 	}
 	data->env = env_init(argv, envp);
 	data->tmp = tmp_alloc();
-	data->prompt = "Prompt > ";
+	data->prompt = NULL;
 	return (data);
 }
 
@@ -44,6 +44,11 @@ int	free_everything(t_data *data)
 		free(data->tmp->files);
 		free(data->tmp->tmpdir);
 		free(data->tmp);
+	}
+	if (data->prompt)
+	{
+		free(data->prompt);
+		data->prompt = NULL;
 	}
 	rl_clear_history();
 	free(data->line);
