@@ -15,7 +15,11 @@
 
 # include "minishell.h"
 
-typedef struct s_read_state
+# define RED "\033[1;31m"
+# define GREEN "\033[1;32m"
+# define RESET "\033[0m"
+
+typedef struct	s_read_state
 {
 	char	*line;
 	char	*cont;

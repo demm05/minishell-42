@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./extra_private.h"
+#include "extra_private.h"
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <signal.h>
@@ -19,6 +19,10 @@ static inline bool	is_empty(char *line);
 
 void	interactive_read(t_data *data)
 {
+	bool	updated;
+
+	updated = 0;
+	update_prompt(data);
 	while (1)
 	{
 		data->line = mini_readline(data->prompt, 1);
@@ -26,6 +30,9 @@ void	interactive_read(t_data *data)
 		{
 			set_signal(0);
 			data->exit_status = 130;
+			if (!updated)
+				update_prompt(data);
+			updated = 1;
 			continue ;
 		}
 		else if (!data->line)
