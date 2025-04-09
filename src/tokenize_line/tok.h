@@ -13,7 +13,7 @@
 #ifndef TOK_H 
 # define TOK_H 
 
-#include "../lexer/lexer.h"
+# include "../lexer/lexer.h"
 
 t_token	*generate_tokens(char *line);
 bool	analyze_tokens(t_data *data, t_token *head);

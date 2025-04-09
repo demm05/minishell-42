@@ -24,6 +24,11 @@ char			**join_tokens(t_token **head);
 void			lex_env(t_lexer *l, bool to_split);
 void			lex_quote(t_lexer *l);
 bool			is_valid_envv(const char *s);
-t_token 		**wildcard_it(t_token **arr);
+t_token			**wildcard_it(t_token **arr);
+bool			match_pattern(t_token *pattern, char *target);
+void			init_wildcards(t_token **arr, char ***targets, t_token ***res);
+bool			is_there_wildcard(t_token *head);
+void			_handle_exec(t_astnode *head, t_data *data);
+void			do_child(t_astnode *head, t_astnode *cur, t_data *data);
 
 #endif

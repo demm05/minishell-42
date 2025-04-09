@@ -20,6 +20,8 @@ t_astnode	*parse_sequence(t_token **token)
 	if (head && *token && (*token)->type == SEQUENCE)
 	{
 		*token = (*token)->next;
+		if (!(*token) || (*token)->type == EOL)
+			return (head);
 		head->next = parse_sequence(token);
 	}
 	return (head);

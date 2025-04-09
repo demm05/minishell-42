@@ -63,6 +63,8 @@ static bool	is_basic(t_token *head)
 		return (1);
 	if (!head->next || !head->next->next)
 		return (1);
+	if (head->next->type == SEQUENCE)
+		return (1);
 	return (0);
 }
 
@@ -87,7 +89,8 @@ static bool	is_paran(t_token **head, int *paren)
 		prev = (*head)->prev;
 	if ((*head)->type == LPAREN)
 	{
-		if (prev && prev->type != OR && prev->type != AND && prev->type != PIPE)
+		if (prev && prev->type != OR && prev->type != AND && prev->type != PIPE
+			&& prev->type != LPAREN)
 			return (1);
 		*paren += 1;
 	}
@@ -95,7 +98,7 @@ static bool	is_paran(t_token **head, int *paren)
 	{
 		if ((prev && prev->type == LPAREN) || *paren < 1)
 			return (1);
-		*paren += 1;
+		*paren -= 1;
 	}
 	return (0);
 }

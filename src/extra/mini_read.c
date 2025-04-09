@@ -15,10 +15,10 @@
 #include <readline/readline.h>
 #include <sys/ioctl.h>
 
-static inline bool	is_there_missing_char(t_read_state *state);
+static inline bool	is_there_missing_char(t_read_state *state, char *line);
 static inline void	print_eol_error(t_read_state *state);
 
-static void signal_handler(int signo)
+static void	signal_handler(int signo)
 {
 	rl_done = 1;
 	rl_erase_empty_line = 1;
@@ -33,9 +33,6 @@ char	*mini_readline(char *prompt, bool complete_state)
 	t_read_state	st;
 	char			*temp;
 
-	// TODO: remoeve when we will sumbit this is for big tester
-	if (!isatty(fileno(stdin)))
-		return (get_next_line(fileno(stdin)));
 	signal(SIGINT, signal_handler);
 	ft_bzero(&st, sizeof(t_read_state));
 	while (1)
@@ -47,7 +44,7 @@ char	*mini_readline(char *prompt, bool complete_state)
 		temp = join_strings(3, st.line, "\n", st.cont);
 		free(st.line);
 		st.line = temp;
-		if (!is_there_missing_char(&st))
+		if (!is_there_missing_char(&st, st.cont))
 			break ;
 		prompt = "> ";
 	}
@@ -60,12 +57,10 @@ char	*mini_readline(char *prompt, bool complete_state)
 	return (st.line);
 }
 
-static inline bool	is_there_missing_char(t_read_state *state)
+static inline bool	is_there_missing_char(t_read_state *state, char *line)
 {
 	int				i;
-	char			*line;
 
-	line = state->cont;
 	if (!line)
 		return (0);
 	i = -1;

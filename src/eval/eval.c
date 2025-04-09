@@ -76,7 +76,7 @@ bool	eval(t_astnode *head, t_data *data)
  *         pointer is of type `builtin_func_ptr`, which is presumably defined
  *         elsewhere as `bool (*builtin_func_ptr)(t_astnode *, t_data *)`.
  */
-t_builtin_func_ptr is_built_in(t_token_type type)
+t_builtin_func_ptr	is_built_in(t_token_type type)
 {
 	if (type == ECHO)
 		return (handle_echo);

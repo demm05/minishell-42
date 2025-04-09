@@ -22,7 +22,7 @@ t_token	*new_token(t_token_type type, char *s, unsigned int s_size)
 	if (!tok)
 		return (NULL);
 	tok->type = type;
-	tok->literal = s; 
+	tok->literal = s;
 	tok->size = s_size;
 	return (tok);
 }
@@ -31,7 +31,7 @@ t_token	*new_token(t_token_type type, char *s, unsigned int s_size)
  * @brief Appends a token to the lexer's token list
  *
  * This function adds a new token to the circular doubly linked list of tokens
- * in the lexer. If the token list is empty, the new token becomes the first token
+ * in lexer. If the token list is empty, the new token becomes the first token
  * and points to itself in prev. Otherwise, the token is inserted at the end of
  * the list, maintaining the circular structure.
  *
@@ -60,16 +60,15 @@ t_token	*append_token(t_lexer *l, t_token *new)
 }
 
 /**
- * @brief Creates a token with allocated memory for its literal value and appends it to the lexer
+ * @brief Appends a token to the lexer's token list
  *
- * This function allocates a buffer of the specified size, copies characters from the
- * lexer's current position into the buffer, creates a new token with this buffer as
- * its literal value, advances the lexer's position, and appends the token to the lexer.
+ * Adds a new token to the circular doubly linked list. If the list is empty,
+ * the new token becomes the first and points to itself. Otherwise, it's
+ * inserted at the end, maintaining the circular structure.
  *
  * @param l Pointer to the lexer
- * @param type The type of the token to create
- * @param size The size of memory to allocate for the token's literal value
- * @return int 0 on success, 1 if lexer is NULL, memory allocation fails, or token creation fails
+ * @param new Token to append
+ * @return int 0 on success, 1 if lexer is NULL, 0 if new token is NULL
  */
 t_token	*append_alloc(t_lexer *l, t_token_type type, int size)
 {
@@ -100,16 +99,18 @@ t_token	*append_alloc(t_lexer *l, t_token_type type, int size)
  * @brief Creates a token with the given literal and advances the lexer position
  *
  * This function creates a new token with the provided literal and type, advances
- * the lexer by the specified number of positions, and appends the token to the lexer.
- * If the literal is NULL, its size is treated as 0.
+ * the lexer by the specified number of positions, and appends the token to the 
+ * lexer. If the literal is NULL, its size is treated as 0.
  *
  * @param l Pointer to the lexer
  * @param literal The literal string value for the token (will be freed on error)
  * @param advance Number of positions to advance the lexer
  * @param type The type of the token to create
- * @return int 0 on success, 1 if lexer is NULL, memory allocation fails, or token creation fails
+ * @return int 0 on success, 1 if lexer is NULL, memory allocation fails, or
+ *         token creation fails
  */
-t_token	*append_advance(t_lexer *l, char *literal, unsigned int advance, t_token_type type)
+t_token	*append_advance(t_lexer *l, char *literal,
+						unsigned int advance, t_token_type type)
 {
 	t_token			*new;
 	unsigned int	size;

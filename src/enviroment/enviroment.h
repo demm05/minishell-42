@@ -92,6 +92,6 @@ void	env_arr_free(char **arr);
  *
  * @param shlvl Pointer to the SHLVL environment variable
  */
-void	increment_shlvl(t_env **head);
+void	increment_shlvl(t_env *shlvl);
 
 #endif

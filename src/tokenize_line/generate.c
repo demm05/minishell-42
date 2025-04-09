@@ -16,7 +16,7 @@ bool	is_fixed_type(t_lexer *l);
 
 t_token	*generate_tokens(char *line)
 {
-	t_lexer l;
+	t_lexer	l;
 
 	ft_bzero(&l, sizeof(t_lexer));
 	l.input = line;

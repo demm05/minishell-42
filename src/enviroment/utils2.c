@@ -72,3 +72,16 @@ char	**env_create_arr(t_env *env)
 	envp[size] = NULL;
 	return (envp);
 }
+
+int	env_getsize(t_env *env)
+{
+	int	size;
+
+	size = 0;
+	while (env)
+	{
+		size++;
+		env = env->next;
+	}
+	return (size);
+}

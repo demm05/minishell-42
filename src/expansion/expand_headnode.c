@@ -12,10 +12,9 @@
 
 #include "expansion_private.h"
 
-void				do_path(t_astnode *head, t_data *data);
-void				do_exec(t_astnode *head, t_data *data);
-void				do_child(t_astnode *head, t_astnode *cur, t_data *data);
-static inline void	_handle_exec(t_astnode *head, t_data *data);
+void		do_path(t_astnode *head, t_data *data);
+void		do_exec(t_astnode *head, t_data *data);
+void		do_child(t_astnode *head, t_astnode *cur, t_data *data);
 
 void	expand_head(t_astnode *head, t_data *data)
 {
@@ -30,65 +29,6 @@ void	expand_head(t_astnode *head, t_data *data)
 	}
 	else if (head->type == EXEC)
 		_handle_exec(head, data);
-}
-
-static inline void	_handle_exec(t_astnode *head, t_data *data)
-{
-	t_astnode	*cur;
-	t_astnode	*next;
-
-	cur = head->children;
-	do_exec(head, data);
-	while (cur)
-	{
-		next = cur->next;
-		if (cur->type == WORD)
-			do_child(head->children, cur, data);
-		cur = next;
-	}
-	if (head->children && (!head->literal || !*head->literal))
-	{
-		while (head->children)
-		{
-			if (head->children->literal && *head->children->literal)
-			{
-				free(head->literal);
-				head->literal = head->children->literal;
-				head->children->literal = NULL;
-				ast_delete_first_child(head);
-				break ;
-			}
-			ast_delete_first_child(head);
-		}
-	}
-	head->childs = ast_get_size(head->children);
-}
-
-void	do_exec(t_astnode *head, t_data *data)
-{
-	t_astnode	*new;
-	t_astnode	*old_last;
-	char		**s;
-
-	s = expand_word(head, data, 1);
-	if (!s)
-		return ;
-	free(head->literal);
-	head->literal = *s;
-	head->type = get_exec_type(head->literal);
-	new = create_nodes(s + 1);
-	free(s);
-	if (!new)
-		return ;
-	if (!head->children)
-	{
-		head->children = new;
-		return ;
-	}
-	new->prev->next = head->children;
-	old_last = head->children->prev;
-	head->children = new;
-	head->children->prev = old_last;
 }
 
 void	do_child(t_astnode *head, t_astnode *cur, t_data *data)
@@ -113,7 +53,7 @@ void	do_child(t_astnode *head, t_astnode *cur, t_data *data)
 		head->prev = new_last;
 	else if (next)
 		next->prev = new_last;
-	new_last->next = next;	
+	new_last->next = next;
 	cur->next = new;
 	new->prev = cur;
 }
