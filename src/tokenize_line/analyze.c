@@ -63,6 +63,8 @@ static bool	is_basic(t_token *head)
 		return (1);
 	if (!head->next || !head->next->next)
 		return (1);
+	if (head->next->type == SEQUENCE)
+		return (1);
 	return (0);
 }
 
