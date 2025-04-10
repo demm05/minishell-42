@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "extra.h"
 #include "extra_private.h"
 #include <readline/readline.h>
 
@@ -25,6 +26,11 @@ t_data	*init(char **argv, char **envp)
 	}
 	data->env = env_init(argv, envp);
 	data->tmp = tmp_alloc();
+	if (!data->tmp)
+	{
+		free_everything(data);
+		return (NULL);
+	}
 	update_prompt(data);
 	return (data);
 }

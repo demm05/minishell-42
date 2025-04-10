@@ -41,7 +41,8 @@ static int	get_status(t_astnode *head, t_data *data)
 		arg = head->literal;
 		if (!is_numeric(arg))
 		{
-			ft_fprintf(STDERR_FILENO, "exit: %s: numeric argument required\n", arg);
+			ft_fprintf(STDERR_FILENO, "exit: %s: numeric "
+				"argument required\n", arg);
 			return (2);
 		}
 		else

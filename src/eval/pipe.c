@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./eval_private.h"
+#include "eval_private.h"
 #include <sys/types.h>
 #include <sys/wait.h>
 
@@ -35,7 +35,7 @@ int	fork_it(t_astnode *head, t_data *data, bool id, int pipefd[2])
 		exec_command(head, data);
 	else
 		eval(head, data);
-	exit(data->exit_status);
+	exit(free_everything(data));
 }
 
 int	get_final_status(int status[2])

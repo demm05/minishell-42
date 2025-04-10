@@ -33,8 +33,6 @@ char	*mini_readline(char *prompt, bool complete_state)
 	t_read_state	st;
 	char			*temp;
 
-	if (!isatty(fileno(stdin)))
-		return (get_next_line(fileno(stdin)));
 	signal(SIGINT, signal_handler);
 	ft_bzero(&st, sizeof(t_read_state));
 	while (1)
@@ -90,9 +88,12 @@ static inline bool	is_there_missing_char(t_read_state *state, char *line)
 static inline void	print_eol_error(t_read_state *state)
 {
 	if (state->in_dquote)
-		ft_fprintf(STDERR_FILENO, "unexpected EOF while looking for matching '\"'\n");
+		ft_fprintf(STDERR_FILENO, "unexpected EOF "
+			"while looking for matching '\"'\n");
 	else if (state->in_squote)
-		ft_fprintf(STDERR_FILENO, "unexpected EOF while looking for matching '''\n");
+		ft_fprintf(STDERR_FILENO, "unexpected EOF "
+			"while looking for matching '''\n");
 	else if (state->in_parentheses)
-		ft_fprintf(STDERR_FILENO, "unexpected EOF while looking for matching ')'\n");
+		ft_fprintf(STDERR_FILENO, "unexpected EOF "
+			"while looking for matching ')'\n");
 }

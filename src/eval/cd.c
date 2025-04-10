@@ -68,7 +68,8 @@ static bool	validate_env_vars(t_env **pwd, t_env **old_pwd, t_data *data)
 				ft_strdup("OLDPWD"), get_curent_dir());
 	if (!*pwd || !*old_pwd)
 	{
-		ft_fprintf(STDERR_FILENO, "cd: failed to set up environment variables\n");
+		ft_fprintf(STDERR_FILENO, "cd: failed to "
+			"set up environment variables\n");
 		data->exit_status = 1;
 		return (false);
 	}

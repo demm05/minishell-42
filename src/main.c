@@ -31,6 +31,8 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	data = init(argv, envp);
+	if (!data)
+		return (0);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{

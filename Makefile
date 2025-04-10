@@ -5,8 +5,8 @@ LDIR				=	libft
 TDIR				=	tests
 NAME				=	minishell
 
-CC					?=	gcc
-CFLAGS				?=	-g -Wall -Wextra -I$(HDIR)
+CC					=	gcc
+CFLAGS				=	-g -Werror -Wall -Wextra -I$(HDIR)
 MAKE_LIB			=	@make --no-print-directory -C
 DIRS				=	$(sort $(dir $(OBJS)))
 
@@ -34,7 +34,7 @@ $(LIBFT):
 compiledb:
 	@compiledb make -n all > /dev/null 2>&1
 
-v valgrind: all
+v valgrind: all inc/rl.supp
 	valgrind --suppressions=inc/rl.supp --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes ./$(NAME)
 
 c clean:
@@ -61,7 +61,10 @@ r run: $(NAME)
 	@clear
 	$(Q)./$(NAME)
 
-.PHONY: all clean fclean re test n norm 
+inc/rl.supp:
+	@echo "{\nreadline_all\nMemcheck:Leak\n...\nobj:*/libreadline.so*\n}" > $@
+
+.PHONY: all clean fclean re test n norm v r
 
 ifeq ($(V),2)
     Q =

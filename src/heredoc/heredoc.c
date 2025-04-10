@@ -33,8 +33,10 @@ char	*heredoc(t_data *data, char *del)
 	}
 	enter_heredoc(data, del, fd);
 	close(fd);
+	data->exit_status = 0;
 	if (get_signal() != SIGINT)
 		return (filename);
+	data->exit_status = 130;
 	free(filename);
 	set_signal(0);
 	return (NULL);

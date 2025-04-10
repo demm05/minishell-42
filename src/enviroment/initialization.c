@@ -59,7 +59,8 @@ void	increment_shlvl(t_env *shlvl)
 		lvl = 0;
 	else if (lvl >= 999)
 	{
-		ft_fprintf(STDERR_FILENO, "warning: shell level too high, reseting to 1\n");
+		ft_fprintf(STDERR_FILENO, "warning: shell level "
+			"too high, reseting to 1\n");
 		lvl = 1;
 	}
 	else if (*s)

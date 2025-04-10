@@ -5,3 +5,4 @@ minishell
 obj
 tests/bin
 inc/criterion
+inc/rl.supp
