@@ -31,7 +31,7 @@ static int	process_character(t_lexer *l, const char **s, int *i, bool *escape)
 		*s = l->input + l->position;
 		*i = 0;
 	}
-	else if ((*s)[*i] == '\\')
+	else if ((*s)[*i] == '\\' && ((*s)[*i] == '"' || (*s)[*i] == '$'))
 		*escape = !(*escape);
 	else if ((*s)[*i] == '"')
 		return (1);
