@@ -76,7 +76,7 @@ static void	process_tokens(t_token **arr, t_token **res, char **targets)
 	while (arr[++i])
 	{
 		if (is_there_wildcard(arr[i]))
-			j += expand_wildcard(arr[i], res, targets);
+			j += expand_wildcard(arr[i], res + j, targets);
 		else
 			res[j++] = arr[i];
 	}
