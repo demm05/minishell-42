@@ -15,9 +15,9 @@
 
 # include "minishell.h"
 
-# define RED "\033[1;31m"
-# define GREEN "\033[1;32m"
-# define RESET "\033[0m"
+# define RED "\001\033[1;31m\002"
+# define GREEN "\001\033[1;32m\002"
+# define RESET "\001\033[0m\002"
 
 typedef struct s_read_state
 {
