@@ -27,6 +27,7 @@ void	exec_command(t_astnode *head, t_data *data)
 
 	if (!*head->literal)
 		exit(0);
+	data->is_child_proc = 1;
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	args = build_args(head);

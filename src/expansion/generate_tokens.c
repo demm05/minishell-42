@@ -34,7 +34,7 @@ t_token	*word_generate_tokens(char *line, t_data *data)
 			lex_wildcard(&l);
 		else if (private_env_tes(l.input + l.position, &l))
 			lex_env(&l, 1);
-		else if (l.ch == '~')
+		else if (l.ch == '~' && (!peek_char(&l) || peek_char(&l) == '/'))
 			expand_home(&l);
 		else
 			lex_word(&l);
@@ -73,10 +73,10 @@ void	lex_word(t_lexer *l)
 	int			i;
 	bool		escape;
 
-	i = 0;
+	i = -1;
 	escape = 0;
 	s = l->input + l->position;
-	while (s[i])
+	while (s[++i])
 	{
 		if (escape)
 		{
@@ -88,9 +88,9 @@ void	lex_word(t_lexer *l)
 		else if (s[i] == '\\')
 			escape = !escape;
 		else if (s[i] == '\'' || s[i] == '"' || s[i] == '*' || \
-				private_env_tes(s + i, l) || s[i] == '~')
+				private_env_tes(s + i, l) || (s[i] == '~' && \
+				(!s[i + 1] || s[i + 1] == '/')))
 			break ;
-		i++;
 	}
 	if (i)
 		append_alloc(l, WORD, i);

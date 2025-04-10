@@ -26,6 +26,7 @@ int	fork_it(t_astnode *head, t_data *data, bool id, int pipefd[2])
 		close(pipefd[1]);
 		return (-1);
 	}
+	data->is_child_proc = 1;
 	if (pid != 0)
 		return (pid);
 	close(pipefd[id]);

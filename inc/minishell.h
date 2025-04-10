@@ -39,6 +39,7 @@ typedef struct s_data
 	t_env					*env;
 	t_tmp					*tmp;
 	int						exit_status;
+	bool					is_child_proc;
 }	t_data;
 
 #endif

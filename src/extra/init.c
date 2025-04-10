@@ -46,7 +46,8 @@ int	free_everything(t_data *data)
 		env_free(&data->env);
 	if (data->tmp)
 	{
-		tmp_del(data->tmp);
+		if (!data->is_child_proc)
+			tmp_del(data->tmp);
 		free(data->tmp->files);
 		free(data->tmp->tmpdir);
 		free(data->tmp);

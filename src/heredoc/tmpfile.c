@@ -71,7 +71,7 @@ void	tmp_del(t_tmp *t)
 	while (i < t->file_count)
 	{
 		file = hash_key(t->tmpdir, t->files[i]);
-		if (unlink(file))
+		if (access(file, F_OK) == 0 && unlink(file))
 			perror("unlink");
 		free(file);
 		i++;

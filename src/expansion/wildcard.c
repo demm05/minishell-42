@@ -14,10 +14,20 @@
 
 bool	is_there_wildcard(t_token *head);
 
-bool	match_pattern(t_token *pattern, char *target)
+static inline bool	do_word(t_token *pattern, char *target)
 {
 	int	len;
 
+	len = ft_strlen(pattern->literal);
+	if (!len)
+		return (true);
+	if (ft_strncmp(pattern->literal, target, len) == 0)
+		return (match_pattern(pattern->next, target + len));
+	return (false);
+}
+
+bool	match_pattern(t_token *pattern, char *target)
+{
 	if (pattern == NULL && *target == 0)
 		return (true);
 	if (pattern == NULL)
@@ -34,11 +44,7 @@ bool	match_pattern(t_token *pattern, char *target)
 		return (match_pattern(pattern->next, target));
 	}
 	else if (pattern->type == WORD)
-	{
-		len = ft_strlen(pattern->literal);
-		if (ft_strncmp(pattern->literal, target, len) == 0)
-			return (match_pattern(pattern->next, target + len));
-	}
+		return (do_word(pattern, target));
 	return (false);
 }
 
@@ -51,8 +57,8 @@ static int	expand_wildcard(t_token *pattern, t_token **res, char **targets)
 	j = 0;
 	while (targets[j])
 	{
-		if (pattern->literal && pattern->literal[0] != '.' && \
-			targets[j][0] == '.')
+		if (targets[j][0] == '.' && \
+			(!pattern->literal || pattern->literal[0] != '.'))
 			;
 		else if (match_pattern(pattern, targets[j]))
 			res[i++] = new_token(WORD, ft_strdup(targets[j]),
