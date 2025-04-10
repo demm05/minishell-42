@@ -45,6 +45,8 @@ bool	analyze_tokens(t_data *data, t_token *head)
 		}
 		else if (head->type == HERE_DOC && aheredoc(data, &head))
 			break ;
+		else if (head->type == SEQUENCE && head->next->type == SEQUENCE)
+			break ;
 		else if (is_basic(head) || is_paran(&head, &paren) || a_is_redir(&head))
 			break ;
 		head = head->next;
