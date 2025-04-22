@@ -48,16 +48,17 @@ char	**dir_get_content_list(char *pwd)
 	struct dirent	*entry;
 	char			**res;
 	int				i;
+	int				dirs;
 
-	i = dir_get_content_size(pwd);
-	if (!i)
+	dirs = dir_get_content_size(pwd);
+	if (!dirs)
 		return (NULL);
-	res = malloc(sizeof(char *) * (i + 1));
+	res = malloc(sizeof(char *) * (dirs + 1));
 	if (!res)
 		return (NULL);
 	dir = opendir(pwd);
 	i = 0;
-	while (1)
+	while (i < dirs)
 	{
 		entry = readdir(dir);
 		if (entry == NULL)
