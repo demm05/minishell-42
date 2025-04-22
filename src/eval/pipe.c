@@ -41,11 +41,10 @@ int	fork_it(t_astnode *head, t_data *data, bool id, int pipefd[2])
 
 int	get_final_status(int status[2])
 {
-	status[0] = get_childs_status(status[0]);
 	status[1] = get_childs_status(status[1]);
-	if (status[0] == 131 || status[1] == 131)
+	if (status[1] == 131)
 		return (131);
-	else if (status[0] == 130 || status[1] == 130)
+	else if (status[1] == 130)
 		return (130);
 	return (status[1]);
 }

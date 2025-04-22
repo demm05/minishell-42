@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "tok_private.h"
-#include <fcntl.h>
 
 static bool	is_paran(t_token **head, int *paren);
 static bool	is_basic(t_token *head);
@@ -45,7 +44,7 @@ bool	analyze_tokens(t_data *data, t_token *head)
 		}
 		else if (head->type == HERE_DOC && aheredoc(data, &head))
 			break ;
-		else if (head->type == SEQUENCE && head->next->type == SEQUENCE)
+		else if (head->type == SEQUENCE && (head->next->type == SEQUENCE || !head->prev->next))
 			break ;
 		else if (is_basic(head) || is_paran(&head, &paren) || a_is_redir(&head))
 			break ;
