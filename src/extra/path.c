@@ -12,33 +12,82 @@
 
 #include "extra_private.h"
 #include <sys/stat.h>
+#include <errno.h>
+#include <string.h>
 
-static char	*check_explicit_path(char *literal, t_data *data)
+int	path_check_errno(const char *path)
+{
+	if (errno == ENONET)
+	{
+		ft_fprintf(STDERR_FILENO, "%s: No such file or directory\n", path);
+		return (127);
+	}
+	else if (errno == EACCES)
+	{
+		ft_fprintf(STDERR_FILENO, "%s: Permission denied\n", path);
+		return (126);
+	}
+	return (0);
+}
+
+int	check_path_perm(char *path)
 {
 	struct stat	st;
 
-	if (access(literal, F_OK) != 0)
+	if (access(path, F_OK) != 0)
 	{
-		ft_fprintf(STDERR_FILENO, "%s: No such file or directory\n", literal);
+		ft_fprintf(STDERR_FILENO, "%s: No such file or directory\n", path);
+		return (127);
+	}
+	if (stat(path, &st) != 0)
+		return (path_check_errno(path));
+	if (S_ISDIR(st.st_mode))
+	{
+		ft_fprintf(STDERR_FILENO, "%s: Is a directory\n", path);
+		return (126);
+	}
+	if (access(path, X_OK) != 0)
+	{
+		ft_fprintf(STDERR_FILENO, "%s: Permission denied\n", path);
+		return (126);
+	}
+	return (0);
+}
+
+static char	*check_explicit_path(char *path, t_data *data)
+{
+	int	st;
+
+	st = check_path_perm(path);
+	if (st)
+	{
+		data->exit_status = st;
+		return (NULL);
+	}
+	return (ft_strdup(path));
+}
+
+static inline char	*handle_return(t_data *data, char *literal, char *path)
+{
+	int	st;
+
+	if (!path)
+	{
+		ft_fprintf(STDERR_FILENO, "%s: command not found\n", literal);
 		data->exit_status = 127;
 		return (NULL);
 	}
-	if (stat(literal, &st) == 0 && S_ISDIR(st.st_mode))
+	st = check_path_perm(path);
+	if (st)
 	{
-		ft_fprintf(STDERR_FILENO, "%s: Is a directory\n", literal);
-		data->exit_status = 126;
+		data->exit_status = st;
+		free(path);
 		return (NULL);
 	}
-	if (access(literal, X_OK) != 0)
-	{
-		ft_fprintf(STDERR_FILENO, "%s: Permission denied\n", literal);
-		data->exit_status = 126;
-		return (NULL);
-	}
-	return (ft_strdup(literal));
+	return (path);
 }
 
-char	*get_path(t_env *env, char *literal, t_data *data)
+char	*get_path(char *env, char *literal, t_data *data)
 {
 	char		*path;
 	char		**dirs;
@@ -48,9 +97,9 @@ char	*get_path(t_env *env, char *literal, t_data *data)
 
 	if (ft_strchr(literal, '/'))
 		return (check_explicit_path(literal, data));
-	if (!env || !env->value || !env->value[0])
+	if (!env || !env[0])
 		return (NULL);
-	dirs = ft_split(env->value, ":");
+	dirs = ft_split(env, ":");
 	path = NULL;
 	i = 0;
 	while (dirs[i] && !path)
@@ -64,5 +113,5 @@ char	*get_path(t_env *env, char *literal, t_data *data)
 		free(dirs[i++]);
 	}
 	free(dirs);
-	return (path);
+	return (handle_return(data, literal, path));
 }
