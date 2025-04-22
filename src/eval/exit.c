@@ -32,7 +32,7 @@ static int	is_numeric(const char *str)
 	return (1);
 }
 
-static int	get_status(t_astnode *head, t_data *data)
+static int	get_status(t_astnode *head, t_data *data, bool *cont)
 {
 	char	*arg;
 
@@ -50,6 +50,7 @@ static int	get_status(t_astnode *head, t_data *data)
 			if (head->next)
 			{
 				ft_fprintf(STDERR_FILENO, "exit: too many arguments\n");
+				*cont = 1;
 				return (-1);
 			}
 			else
@@ -62,9 +63,11 @@ static int	get_status(t_astnode *head, t_data *data)
 bool	handle_exit(t_astnode *head, t_data *data)
 {
 	int		status;
+	bool	cont;
 
-	status = get_status(head->children, data);
-	if (status == -1)
+	cont = 0;
+	status = get_status(head->children, data, &cont);
+	if (cont)
 	{
 		data->exit_status = 1;
 		return (1);

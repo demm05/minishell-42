@@ -98,7 +98,7 @@ char	*get_path(char *env, char *literal, t_data *data)
 	if (ft_strchr(literal, '/'))
 		return (check_explicit_path(literal, data));
 	if (!env || !env[0])
-		return (NULL);
+		return (handle_return(data, literal, NULL));
 	dirs = ft_split(env, ":");
 	path = NULL;
 	i = 0;
