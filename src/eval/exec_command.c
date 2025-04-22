@@ -13,6 +13,7 @@
 #include "./eval_private.h"
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <errno.h>
 
 static char	**build_args(t_astnode *head);
 static void	free_ptp(char **args);
@@ -51,7 +52,12 @@ static void	hangle_failed_execve(t_data *data, char **args,
 	free_ptp(args);
 	free_ptp(envp);
 	st = path_check_errno(path);
-	if (st)
+	if (errno == ENOEXEC)
+	{
+		ft_fprintf(STDERR_FILENO, "%s: Permission denied\n", path);
+		data->exit_status = 126;
+	}
+	else if (st)
 		data->exit_status = st;
 	else
 		data->exit_status = 127;

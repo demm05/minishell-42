@@ -105,8 +105,7 @@ char	*get_path(char *env, char *literal, t_data *data)
 	while (dirs[i] && !path)
 	{
 		tmp = join_strings(3, dirs[i], "/", literal);
-		if (tmp && access(tmp, X_OK) == 0 && stat(tmp, &st) == 0
-			&& !S_ISDIR(st.st_mode))
+		if (tmp && stat(tmp, &st) == 0 && !S_ISDIR(st.st_mode))
 			path = tmp;
 		if (!path && tmp)
 			free(tmp);
