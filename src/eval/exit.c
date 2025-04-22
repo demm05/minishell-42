@@ -50,7 +50,7 @@ static int	get_status(t_astnode *head, t_data *data)
 			if (head->next)
 			{
 				ft_fprintf(STDERR_FILENO, "exit: too many arguments\n");
-				return (1);
+				return (-1);
 			}
 			else
 				return ((int)ft_atol(arg) % 256);
@@ -64,6 +64,11 @@ bool	handle_exit(t_astnode *head, t_data *data)
 	int		status;
 
 	status = get_status(head->children, data);
+	if (status == -1)
+	{
+		data->exit_status = 1;
+		return (1);
+	}
 	free_everything(data);
 	exit(status);
 }
